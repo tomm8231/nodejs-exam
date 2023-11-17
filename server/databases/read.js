@@ -1,5 +1,8 @@
-import db from "./connections.js"
+import { db } from "./connections.js";
 
-const allProducts = await db.products.find().toArray()
+const getProductsCollection = db.collection("products");
 
-export default allProducts
+
+export {
+    getProductsCollection
+};

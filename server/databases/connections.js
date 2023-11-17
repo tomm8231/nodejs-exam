@@ -7,6 +7,6 @@ await client.connect();
 const dbName = "staff_orders";
 const db = await client.db(dbName);
 
-export default {
-    products: db.collection("products")
+export {
+    db
 };
