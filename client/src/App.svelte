@@ -1,6 +1,5 @@
 <script>
 
-import Item from "./components/Item.svelte";
 
 const items = [
     { AB_item_number: '64-00001', description: 'UltraLight ASC Mat XSmall Yellow', normal_price: 850, staff_price: 340 },
@@ -21,20 +20,27 @@ const items = [
     { AB_item_number: '64-00352', description: "Sea to Summit Comfort Light SI Women's Regular Aegean", normal_price: 1100, staff_price: 440 },
 ];
 
-let quantityValues = {}; 
+// const items = [
+//   { model_number: 23, model_name: 'kajka', kon: 'woman', farvekode: 228 }
+// ]
 
-  function handleQuantityChange(AB_item_number, event) {
-    quantityValues = {
-      ...quantityValues,
-      [AB_item_number]: parseInt(event.target.value) || 0,
-    };
-  }
+const headerKeys = items.length > 0 ? Object.keys(items[0]) : [];
 
-  function printQuantities() {
-    console.log("Quantity Values:", quantityValues);
-  }
+const itemKey = items.length > 0 ? Object.keys(items[0])[0] : '';
 
+let quantityValues = {};
 
+function handleQuantityChange(AB_item_number, event) {
+  const value = parseInt(event.target.value) || 0;
+  quantityValues = {
+    ...quantityValues,
+    [AB_item_number]: value,
+  };
+}
+
+function printQuantities() {
+  console.log("Quantity Values:", quantityValues);
+}
 </script>
 
 <main>
@@ -43,25 +49,23 @@ let quantityValues = {};
   <table>
     <thead>
       <tr>
-        <th>AB Item Number</th>
-        <th>Description</th>
-        <th>Normal Price</th>
-        <th>Staff Price</th>
-        <th>Quantity</th> 
+        {#each headerKeys as key (key)}
+          <th>{key}</th>
+        {/each}
+        <th>Quantity</th>
       </tr>
     </thead>
     <tbody>
-      {#each items as { AB_item_number, description, normal_price, staff_price } (AB_item_number)}
+      {#each items as item (item[itemKey])}
         <tr>
-          <td>{AB_item_number}</td>
-          <td>{description}</td>
-          <td>{normal_price}</td>
-          <td>{staff_price}</td>
+          {#each headerKeys as key (key)}
+            <td>{item[key]}</td>
+          {/each}
           <td>
-          <input
+            <input
               type="number"
-              bind:value={quantityValues[AB_item_number]}
-              on:input={(event) => handleQuantityChange(AB_item_number, event)}
+              value={quantityValues[item[itemKey]] || ''}
+              on:input={(event) => handleQuantityChange(item[itemKey], event)}
             />
           </td>
         </tr>
