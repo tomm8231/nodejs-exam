@@ -1,8 +1,10 @@
 import express from "express"
 const app = express()
 
+import allProducts from "./databases/read.js"
+
 app.get("/", (req, res) => {
-    res.send("Hul igennem")
+    res.send({data: allProducts})
 })
 
 const PORT = process.env.PORT || 8080

@@ -8,5 +8,5 @@ const dbName = "staff_orders";
 const db = await client.db(dbName);
 
 export default {
-    items: db.collection("S2S")
+    products: db.collection("products")
 };
