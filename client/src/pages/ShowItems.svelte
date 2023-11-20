@@ -24,11 +24,29 @@
       quantityValues = {
         ...quantityValues,
         [sku]: value,
-      };
+    };
+      console.log(quantityValues);
     }
     
-    function printQuantities() {
+    async function submitChanges() {
+      console.log(items[0]);
+      const orderedItems = items.map((item) => {
+        if (item && Object.keys(item).length > 0 && quantityValues.hasOwnProperty(item[itemKey])) {
+          console.log(quantityValues[item[itemKey]]);
+          item.quantity = quantityValues[item[itemKey]]
+          console.log("Der er et antal");
+        } else {
+          item.quantity = 0
+        }
+        return item
+      })
+
+      console.log(orderedItems);
+      /*
+      const response = await fetch(`${$BASE_URL}orderedProducts`)
+
       console.log("Quantity Values:", quantityValues);
+      */
     }
     </script>
     
@@ -62,5 +80,5 @@
         </tbody>
       </table>
     
-      <button on:click={printQuantities}>Print Quantities</button>
+      <button on:click={submitChanges}>Gem ændringer</button>
     </main>
