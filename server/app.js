@@ -1,12 +1,15 @@
 import express from "express"
 const app = express()
 
-app.get("/", (req, res) => {
-    res.send("Hul igennem")
-})
+import productsRouters from "./routers/productsRouter.js";
+app.use(productsRouters);
 
-const PORT = process.env.PORT || 8080
+app.all("*", (req, res) => {
+    res.status(404).send({ data: `Unsupported path ${req.path}`});
+});
+
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (res, req) => {
     console.log("Server is running on port", PORT);
-})
+});
