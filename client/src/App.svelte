@@ -1,6 +1,6 @@
 <script>
-    import {Router, Link, Route, navigate} from 'svelte-navigator'
-    import ShowItems from './pages/ShowItems.svelte'
+    import {Router, Link, Route, navigate} from 'svelte-navigator';
+    import ShowItems from './pages/ShowItems.svelte';
     import Home from "./pages/Home.svelte";
 </script>
 
