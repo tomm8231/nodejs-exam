@@ -4,6 +4,14 @@ const app = express()
 import productsRouters from "./routers/productsRouter.js";
 app.use(productsRouters);
 
+import helmet from "helmet";
+app.use(helmet)
+
+import cors from 'cors'
+app.use(cors({
+    origin: true
+}))
+
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});
 });
