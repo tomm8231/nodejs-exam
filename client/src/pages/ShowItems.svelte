@@ -9,7 +9,7 @@
 
 
     onMount( async () => {
-        const response = await fetch(`${$BASE_URL}api/products/fjallraven_feb_24`);
+        const response = await fetch(`${$BASE_URL}/api/products/fjallraven_feb_24`);
         const result = await response.json();
         items = result.data
 
@@ -29,19 +29,34 @@
     }
     
     async function submitChanges() {
-      console.log(items[0]);
       const orderedItems = items.map((item) => {
         if (item && Object.keys(item).length > 0 && quantityValues.hasOwnProperty(item[itemKey])) {
           console.log(quantityValues[item[itemKey]]);
           item.quantity = quantityValues[item[itemKey]]
-          console.log("Der er et antal");
         } else {
           item.quantity = 0
         }
         return item
       })
 
-      console.log(orderedItems);
+      try {
+        const response = await fetch(`${$BASE_URL}/api/createorder`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            orderedItems,
+            username: "user1"
+          })
+        })
+      
+         //Toastr
+        
+      } catch (error) {
+        console.log("Error: " + error);
+        //Toastr
+      }
       /*
       const response = await fetch(`${$BASE_URL}orderedProducts`)
 
