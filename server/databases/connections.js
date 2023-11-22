@@ -7,6 +7,4 @@ await client.connect();
 const dbName = "staff_orders";
 const db = await client.db(dbName);
 
-export {
-    db
-};
+export default db;

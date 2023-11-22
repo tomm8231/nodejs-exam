@@ -1,6 +1,8 @@
 import db from "./connections.js";
 
-await db.collection("products").products.insertMany([
+await db.createCollection("products");
+
+await db.collection("products").insertMany([
     { item_number: '64-00001', item: 'UltraLight ASC Mat XSmall Yellow', normal_price: 850, staff_price: 340, round: "s2s_oct_24" },
     { item_number: '64-00021', item: 'Sea to Summit UltraLight ASC Mat Regular Yellow', normal_price: 1200, staff_price: 480, round: "s2s_oct_24" },
     { item_number: '64-00031', item: 'Sea to Summit UltraLight ASC Mat Large Yellow', normal_price: 1300, staff_price: 520, round: "s2s_oct_24" },

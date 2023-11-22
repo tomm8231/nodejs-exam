@@ -1,4 +1,4 @@
-import { db } from "./connections.js";
+import db from "./connections.js";
 
 const getProductsCollection = db.collection("products");
 
