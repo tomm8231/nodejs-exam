@@ -9,7 +9,7 @@
 
 
     onMount( async () => {
-        const response = await fetch(`${$BASE_URL}products/fjallraven_feb_24`);
+        const response = await fetch(`${$BASE_URL}api/products/fjallraven_feb_24`);
         const result = await response.json();
         items = result.data
 
