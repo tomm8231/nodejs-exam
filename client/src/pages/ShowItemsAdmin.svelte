@@ -30,8 +30,7 @@
     // const response = await fetch(`${$BASE_URL}/api/products/fjallraven_feb_24`);
     const response = await fetch(`${$BASE_URL}/api/orders/fjallraven_feb_24`);
     const result = await response.json();
-    showAllOrders = result.data[0].orderedItems;
-    // console.log(items);
+    showAllOrders = result.data[0];
     headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
     itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
   });

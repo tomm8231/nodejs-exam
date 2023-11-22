@@ -47,7 +47,7 @@
         },
         body: JSON.stringify({
           orderedItems,
-          username: "user2",
+          username: "user1",
           round: "fjallraven_feb_24"
         }),
       });
