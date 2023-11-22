@@ -1,8 +1,8 @@
 <script>
   import {Router, Link, Route, navigate} from 'svelte-navigator';
-  import ShowItems from './pages/ShowItems.svelte';
+  import ShowItems from './pages/ShowItems/ShowItems.svelte';
   import Home from "./pages/Home.svelte";
-  import ShowItemsAdmin from './pages/ShowItemsAdmin.svelte';
+  import ShowItemsAdmin from './pages/ShowItemsAdmin/ShowItemsAdmin.svelte';
 </script>
 
 <Router>

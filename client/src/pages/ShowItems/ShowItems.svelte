@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { BASE_URL } from "../stores/generalStore.js";
+  import { BASE_URL } from "../../stores/generalStore.js";
 
   let items = [];
   let headerKeys = [];
@@ -13,7 +13,7 @@
     items = result.data;
 
     headerKeys = items.length > 0 ? Object.keys(items[0]) : [];
-
+    headerKeys.shift() // removes/hides the _id from the user
     itemKey = items.length > 0 ? Object.keys(items[0])[0] : "";
   });
 
@@ -59,9 +59,12 @@
     }
   }
 </script>
+<style>
+  @import './showItems.css';
+</style>
 
 <main>
-  <h1>List of Items</h1>
+  <h1>Din bestellings seddel for PLACEHOLDER</h1>
 
   <table>
     <thead>

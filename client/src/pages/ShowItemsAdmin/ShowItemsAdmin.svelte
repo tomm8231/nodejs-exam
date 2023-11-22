@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { BASE_URL } from "../stores/generalStore.js";
+  import { BASE_URL } from "../../stores/generalStore.js";
 
   //     const orderedItems = [
   //     { AB_item_number: '64-00001', description: 'UltraLight ASC Mat XSmall Yellow', normal_price: 850, staff_price: 340, total_amount: 2 },
@@ -34,11 +34,13 @@
     // Works with aggregate:
     // showAllOrders = result.data[0].orderedItems;
     headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
+    headerKeys.shift()
+    console.log(headerKeys)
     itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
   });
 
-  headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
-  itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
+  // headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
+  // itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
 
   function handleQuantityChange(sku, event) {
     const value = parseInt(event.target.value) || 0;
@@ -53,8 +55,12 @@
   }
 </script>
 
+<style>
+  @import './showItemsAdmin.css';
+</style>
+
 <main>
-  <h1>List of Items</h1>
+  <h1>Samlet ordre for bestilling PLACEHOLDER</h1>
 
   <table>
     <thead>
@@ -70,7 +76,7 @@
           {#each headerKeys as key (key)}
             <td>{item[key]}</td>
           {/each}
-          <td /></tr
+         </tr
         >
       {/each}
     </tbody>

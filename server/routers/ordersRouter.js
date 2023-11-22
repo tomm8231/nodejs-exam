@@ -32,6 +32,7 @@ router.post("/api/orders", async (req, res) => {
 router.get("/api/orders/:round", async (req, res) => {
     const round = req.params?.round
 
+
     try {
         const existingOrders = await db.collection("orders").find({ round }).toArray();
 
@@ -50,7 +51,7 @@ router.get("/api/orders/:round", async (req, res) => {
                     }
                 }
             ]).toArray()
-            
+
             const result = existingOrders[0].orderedItems.map(product => {
                 const foundItem = counts.find(item => item._id === product._id);
                 product.quantity = foundItem ? foundItem.count : 0;
