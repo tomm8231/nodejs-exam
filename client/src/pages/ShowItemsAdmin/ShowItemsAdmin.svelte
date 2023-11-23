@@ -50,15 +50,19 @@
 </style>
 
 <main>
+  {#if currentRound}
   <h1>Samlet ordre for bestilling {currentRound}</h1>
+  {:else}
+  <h1>Se samlet ordrer</h1>
+  {/if}
 
-  <label for="offerRound">Select Offer Round:</label>
+  <label for="offerRound">Vælg bestillingsrunde:</label>
   <select id="offerRound" bind:value={currentRound} on:change={handleOfferRoundChange}>
     <option value="fjallraven_feb_24">Fjallraven Feb 24</option>
     <option value="s2s_oct_24">Sea to Summit Nov 24</option>
   </select>
 
-  
+  {#if currentRound}
   <table>
     <thead>
       <tr>
@@ -78,6 +82,6 @@
       {/each}
     </tbody>
   </table>
-
+  {/if}
   <!-- <button on:click={printQuantities}>Print Quantities</button> -->
 </main>
