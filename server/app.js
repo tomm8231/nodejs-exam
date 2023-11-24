@@ -14,7 +14,7 @@ app.use(express.json())
 import productsRouters from "./routers/productsRouter.js";
 app.use(productsRouters);
 
-import orderRouter from './routers/orderRouter.js'
+import orderRouter from './routers/ordersRouter.js'
 app.use(orderRouter)
 
 app.all("*", (req, res) => {
