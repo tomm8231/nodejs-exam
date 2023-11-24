@@ -11,9 +11,9 @@ router.post("/auth/login", async (req, res) => {
     const { username, password } = req.body
     const foundUser = await userCollection.find({ username }).toArray()
 
-    const compareResult = await bcrypt.compare(password, foundUser[0].hashedPassword)
+    const passwordMatch = await bcrypt.compare(password, foundUser[0].hashedPassword)
 
-    if (compareResult) {
+    if (passwordMatch) {
         res.status(200).send({ data: "logged in"})
     } else {
         res.status(500).send({ data: "not logged in"})
