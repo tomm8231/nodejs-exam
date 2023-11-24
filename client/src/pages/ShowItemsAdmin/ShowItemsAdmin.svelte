@@ -59,7 +59,7 @@
   <label for="offerRound">Vælg bestillingsrunde:</label>
   <select id="offerRound" bind:value={currentRound} on:change={handleOfferRoundChange}>
     <option value="fjallraven_feb_24">Fjallraven Feb 24</option>
-    <option value="s2s_oct_24">Sea to Summit Nov 24</option>
+    <option value="s2s_oct_24">Sea to Summit okt 24</option>
   </select>
 
   {#if currentRound}

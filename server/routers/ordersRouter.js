@@ -89,6 +89,26 @@ router.get("/api/orders/:round", async (req, res) => {
 })
 
 
+router.get("/api/orders/:round/:username", async (req, res) => {
+    const round = req.params?.round
+    const username = req.params?.username
+
+    try {
+        const existingOrder = await db.collection("orders").find({ round, username }).toArray();
+
+        if(existingOrder) {
+            res.status(200).send({ data: existingOrder[0].orderedItems })
+        } else {
+            res.status(400).send({ data: "Not found" })
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+
 
 
 export default router;
