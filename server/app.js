@@ -11,11 +11,38 @@ app.use(cors({
 
 app.use(express.json())
 
+
+import { rateLimit } from 'express-rate-limit';
+
+const allRoutesRateLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+});
+
+app.use(allRoutesRateLimiter);
+
+const authRateLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Use an external store for consistency across multiple server instances.
+});
+
+app.use("/auth", authRateLimiter);
+
+
 import productsRouters from "./routers/productsRouter.js";
 app.use(productsRouters);
 
 import orderRouter from './routers/ordersRouter.js'
 app.use(orderRouter)
+
+import authRouter from "./routers/authRouter.js"
+app.use(authRouter)
 
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});

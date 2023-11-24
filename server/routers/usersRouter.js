@@ -8,7 +8,7 @@ router.post('/api/users', async (req, res) => {
     const {username, password} = req.body
     const role = "USER"
 
-    const existingUser = await userCollection.findOne({username, password})
+    const existingUser = await userCollection.findOne({ username, password })
 
     if (!existingUser) {
         await userCollection.insertOne({username, password, role} )
