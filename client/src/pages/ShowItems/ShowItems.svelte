@@ -2,35 +2,32 @@
   import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
 
-  let items = [];
+  let orderedItems = [];
   let headerKeys = [];
   let itemKey = "";
-  let quantityValues = {};
   let currentRound = "";
   
 
   async function fetchData() {
-    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/user2`);
+    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/user4`);
 
     if (!response.ok) {
       response = await fetch(`${$BASE_URL}/api/products/${currentRound}`);
     }
 
     const result = await response.json();
-    items = result.data;
+    orderedItems = result.data;
 
-    headerKeys = items.length > 0 ? Object.keys(items[0]) : [];
+    headerKeys = orderedItems.length > 0 ? Object.keys(orderedItems[0]) : [];
     headerKeys.shift(); // removes/hides the _id from the user
     headerKeys.pop(); // removes/hides the quantity from the user
-    itemKey = items.length > 0 ? Object.keys(items[0])[0] : "";
+    itemKey = orderedItems.length > 0 ? Object.keys(orderedItems[0])[0] : "";
   }
 
-  function handleQuantityChange(sku, event) {
-    const value = parseInt(event.target.value) || 0;
-    quantityValues = {
-      ...quantityValues,
-      [sku]: value,
-    };
+  function handleQuantityChange(itemId, event) {
+    const value = parseInt(event.target.value);
+    const foundItem = orderedItems.find(item => item._id === itemId)
+    foundItem.quantity = value
   }
 
   function handleOfferRoundChange(event) {
@@ -39,14 +36,6 @@
   }
 
   async function submitChanges() {
-    const orderedItems = items.map((item) => {
-      if (item && Object.keys(item).length > 0 && quantityValues.hasOwnProperty(item[itemKey])) {
-        item.quantity = quantityValues[item[itemKey]];
-      } else {
-        item.quantity = 0;
-      }
-      return item;
-    });
 
     try {
       await fetch(`${$BASE_URL}/api/orders`, {
@@ -56,7 +45,7 @@
         },
         body: JSON.stringify({
           orderedItems,
-          username: "user2",
+          username: "user4",
           round: currentRound,
         }),
       });
@@ -97,7 +86,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each items as item (item[itemKey])}
+        {#each orderedItems as item (item[itemKey])}
           <tr>
             {#each headerKeys as key (key)}
               <td>{item[key]}</td>
@@ -105,7 +94,7 @@
             <td>
               <input
                 type="number"
-                value={quantityValues[item[itemKey]] || item.quantity}
+                value={item.quantity || 0}
                 on:input={(event) => handleQuantityChange(item[itemKey], event)}
               />
             </td>

@@ -95,8 +95,8 @@ router.get("/api/orders/:round/:username", async (req, res) => {
 
     try {
         const existingOrder = await db.collection("orders").find({ round, username }).toArray();
-
-        if(existingOrder) {
+        
+        if(existingOrder[0] ) {
             res.status(200).send({ data: existingOrder[0].orderedItems })
         } else {
             res.status(400).send({ data: "Not found" })
