@@ -27,7 +27,7 @@
         $user = data.userData
 
         const from = ($location.state && $location.state.from) || "/"
-        navigate("/", { replace: true })
+        navigate(from, { replace: true })
       }
     } catch (err) {
       console.log("err: " + err);
