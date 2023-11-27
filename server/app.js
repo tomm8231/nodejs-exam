@@ -1,3 +1,4 @@
+import "dotenv/config.js"
 import express from "express"
 const app = express()
 
@@ -10,6 +11,22 @@ app.use(cors({
 }))
 
 app.use(express.json())
+
+import session from "express-session"
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+  }))
+
+const checkAuth = (req, res, next) => {
+	if (req.session && req.session.userId) {
+		return next()
+	} else {
+		return res.status(401).send({ data: "Unauthorised" })
+	}
+}
 
 
 import { rateLimit } from 'express-rate-limit';

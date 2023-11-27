@@ -59,8 +59,8 @@
     <tbody>
       {#each users as user}
         <tr>
-          <td>{user.membernumber}</td>
-          <td>{user.username}</td>
+          <td>{user.staffNumber}</td>
+          <td>{user.name}</td>
           <td>{user.email}</td>
           <td><button>Rediger</button></td>
           <td><button id="${user._id}" on:click={deleteUser}>Slet</button></td>
