@@ -35,3 +35,5 @@ await db.collection("products").insertMany([
     { Model_number: 27097, Model_name: 'Kajka 100', Farvekode: 660, Farve: 'Forest Green', Størrelse: '1 Size', Indkøbspris: 2160, Bar_code: 7392158958511, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
     { Model_number: 27096, Model_name: 'Kajka 85', Farvekode: 550, Farve: 'Black', Størrelse: '1 Size', Indkøbspris: 2100, Bar_code: 7392158958412, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
 ]);
+
+//Create users with roles

@@ -3,31 +3,14 @@ import db from "../databases/connections.js";
 const router = Router();
 
 
-router.post("/api/orders", async (req, res) => {
+router.get("/api/orders", async (req, res) => {
+// find all the names of differend rounds
+    const rounds = await db.collection("orders").distinct("round")
+    console.log(rounds)
+    res.status(200).send({ data: rounds })
 
-    const username = req.body.username;
-    const round = req.body.round;
-    const existingOrder = await db.collection("orders").findOne({ username, round });
-
-    try {
-        if (!existingOrder) {
-            await db.collection("orders").insertOne(req.body);
-        } else {
-            const newData = req.body
-
-            await db.collection("orders").updateOne(
-                { "username": req.body.username },
-                { $set: newData }
-            );
-        }
-
-        res.status(200).send({ data: "All went well" })
-
-    } catch (error) {
-        console.log("Error: " + error);
-        res.status(500).send({ data: "Nothing went well" })
-    }
 })
+
 
 router.get("/api/orders/:round", async (req, res) => {
     const round = req.params?.round
@@ -109,6 +92,31 @@ router.get("/api/orders/:round/:username", async (req, res) => {
 })
 
 
+router.post("/api/orders", async (req, res) => {
+
+    const username = req.body.username;
+    const round = req.body.round;
+    const existingOrder = await db.collection("orders").findOne({ username, round });
+
+    try {
+        if (!existingOrder) {
+            await db.collection("orders").insertOne(req.body);
+        } else {
+            const newData = req.body
+
+            await db.collection("orders").updateOne(
+                { "username": req.body.username },
+                { $set: newData }
+            );
+        }
+
+        res.status(200).send({ data: "All went well" })
+
+    } catch (error) {
+        console.log("Error: " + error);
+        res.status(500).send({ data: "Nothing went well" })
+    }
+})
 
 
 export default router;

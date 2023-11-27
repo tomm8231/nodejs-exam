@@ -1,12 +1,11 @@
 import { Router } from "express";
+import db from "../databases/connections.js";
 const router = Router();
 
-import { getProductsCollection } from "../databases/read.js";
 
 router.get("/api/products/:round", async (req, res) => {
     const round = req.params?.round;
-    const productsCollection = getProductsCollection;
-    const allProducts = await productsCollection.find({ round }).toArray();
+    const allProducts = await db.collection("products").find({ round }).toArray();
 
     res.send({ data: allProducts });
 });
