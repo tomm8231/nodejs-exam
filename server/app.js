@@ -34,6 +34,8 @@ const authRateLimiter = rateLimit({
 
 app.use("/auth", authRateLimiter);
 
+import userRouters from "./routers/usersRouter.js";
+app.use(userRouters);
 
 import productsRouters from "./routers/productsRouter.js";
 app.use(productsRouters);
