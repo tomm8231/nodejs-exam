@@ -6,7 +6,6 @@ const router = Router();
 router.get("/api/orders", async (req, res) => {
 // find all the names of differend rounds
     const rounds = await db.collection("orders").distinct("round")
-    console.log(rounds)
     res.status(200).send({ data: rounds })
 
 })

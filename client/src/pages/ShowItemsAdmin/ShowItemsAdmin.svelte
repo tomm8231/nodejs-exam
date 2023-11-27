@@ -8,9 +8,7 @@
   let quantityValues = {};
   let currentRound = "";
 
-  onMount(async () => {
-    await fetchData();
-  });
+
 
   async function fetchData() {
     const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`);
@@ -40,9 +38,6 @@
     fetchData();
   }
 
-  function printQuantities() {
-    console.log("Quantity Values:", quantityValues);
-  }
 </script>
 
 <style>
