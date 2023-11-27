@@ -11,19 +11,19 @@
 
 
   async function fetchData() {
-    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`);
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: "include",
+    });
+    
     const result = await response.json();
     showAllOrders = result.data[0];
-    // Works with aggregate:
-    // showAllOrders = result.data[0].orderedItems;
+
     headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
     headerKeys.shift()
     console.log(headerKeys)
     itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
   };
 
-  // headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
-  // itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
 
   function handleQuantityChange(sku, event) {
     const value = parseInt(event.target.value) || 0;

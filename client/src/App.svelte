@@ -9,6 +9,18 @@
   import ShowUsers from './pages/ShowUsers/showUsers.svelte';
   import { user } from './stores/userStore.js'
   import ShowOrder from './pages/showOrderAdmin/ShowOrder.svelte';  
+  import { onMount } from 'svelte';
+
+  onMount(async () => {
+    const currentUserLocalStorage =localStorage.getItem("currentUser");
+    if (currentUserLocalStorage) {
+
+      const uid = localStorage.getItem("currentUserId")
+      const role =  localStorage.getItem("currentUserRole")
+
+      $user =  {uid, role}
+    }
+  })
 </script>
 
 <Router>

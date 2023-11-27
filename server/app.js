@@ -1,33 +1,29 @@
-import "dotenv/config.js"
+import "dotenv/config"
 import express from "express"
 const app = express()
+
+import session from "express-session";
+const sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+});
+app.use(sessionMiddleware);
 
 import helmet from "helmet";
 app.use(helmet())
 
 import cors from 'cors'
 app.use(cors({
-    origin: true
+    origin: true,
+	credentials: true
 }))
 
 app.use(express.json())
 
-import session from "express-session"
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-  }))
 
-const checkAuth = (req, res, next) => {
-	if (req.session && req.session.userId) {
-		return next()
-	} else {
-		return res.status(401).send({ data: "Unauthorised" })
-	}
-}
-
+  
 
 import { rateLimit } from 'express-rate-limit';
 

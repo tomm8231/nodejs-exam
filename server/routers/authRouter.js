@@ -15,14 +15,13 @@ router.post("/auth/login", async (req, res) => {
 
 
     if (passwordMatch) {
+
         req.session.user = {
             uid: foundUser[0].staffNumber,
             role: foundUser[0].role
           }
 
-
-
-        res.status(200).send({ data: "logged in", userData: req.session.user })
+          res.status(200).send({ data: "logged in", userData: req.session.user })
     } else {
         res.status(500).send({ data: "not logged in"})
     }

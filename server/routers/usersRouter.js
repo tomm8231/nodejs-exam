@@ -15,7 +15,6 @@ import { ObjectId } from 'mongodb';
 
 router.delete("/api/users/:id", async (req, res) => {
     const { id } = req.params;
-    console.log(id);
 
     const response = await userCollection.deleteOne({ _id: new ObjectId(id) });
     res.status(200).send({ data: response });

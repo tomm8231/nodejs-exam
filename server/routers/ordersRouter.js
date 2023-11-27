@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import db from "../databases/connections.js";
+import { adminCheck } from '../middelware/authMiddelware.js';
 const router = Router();
 
 
@@ -14,6 +15,7 @@ router.get("/api/orders", async (req, res) => {
 router.get("/api/orders/:round", async (req, res) => {
     const round = req.params?.round
 
+    console.log(req.session)
 
     try {
         const existingOrders = await db.collection("orders").find({ round }).toArray();
