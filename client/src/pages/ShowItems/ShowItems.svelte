@@ -1,15 +1,17 @@
 <script>
   import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
+  import { user } from "../../stores/userStore.js"
 
   let orderedItems = [];
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
   
+  //test
 
   async function fetchData() {
-    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/user5`);
+    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`);
 
     if (!response.ok) {
       response = await fetch(`${$BASE_URL}/api/products/${currentRound}`);
@@ -45,11 +47,12 @@
         },
         body: JSON.stringify({
           orderedItems,
-          username: "user4",
+          staffNumber: $user.uid,
           round: currentRound,
-        }),
+        })
       });
 
+      console.log($user.uid);
       //Toastr
     } catch (error) {
       console.error("Error: " + error);
