@@ -40,7 +40,7 @@
     <PrivateRoute path="/ShowItemsAdmin" let:location><ShowItemsAdmin /></PrivateRoute>
     <PrivateRoute path="/adduser" let:location><AddUser /></PrivateRoute>
     <PrivateRoute path="/showusers" let:location><ShowUsers /></PrivateRoute>
-    <PrivateRoute path="/showorderadmin" let:location><ShowItemsAdmin /></PrivateRoute>
+    <PrivateRoute path="/showorderadmin" let:location><ShowOrder /></PrivateRoute>
     <Route path="/login"><Login /></Route>
   </div>
 
