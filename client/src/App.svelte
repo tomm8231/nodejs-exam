@@ -12,13 +12,11 @@
   import { onMount } from "svelte";
 
   onMount(async () => {
-    if (
-      localStorage.getItem("currentUserId") &&
-      localStorage.getItem("currentUserRole")
-    ) {
+    if (localStorage.getItem("currentUserId") && localStorage.getItem("currentUserRole")) {
       const uid = localStorage.getItem("currentUserId");
       const role = localStorage.getItem("currentUserRole");
       $user = { uid, role };
+      navigate("/")
     }
   });
 
