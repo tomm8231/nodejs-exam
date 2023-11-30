@@ -16,26 +16,36 @@
     if (localStorage.getItem("currentUserId") && localStorage.getItem("currentUserRole")) {
       const uid = localStorage.getItem("currentUserId")
       const role =  localStorage.getItem("currentUserRole")
-
       $user =  {uid, role}
     }
+
+  
   })
+
+  async function logout() {
+    // Perform logout logic here
+    // For example, clear user data from localStorage and navigate to the login page
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("currentUserRole");
+    navigate('/login');
+  }
+
 </script>
 
 <Router>
+  <div id="app">
+  {#if $user}
   <nav>
-    {#if $user && $user.role === "ADMIN"}
+    {#if $user}
     <Link to="/">Home</Link>
+    <Link to="/ShowItems">Show items</Link>
     <Link to="/ShowItemsAdmin">Show items (Admin)</Link>
     <Link to="/adduser">Tilføj bruger (Admin)</Link>
     <Link to="/showusers">Vis brugere (Admin)</Link>
     <Link to="/showorderadmin">Vis ordre (Admin)</Link>
-    {:else if $user && $user.role === "USER"}
-    <Link to="/">Home</Link>
-    <Link to="/ShowItems">Show items</Link>
+    <a href="/" on:click={logout}>Log ud</a>
     {/if}
-  </nav>
-  <div>
+  <div class="content">
     <PrivateRoute path="/" let:location><Home /></PrivateRoute>
     <PrivateRoute path="/ShowItems" let:location><ShowItems /></PrivateRoute>
     <PrivateRoute path="/ShowItemsAdmin" let:location><ShowItemsAdmin /></PrivateRoute>
@@ -44,6 +54,6 @@
     <PrivateRoute path="/showorderadmin" let:location><ShowOrder /></PrivateRoute>
     <Route path="/login"><Login /></Route>
   </div>
-
+</div>
 </Router>
 
