@@ -6,15 +6,14 @@
   import ShowItemsAdmin from './pages/ShowItemsAdmin/ShowItemsAdmin.svelte';
   import AddUser from './pages/AddUser/AddUser.svelte';
   import Login from "./pages/Login/Login.svelte"
-  import ShowUsers from './pages/ShowUsers/showUsers.svelte';
+  import ShowUsers from './pages/showUsers/ShowUsers.svelte';
   import { user } from './stores/userStore.js'
-  import ShowOrder from './pages/showOrderAdmin/ShowOrder.svelte';  
+  import ShowOrder from './pages/ShowOrderAdmin/ShowOrder.svelte';  
   import { onMount } from 'svelte';
 
   onMount(async () => {
-    const currentUserLocalStorage =localStorage.getItem("currentUser");
-    if (currentUserLocalStorage) {
 
+    if (localStorage.getItem("currentUserId") && localStorage.getItem("currentUserRole")) {
       const uid = localStorage.getItem("currentUserId")
       const role =  localStorage.getItem("currentUserRole")
 
@@ -25,13 +24,15 @@
 
 <Router>
   <nav>
-    {#if $user}
+    {#if $user && $user.role === "ADMIN"}
     <Link to="/">Home</Link>
-    <Link to="/ShowItems">Show items</Link>
     <Link to="/ShowItemsAdmin">Show items (Admin)</Link>
     <Link to="/adduser">Tilføj bruger (Admin)</Link>
     <Link to="/showusers">Vis brugere (Admin)</Link>
     <Link to="/showorderadmin">Vis ordre (Admin)</Link>
+    {:else if $user && $user.role === "USER"}
+    <Link to="/">Home</Link>
+    <Link to="/ShowItems">Show items</Link>
     {/if}
   </nav>
   <div>

@@ -68,10 +68,6 @@
     }
   }
 
-  function handleOfferRoundChange(event) {
-    currentRound = event.target.value;
-    fetchUserOrders(selectedUserId);
-  }
 </script>
 
 <style>
@@ -117,7 +113,6 @@
         <th>Email</th>
         <th></th>
         <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -128,21 +123,10 @@
           <td>{user.email}</td>
           <td><button>Rediger</button></td>
           <td><button id="${user._id}" on:click={deleteUser}>Slet</button></td>
-          <td><button on:click={() => showOrders(user.staffNumber)}>Vis ordre</button></td>
         </tr>
       {/each}
     </tbody>
   </table>
-
-  <label for="offerRound">Vælg bestillingsrunde</label>
-  <select
-    id="offerRound"
-    bind:value={currentRound}
-    on:change={handleOfferRoundChange}
-  >
-    <option value="fjallraven_feb_24">Fjallraven Feb 24</option>
-    <option value="s2s_oct_24">Sea to Summit okt 24</option>
-  </select>
 
   <table>
     <thead>
