@@ -12,6 +12,7 @@
 
     try {
       const response = await fetch($BASE_URL+"/auth/signup", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -10,14 +10,35 @@
   import { user } from "./stores/userStore.js";
   import ShowOrder from "./pages/ShowOrderAdmin/ShowOrder.svelte";
   import { onMount } from "svelte";
+  import { BASE_URL } from "./stores/generalStore.js";
+
+  let userSession = null;
+  let currentUserId = localStorage.getItem("currentUserId");
 
   onMount(async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/auth/validateSession`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserId
+        }),
+      });
+      
+    } catch (error) {
+      console.error("Could not fetch:", error);
+    }
+
     if (
       localStorage.getItem("currentUserId") &&
       localStorage.getItem("currentUserRole")
     ) {
       const uid = localStorage.getItem("currentUserId");
       const role = localStorage.getItem("currentUserRole");
+
       $user = { uid, role };
     }
   });

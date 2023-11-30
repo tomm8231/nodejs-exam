@@ -12,6 +12,7 @@
     event.preventDefault()
     try {
       const response = await fetch(`${$BASE_URL}/auth/login`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
