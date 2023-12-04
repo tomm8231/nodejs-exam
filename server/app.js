@@ -29,16 +29,7 @@ app.use(cors({
 
 app.use(express.json())
 
-import session from "express-session";
-const sessionMiddleware = session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false,
-		maxAge: 1000 * 60 * 60 //1 time		
-	}
-});
-app.use(sessionMiddleware);
+
   
 
 import { rateLimit } from 'express-rate-limit';

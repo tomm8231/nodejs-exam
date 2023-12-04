@@ -6,7 +6,7 @@
   import ShowItemsAdmin from "./pages/ShowItemsAdmin/ShowItemsAdmin.svelte";
   import AddUser from "./pages/AddUser/AddUser.svelte";
   import Login from "./pages/Login/Login.svelte";
-  import ShowUsers from "./pages/ShowUsers/showUsers.svelte";
+  import ShowUsers from "./pages/ShowUsers/ShowUsers.svelte";
   import { user } from "./stores/userStore.js";
   import ShowOrder from "./pages/ShowOrderAdmin/ShowOrder.svelte";
   import { onMount } from "svelte";
