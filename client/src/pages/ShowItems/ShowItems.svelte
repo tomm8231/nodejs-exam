@@ -41,7 +41,6 @@
     try {
       await fetch(`${$BASE_URL}/api/orders`, {
         credentials: "include",
-        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
