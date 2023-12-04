@@ -64,58 +64,7 @@ function handleQuantityChange(itemId, event) {
 </script>
 
 <style>
-  .sidebar {
-    width: 200px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #f4f4f4;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-out;
-    padding-top: 70px;
-
-  }
-
-  .sidebar.show {
-    transform: translateX(0);
-  }
-
-  .person-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #f4f4f4;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    color: black;
-
-  }
-
-  .show-members{
-    width: 20 px;
-    text-align: center;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #f4f4f4;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    color: black;
-  }
-
-  .person-link:hover {
-    background-color: #e0e0e0;
-  }
-
-  .person-link p {
-    margin: 0;
-  }
+  @import './showOrder.css';
 </style>
 
 <h1>Find bestillinger</h1>
@@ -132,8 +81,7 @@ function handleQuantityChange(itemId, event) {
 </select>
 
 {#if currentRound && users.length > 0}
-
-<button class="show-members" on:click={toggleSidebar}>
+<button class="show-members" style="left: {showSidebar ? '195px' : '0'};" on:click={toggleSidebar}>
   {#if !showSidebar} Vis medlemmer {/if}
   {#if showSidebar} Skjul medlemmer {/if}
 </button>
@@ -143,7 +91,8 @@ function handleQuantityChange(itemId, event) {
   <h3>klik for ordre</h3>
     {#each users as user}
       <button class="person-link" on:click={() => fetchOrderForUser(user)}>
-        <p>{user.staffNumber} - {user.name}</p>
+        <p>{user.staffNumber}</p>
+        <p>{user.name}</p>
       </button>
     {/each}
 </div>

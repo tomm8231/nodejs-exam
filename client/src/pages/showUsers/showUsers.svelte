@@ -6,13 +6,14 @@
     topcenterMessageFail,
   } from "../../components/toastr/toastrMessage.js";
   import { navigate } from "svelte-navigator";
+  import Modal from "../../components/Modal/Modal.svelte";
 
   let users = [];
-  let selectedUserId = null;
   let userOrders = [];
-  let currentRound = ""
-  let headerKeys = []
-  let itemKey = ""
+  let headerKeys = [];
+  let itemKey = "";
+  let showModal = false;
+  let selectedUser = { staffnumber: "", name: "", email: "" };
 
   onMount(async () => {
     try {
@@ -24,26 +25,14 @@
     }
   });
 
-  async function fetchUserOrders(userId) {
-    try {
-      const response = await fetch($BASE_URL + `/api/orders/${currentRound}/${userId}`);
-      const data = await response.json();
-      userOrders = data.data;
-
-      selectedUserId = userId
-
-      headerKeys = userOrders.length > 0 ? Object.keys(userOrders[0]) : [];
-      headerKeys.shift(); // removes/hides the _id from the user
-      itemKey = userOrders.length > 0 ? Object.keys(userOrders[0])[0] : "";
-  
-    } catch (error) {
-      console.error("Error fetching user orders: " + error);
-    }
+  function updateUser(event) {
+    event.preventDefault();
+    topcenterMessageSucces("Brugeren er opdateret");
   }
 
-  async function showOrders(userId) {
-    selectedUserId = userId;
-    await fetchUserOrders(selectedUserId);
+  function updatePassword(event) {
+    event.preventDefault();
+    topcenterMessageSucces("Password er opdateret");
   }
 
   async function deleteUser(evt) {
@@ -57,6 +46,9 @@
       });
       const data = await response.json();
 
+      users = users.filter(user => user._id !== id);
+
+
       if (response.ok) {
         topcenterMessageSucces("Brugeren er slettet");
       } else if (data.error) {
@@ -68,41 +60,13 @@
     }
   }
 
+  function openModal(user) {
+    selectedUser = user;
+    showModal = true;
+  }
 </script>
 
-<style>
-  @import '../ShowItemsAdmin/showItemsAdmin.css';
-</style>
-
-
 <h1>Bruger i systemet</h1>
-
-<!-- <section>
-  <table>
-    <thead>
-      <tr>
-        <th>Medlemsnummer</th>
-        <th>Navn</th>
-        <th>Email</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each users as user}
-        <tr>
-          <td>{user.staffNumber}</td>
-          <td>{user.name}</td>
-          <td>{user.email}</td>
-          <td><button>Rediger</button></td>
-          <td><button id="${user._id}" on:click={deleteUser}>Slet</button></td>
-          <td><button on:click={showOrders}>Vis ordre</button></td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-</section> -->
 
 <main>
   <table>
@@ -121,7 +85,7 @@
           <td>{user.staffNumber}</td>
           <td>{user.name}</td>
           <td>{user.email}</td>
-          <td><button>Rediger</button></td>
+          <td><button on:click={() => openModal(user)}>Rediger</button></td>
           <td><button id="${user._id}" on:click={deleteUser}>Slet</button></td>
         </tr>
       {/each}
@@ -142,8 +106,35 @@
           {#each headerKeys as key (key)}
             <td>{item[key]}</td>
           {/each}
-         </tr>
+        </tr>
       {/each}
     </tbody>
   </table>
+
+  <Modal bind:showModal bind:selectedUser>
+    <h1>Rediger bruger</h1>
+    <form>
+      <label for="staffNumber">Medlemsnummer</label>
+      <input type="text" id="staffNumber" name="staffNumber" bind:value={selectedUser.staffNumber} readonly/>
+
+      <label for="name">Navn</label>
+      <input type="text" id="name" name="name" bind:value={selectedUser.name} />
+
+      <label for="email">Email</label>
+      <input type="text" id="email" name="email" value={selectedUser.email} />
+
+      <button on:click={updateUser}>Opdater bruger</button>
+    </form>
+    <hr />
+    <form>
+      <label for="password">Password</label>
+      <input type="text" id="password" name="password" />
+
+      <button on:click={updatePassword}>Opdater password</button>
+    </form>
+  </Modal>
 </main>
+
+<style>
+  @import "../ShowItemsAdmin/showItemsAdmin.css";
+</style>
