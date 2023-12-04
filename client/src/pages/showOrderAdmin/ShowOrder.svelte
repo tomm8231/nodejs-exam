@@ -13,7 +13,9 @@
   let currentStaffNumber = "";
 
   onMount(async () => {
-    const response = await fetch("http://localhost:8080/api/orders", { credentials: "include" });
+    const response = await fetch(`${$BASE_URL}/api/orders`, {
+        credentials: "include"
+      })
     const data = await response.json();
     list = data.data;
   });

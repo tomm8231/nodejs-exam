@@ -6,26 +6,65 @@
   import ShowItemsAdmin from "./pages/ShowItemsAdmin/ShowItemsAdmin.svelte";
   import AddUser from "./pages/AddUser/AddUser.svelte";
   import Login from "./pages/Login/Login.svelte";
-  import ShowUsers from "./pages/showUsers/ShowUsers.svelte";
+  import ShowUsers from "./pages/ShowUsers/showUsers.svelte";
   import { user } from "./stores/userStore.js";
   import ShowOrder from "./pages/ShowOrderAdmin/ShowOrder.svelte";
   import { onMount } from "svelte";
+  import { BASE_URL } from "./stores/generalStore.js";
+
+  let userSession = null;
+  let currentUserId = localStorage.getItem("currentUserId");
 
   onMount(async () => {
-    if (localStorage.getItem("currentUserId") && localStorage.getItem("currentUserRole")) {
+    try {
+      const response = await fetch(`${$BASE_URL}/auth/validateSession`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentUserId
+        }),
+      });
+      
+    } catch (error) {
+      console.error("Could not fetch:", error);
+    }
+
+    if (
+      localStorage.getItem("currentUserId") &&
+      localStorage.getItem("currentUserRole")
+    ) {
       const uid = localStorage.getItem("currentUserId");
       const role = localStorage.getItem("currentUserRole");
+
       $user = { uid, role };
-      navigate("/")
+
+      navigate("/", { replace: true })
     }
   });
 
   async function logout() {
     // Perform logout logic here
     // For example, clear user data from localStorage and navigate to the login page
+
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserRole");
-    navigate("/login");
+
+    try {
+      const response = await fetch(`${BASE_URL}/auth/logout`)
+
+      if (response.ok) {
+        navigate("/");
+
+        console.log("Logout sucessful")
+      }
+    } catch(error) {
+      console.log("Could not logout:", error)
+    }
+
+
   }
 </script>
 
