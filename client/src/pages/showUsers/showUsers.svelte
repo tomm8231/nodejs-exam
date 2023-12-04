@@ -16,7 +16,10 @@
 
   onMount(async () => {
     try {
-      const response = await fetch($BASE_URL + "/api/users");
+      const response = await fetch($BASE_URL + "/api/users", {
+        credentials: "include"
+      });
+      
       const data = await response.json();
       users = data.data;
     } catch (error) {

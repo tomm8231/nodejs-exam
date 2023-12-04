@@ -14,10 +14,22 @@ export const adminCheck = (req, res, next) => {
   }
 };
 
-const checkAuth = (req, res, next) => {
-  if (req.session && req.session.userId) {
-    return next();
-  } else {
-    return res.status(401).send({ data: "Unauthorised" });
-  }
+export const checkAuth = (req, res, next) => {
+  // console.log(req.session);
+
+  // console.log(req.path);
+
+  // if (req.path === '/auth/login') {
+  //   return next();
+  // }
+
+
+  console.log(req.session);
+  next()
+
+  // if (req.session) {
+  //   return next();
+  // } else {
+  //   return res.status(401).send({ data: "Unauthorised" });
+  // }
 };

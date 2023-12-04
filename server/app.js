@@ -1,6 +1,19 @@
 import "dotenv/config"
 import express from "express"
+
 const app = express()
+
+
+import session from "express-session";
+const sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+});
+app.use(sessionMiddleware);
+
+
 
 import helmet from "helmet";
 app.use(helmet())
@@ -13,15 +26,7 @@ app.use(cors({
 
 app.use(express.json())
 
-import session from "express-session";
-const sessionMiddleware = session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
-});
-app.use(sessionMiddleware);
-  
+
 
 import { rateLimit } from 'express-rate-limit';
 
@@ -42,6 +47,9 @@ const authRateLimiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	// store: ... , // Use an external store for consistency across multiple server instances.
 });
+
+import { checkAuth } from "./middelware/authMiddelware.js";
+app.use(checkAuth)
 
 app.use("/auth", authRateLimiter);
 

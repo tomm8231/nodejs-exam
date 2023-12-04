@@ -1,9 +1,12 @@
 <script>
   import { onMount } from "svelte";
+  import { BASE_URL } from "../../stores/generalStore";
 
     let list = []
     onMount ( async () => {
-        const response = await fetch("http://localhost:8080/api/orders")
+        const response = await fetch(`${$BASE_URL}/api/orders`, {
+        credentials: "include"
+      })
         const data = await response.json()
         list = data.data
     })
