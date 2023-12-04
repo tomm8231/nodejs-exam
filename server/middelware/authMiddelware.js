@@ -20,7 +20,7 @@ export const checkAuth = (req, res, next) => {
   }
 
 
- if (req.session && req.session.uid) {
+ if (req.session && req.session.user.uid) {
     return next();
   } else {
     return res.status(401).send({ data: "Unauthorised" });

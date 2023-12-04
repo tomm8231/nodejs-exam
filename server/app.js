@@ -52,8 +52,8 @@ const authRateLimiter = rateLimit({
 	// store: ... , // Use an external store for consistency across multiple server instances.
 });
 
-// import { checkAuth } from "./middelware/authMiddelware.js";
-// app.use(checkAuth)
+import { checkAuth } from "./middelware/authMiddelware.js";
+app.use(checkAuth)
 
 app.use("/auth", authRateLimiter);
 
