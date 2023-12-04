@@ -76,7 +76,6 @@ router.get("/api/orders/:round/users", async (req, res) => {
 
     try {
         const existingOrders = await db.collection("orders").find({ round }).sort({ staffNumber: 1 }).toArray();
-        console.log(existingOrders)
         if (existingOrders) {
 
             const users = existingOrders.map(order => ({staffNumber: order.staffNumber, name: order.name}))          

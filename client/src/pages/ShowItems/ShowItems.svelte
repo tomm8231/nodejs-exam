@@ -2,14 +2,13 @@
   import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
   import { user } from "../../stores/userStore.js"
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
 
   let orderedItems = [];
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
   
-  //test
-
   async function fetchData() {
     let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`);
 
@@ -53,10 +52,10 @@
       });
 
       console.log($user.uid);
-      //Toastr
+      topcenterMessageSucces("Din bestilling er gemt");
     } catch (error) {
       console.error("Error: " + error);
-      //Toastr
+      topcenterMessageFail("Der skete en fejl. Prøv igen senere")
     }
   }
 </script>
