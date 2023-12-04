@@ -5,7 +5,6 @@
     topcenterMessageSucces,
     topcenterMessageFail,
   } from "../../components/toastr/toastrMessage.js";
-  import { navigate } from "svelte-navigator";
   import Modal from "../../components/Modal/Modal.svelte";
 
   let users = [];
@@ -16,18 +15,57 @@
   let selectedUser = { staffnumber: "", name: "", email: "" };
 
   onMount(async () => {
+    fetchUsers();
+  });
+
+  async function fetchUsers() {
     try {
-      const response = await fetch($BASE_URL + "/api/users");
+      // const response = await fetch($BASE_URL + "/api/users");
+      const response = await fetch("http://localhost:8080/api/users", { credentials: "include" });
       const data = await response.json();
       users = data.data;
     } catch (error) {
       console.error("Error: " + error);
     }
-  });
+  }
 
-  function updateUser(event) {
+  async function updateFrontendUser(){
+    users = users.map(user => {
+      if(user.staffNumber === selectedUser.staffNumber){
+        user.name = selectedUser.name;
+        user.email = selectedUser.email;
+      }
+      return user;
+    })
+  }
+
+  async function updateUser(event) {
     event.preventDefault();
-    topcenterMessageSucces("Brugeren er opdateret");
+    try {
+      const response = await fetch(`${$BASE_URL}/api/users/${selectedUser.staffNumber}`, {
+        credentials: "include",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: selectedUser.name,
+          email: selectedUser.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        topcenterMessageSucces("Brugeren er opdateret");
+        updateFrontendUser();
+      } else if (data.error) {
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      topcenterMessageFail(error.message);
+      console.error("Error: " + error);
+    }
   }
 
   function updatePassword(event) {
@@ -42,6 +80,7 @@
 
     try {
       const response = await fetch($BASE_URL + "/api/users/" + id, {
+        credentials: "include",
         method: "DELETE",
       });
       const data = await response.json();
@@ -121,7 +160,7 @@
       <input type="text" id="name" name="name" bind:value={selectedUser.name} />
 
       <label for="email">Email</label>
-      <input type="text" id="email" name="email" value={selectedUser.email} />
+      <input type="text" id="email" name="email" bind:value={selectedUser.email} />
 
       <button on:click={updateUser}>Opdater bruger</button>
     </form>

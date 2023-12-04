@@ -5,7 +5,7 @@
   let showAllOrders = [];
   let headerKeys = [];
   let itemKey = "";
-  let quantityValues = {};
+  // let quantityValues = {};
   let currentRound = "";
 
 
@@ -25,13 +25,13 @@
   };
 
 
-  function handleQuantityChange(sku, event) {
-    const value = parseInt(event.target.value) || 0;
-    quantityValues = {
-      ...quantityValues,
-      [sku]: value,
-    };
-  }
+  // function handleQuantityChange(sku, event) {
+  //   const value = parseInt(event.target.value) || 0;
+  //   quantityValues = {
+  //     ...quantityValues,
+  //     [sku]: value,
+  //   };
+  // }
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;

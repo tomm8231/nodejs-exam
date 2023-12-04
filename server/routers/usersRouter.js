@@ -4,7 +4,6 @@ const router = Router()
 
 const userCollection = db.collection("users");
 
-
 router.get("/api/users", async (req, res) => {
     const response = await userCollection.find({}).toArray()
 
@@ -20,5 +19,20 @@ router.delete("/api/users/:id", async (req, res) => {
     res.status(200).send({ data: response });
 });
 
+router.put("/api/users/:staffnumber", async (req, res) => {
+    const staffNumber = req.params.staffnumber;
+    const { name, email } = req.body;
+
+    const response = await userCollection.updateOne(
+        { staffNumber },
+        {
+            $set: {
+                name,
+                email,
+            },
+        }
+    );
+    res.status(200).send({ data: response });
+});
 
 export default router

@@ -10,9 +10,10 @@
   let headerKeys = [];
   let itemKey = "";
   let currentName = "";
+  let currentStaffNumber = "";
 
   onMount(async () => {
-    const response = await fetch("http://localhost:8080/api/orders");
+    const response = await fetch("http://localhost:8080/api/orders", { credentials: "include" });
     const data = await response.json();
     list = data.data;
   });
@@ -42,8 +43,9 @@ function toggleSidebar() {
 async function fetchOrderForUser(user) {
   showSidebar = false;
   currentName = user.name
+  currentStaffNumber = user.staffNumber
 
-  let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${user.staffNumber}`);
+  let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${user.staffNumber}`, { credentials: "include" });
 
   const result = await response.json();
   orderedItems = result.data;
@@ -99,8 +101,8 @@ function handleQuantityChange(itemId, event) {
 {/if}
 
 {#if orderedItems && orderedItems.length > 0}
-<h3>{currentRound}</h3>
-<h3>{currentName}</h3>
+<h3>Medlemsnummer: {currentStaffNumber}</h3>
+<h3>Navn: {currentName}</h3>
 <table>
   <thead>
     <tr>

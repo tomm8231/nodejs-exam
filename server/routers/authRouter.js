@@ -20,7 +20,6 @@ router.post("/auth/login", async (req, res) => {
             uid: foundUser[0].staffNumber,
             role: foundUser[0].role
           }
-
           res.status(200).send({ data: "logged in", userData: req.session.user })
     } else {
         res.status(500).send({ data: "not logged in"})
@@ -28,6 +27,7 @@ router.post("/auth/login", async (req, res) => {
 })
 
 router.post("/auth/signup", async (req, res) => {
+    console.log(req.session)
     const { name, password, email, staffNumber } = req.body
     const role = "USER"
 

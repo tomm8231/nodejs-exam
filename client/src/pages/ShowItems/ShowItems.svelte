@@ -10,10 +10,10 @@
   let currentRound = "";
   
   async function fetchData() {
-    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`);
+    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`, { credentials: "include" });
 
     if (!response.ok) {
-      response = await fetch(`${$BASE_URL}/api/products/${currentRound}`);
+      response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, { credentials: "include" });
     }
 
     const result = await response.json();
@@ -40,6 +40,7 @@
 
     try {
       await fetch(`${$BASE_URL}/api/orders`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
