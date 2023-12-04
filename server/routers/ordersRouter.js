@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import db from "../databases/connections.js";
+import { adminCheck } from '../middelware/authMiddelware.js';
 const router = Router();
 
 
@@ -13,7 +14,6 @@ router.get("/api/orders", async (req, res) => {
 
 router.get("/api/orders/:round", async (req, res) => {
     const round = req.params?.round
-
 
     try {
         const existingOrders = await db.collection("orders").find({ round }).toArray();
@@ -71,15 +71,15 @@ router.get("/api/orders/:round", async (req, res) => {
 })
 
 
-router.get("/api/orders/:round/:username", async (req, res) => {
+router.get("/api/orders/:round/users", async (req, res) => {
     const round = req.params?.round
-    const username = req.params?.username
 
     try {
-        const existingOrder = await db.collection("orders").find({ round, username }).toArray();
-        
-        if(existingOrder[0] ) {
-            res.status(200).send({ data: existingOrder[0].orderedItems })
+        const existingOrders = await db.collection("orders").find({ round }).sort({ staffNumber: 1 }).toArray();
+        if (existingOrders) {
+
+            const users = existingOrders.map(order => ({staffNumber: order.staffNumber, name: order.name}))          
+            res.status(200).send({ data: users })
         } else {
             res.status(400).send({ data: "Not found" })
         }
@@ -91,21 +91,47 @@ router.get("/api/orders/:round/:username", async (req, res) => {
 })
 
 
+
+router.get("/api/orders/:round/:staffNumber", async (req, res) => {
+    const round = req.params?.round
+    const staffNumber = req.params?.staffNumber
+
+    try {
+        const existingOrder = await db.collection("orders").find({ round, staffNumber }).toArray();
+        
+        if(existingOrder[0] ) {
+            res.status(200).send({ data: existingOrder[0].orderedItems })
+        } else {
+            res.status(400).send({ data: "Not order found" })
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+
+
 router.post("/api/orders", async (req, res) => {
 
-    const username = req.body.username;
+    // const staffNumber = req.body.staffNumber;
+    const staffNumber = req.session.user?.uid;
+    console.log(staffNumber)
     const round = req.body.round;
-    const existingOrder = await db.collection("orders").findOne({ username, round });
+    const existingOrder = await db.collection("orders").findOne({ staffNumber, round });
+
 
     try {
         if (!existingOrder) {
+            const user = await db.collection("users").findOne({ staffNumber })
+            req.body.name = user.name    
             await db.collection("orders").insertOne(req.body);
         } else {
             const newData = req.body
-
             await db.collection("orders").updateOne(
-                { "username": req.body.username },
-                { $set: newData }
+                { "staffNumber": staffNumber }
+                ,{ $set: newData }
             );
         }
 

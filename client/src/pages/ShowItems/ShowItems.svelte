@@ -1,18 +1,19 @@
 <script>
   import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
+  import { user } from "../../stores/userStore.js"
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
 
   let orderedItems = [];
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
   
-
   async function fetchData() {
-    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/user5`);
+    let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`, { credentials: "include" });
 
     if (!response.ok) {
-      response = await fetch(`${$BASE_URL}/api/products/${currentRound}`);
+      response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, { credentials: "include" });
     }
 
     const result = await response.json();
@@ -39,21 +40,24 @@
 
     try {
       await fetch(`${$BASE_URL}/api/orders`, {
+        credentials: "include",
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           orderedItems,
-          username: "user4",
+          staffNumber: $user.uid,
           round: currentRound,
-        }),
+        })
       });
 
-      //Toastr
+      console.log($user.uid);
+      topcenterMessageSucces("Din bestilling er gemt");
     } catch (error) {
       console.error("Error: " + error);
-      //Toastr
+      topcenterMessageFail("Der skete en fejl. Prøv igen senere")
     }
   }
 </script>

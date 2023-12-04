@@ -2,8 +2,8 @@
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
   import { BASE_URL } from "../../stores/generalStore.js";
 
-  let username = "";
-  let membernumber = "";
+  let name = "";
+  let staffNumber = "";
   let email = "";
   let password = "";
 
@@ -11,12 +11,13 @@
     event.preventDefault();
 
     try {
-      const response = await fetch($BASE_URL+"/api/users", {
+      const response = await fetch($BASE_URL+"/auth/signup", {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, membernumber, email, password }),
+        body: JSON.stringify({ name, staffNumber, email, password }),
       });
 
       const data = await response.json();
@@ -25,10 +26,10 @@
         throw new Error(data.error);
       } else if (response.ok) {
         topcenterMessageSucces("Brugeren er tilføjet");
-        username = "";
+        name = "";
         email = "";
         password = "";
-        membernumber = "";
+        staffNumber = "";
 
       }
 
@@ -48,11 +49,11 @@
 
   <form on:submit={handleSubmit}>
 
-    <label for="membernumber">Medlemsnummer</label>
-    <input type="text" id="membernumber" bind:value={membernumber} />
+    <label for="staffNumber">Medlemsnummer</label>
+    <input type="text" id="staffNumber" bind:value={staffNumber} />
 
-    <label for="username">Navn</label>
-    <input type="text" id="username" bind:value={username} />
+    <label for="name">Navn</label>
+    <input type="text" id="name" bind:value={name} />
 
     <label for="email">Email</label>
     <input type="email" id="email" bind:value={email} />
