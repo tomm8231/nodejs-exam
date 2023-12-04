@@ -65,7 +65,6 @@ router.post("/auth/validateSession", async (req, res) => {
 
 router.get("/auth/logout", (req, res) => {
     delete req.session.user
-    console.log(req.session.user)
 
     req.session.destroy(() => {
             res.status(200).send({ data: "Logged out" })

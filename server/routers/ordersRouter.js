@@ -117,7 +117,6 @@ router.post("/api/orders", async (req, res) => {
 
     // const staffNumber = req.body.staffNumber;
     const staffNumber = req.session.user?.uid;
-    console.log(staffNumber)
     const round = req.body.round;
     const existingOrder = await db.collection("orders").findOne({ staffNumber, round });
 
