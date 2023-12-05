@@ -3,6 +3,9 @@
   import { BASE_URL } from "../../stores/generalStore.js";
   import { user } from "../../stores/userStore.js"
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+  import { io } from "socket.io-client";
+  
+  const socket = io($BASE_URL);
 
   let orderedItems = [];
   let headerKeys = [];
@@ -10,6 +13,9 @@
   let currentRound = "";
   let isOpen = true;
 
+  socket.on("server-sent-round-message", (data) => {
+             topcenterMessageSucces(data.message)
+         });
   
   async function fetchData() {
     let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`, { credentials: "include" });
@@ -61,7 +67,6 @@
         })
       });
 
-      console.log($user.uid);
       topcenterMessageSucces("Din bestilling er gemt");
     } catch (error) {
       console.error("Error: " + error);

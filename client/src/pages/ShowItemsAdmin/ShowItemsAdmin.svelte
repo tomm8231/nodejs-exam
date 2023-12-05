@@ -1,6 +1,9 @@
 <script>
   import { BASE_URL } from "../../stores/generalStore.js";
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+  import { io } from "socket.io-client";
+  
+  const socket = io($BASE_URL);
 
   let showAllOrders = [];
   let headerKeys = [];
@@ -48,7 +51,11 @@
       topcenterMessageFail("Der skete en fejl: " + message);
     } else {
       topcenterMessageSucces("Runden er lukket for flere bestillinger");
-    }
+
+      socket.emit("client-admin-order-status", {
+            message: `${currentRound} er lukket for flere bestillinger`
+      });
+     }
   }
 
   async function openOrder() {
@@ -67,6 +74,9 @@
       topcenterMessageFail("Der skete en fejl: " + message);
     } else {
       topcenterMessageSucces("Runden er åbnet for flere bestillinger");
+      socket.emit("client-admin-order-status", {
+            message: `${currentRound} er genåbnet for bestillinger`
+        });
     }
   }
 
