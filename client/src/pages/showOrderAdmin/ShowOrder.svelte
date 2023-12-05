@@ -19,10 +19,13 @@
     const data = await response.json();
     list = data.data;
   });
-
+ 
  async function handleOfferRoundChange(event) {
 
   currentRound = event.target[event.target.selectedIndex].text;
+
+  orderedItems = []
+
 
   showSidebar = true;
 
@@ -32,6 +35,7 @@
     
     const result = await response.json();
     users = result.data;
+  
   }
 
   let showSidebar = false;
@@ -100,6 +104,10 @@ function handleQuantityChange(itemId, event) {
       </button>
     {/each}
 </div>
+{/if}
+
+{#if currentRound}
+<h3>Runde: {currentRound}</h3>
 {/if}
 
 {#if orderedItems && orderedItems.length > 0}

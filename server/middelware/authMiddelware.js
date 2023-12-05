@@ -15,14 +15,17 @@ export const adminCheck = (req, res, next) => {
 };
 
 export const checkAuth = (req, res, next) => {
+  
   if (req.path === '/auth/login') {
     return next();
   }
 
 
- if (req.session && req.session.user.uid) {
+ if (req.session && req.session.user) {
     return next();
   } else {
     return res.status(401).send({ data: "Unauthorised" });
   }
+  
+ 
 };
