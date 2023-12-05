@@ -8,12 +8,21 @@
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
+  let isOpen = true;
+
   
   async function fetchData() {
     let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`, { credentials: "include" });
 
     if (!response.ok) {
       response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, { credentials: "include" });
+    }
+
+
+    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: "include" });
+    const statusResult = await roundStatus.json();
+    if (statusResult.data !== undefined) {
+      isOpen = statusResult.data;
     }
 
     const result = await response.json();
@@ -97,6 +106,7 @@
             <td>
               <input
                 type="number"
+                min="0"
                 value={item.quantity || 0}
                 on:input={(event) => handleQuantityChange(item[itemKey], event)}
               />
@@ -105,8 +115,13 @@
         {/each}
       </tbody>
     </table>
-
-    <button on:click={submitChanges}>Gem ændringer</button>
+    <div class="button-container">
+    {#if isOpen}
+    <button class="open-button" on:click={submitChanges}>Gem ændringer</button>
+    {:else}
+    <button disabled class="close-button">Lukket for bestillinger</button>
+    {/if}
+    </div>
   {/if}
 </main>
 

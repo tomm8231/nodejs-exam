@@ -11,7 +11,6 @@ const userCollection = db.collection("users");
 router.post("/auth/login", async (req, res) => {
     const { staffNumber, password } = req.body
     const foundUser = await userCollection.find({ staffNumber }).toArray()
-    console.log(foundUser);
     const uid = foundUser[0].staffNumber
     const role = foundUser[0].role
 
