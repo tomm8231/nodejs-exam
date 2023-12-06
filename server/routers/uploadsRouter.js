@@ -2,16 +2,19 @@ import { Router } from 'express'
 const router = Router()
 import multer from 'multer'
 
-import * as XLSX from 'xlsx/xlsx.mjs'
+import * as xlsx from 'xlsx/xlsx.mjs'
 
 import * as fs from 'fs'
-XLSX.set_fs(fs)
+xlsx.set_fs(fs)
 
 import { Readable } from 'stream'
-XLSX.stream.set_readable(Readable)
+xlsx.stream.set_readable(Readable)
 
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs'
-XLSX.set_cptable(cpexcel)
+xlsx.set_cptable(cpexcel)
+
+import db from '../databases/connections.js'
+const productsCollection = db.collection("products")
 
 
 
@@ -39,7 +42,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-router.post("/api/upload", upload.single('file'), (req, res) => {
+router.post("/api/upload", upload.single('file'), async (req, res) => {
 
 
     try {
@@ -47,23 +50,16 @@ router.post("/api/upload", upload.single('file'), (req, res) => {
             return res.status(400).json({ error: 'Invalid file or file is empty.' });
         }
 
-        // Read the uploaded file
-        const workbook = XLSX.readFile(req.file.path);
-        // Assuming the first sheet in the Excel file contains the data
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        // Convert sheet data to JSON
+        const allData = xlsx.readFile(req.file.path);
+        const spreadsheetName = allData.SheetNames[0];
+        const sheet = allData.Sheets[spreadsheetName];
+
         // const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // header: 1 returnerer mærkelig json-struktur
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-        console.log(jsonData);
+        // const response = await productsCollection.insertMany(jsonData)
 
-        // Here, you can add your code to save `jsonData` to the database
-        // For example, if using Mongoose:
-        // const YourModel = mongoose.model('YourModel', yourSchema);
-        // await YourModel.insertMany(jsonData);
 
-        // Send the JSON data as a response (optional)
         res.status(200).send({ data: jsonData });
 
     } catch (error) {
