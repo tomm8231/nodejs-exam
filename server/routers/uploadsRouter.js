@@ -63,7 +63,7 @@ router.post("/api/upload", upload.single('file'), async (req, res) => {
         const jsonDataWithRoundName = jsonData.map(doc => ({ ...doc, round: roundName }));
 
         console.log(jsonDataWithRoundName);
-        const response = await productsCollection.insertMany(jsonDataWithRoundName)
+        // const response = await productsCollection.insertMany(jsonDataWithRoundName)
 
 
 
