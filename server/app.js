@@ -53,7 +53,7 @@ const authRateLimiter = rateLimit({
 });
 
 import { checkAuth } from "./middelware/authMiddelware.js";
-app.use(checkAuth)
+// app.use(checkAuth)
 
 app.use("/auth", authRateLimiter);
 
@@ -71,6 +71,9 @@ app.use(authRouter)
 
 import uploadsRouter from "./routers/uploadsRouter.js"
 app.use(uploadsRouter)
+
+import roundsRouter from "./routers/roundsRouters.js"
+app.use(roundsRouter)
 
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});

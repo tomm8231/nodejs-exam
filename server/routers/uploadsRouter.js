@@ -20,12 +20,12 @@ const productsCollection = db.collection("products")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads')
+        cb(null, './uploads')
     },
     filename: function (req, file, cb) {
         const now = Date.now();
         const dateObject = new Date(now);
-        
+
         const year = dateObject.getFullYear();
         const month = dateObject.getMonth() + 1; // Months are zero-based, so add 1
         const date = (dateObject.getDate()) < 10 ? "0" + dateObject.getDate() : dateObject.getDate()
@@ -35,14 +35,15 @@ const storage = multer.diskStorage({
         const milliseconds = (dateObject.getMilliseconds()) < 10 ? "0" + dateObject.getMilliseconds() : dateObject.getMilliseconds()
         const uniqueIdentifier = date + month + year + '_' + hours + minutes + seconds + milliseconds
         const fileName = file.originalname.slice(0, file.originalname.lastIndexOf('.')) + '_' + uniqueIdentifier + file.originalname.slice(file.originalname.lastIndexOf('.'))
-      cb(null, fileName)
+        cb(null, fileName)
     }
-  })
+})
 
 const upload = multer({ storage });
 
 
 router.post("/api/upload", upload.single('file'), async (req, res) => {
+
 
 
     try {
@@ -57,23 +58,30 @@ router.post("/api/upload", upload.single('file'), async (req, res) => {
         // const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // header: 1 returnerer mærkelig json-struktur
         const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-        // const response = await productsCollection.insertMany(jsonData)
+        const roundName = req.body.roundName.trim().replace(/\s+/g, '_')    
+
+        const jsonDataWithRoundName = jsonData.map(doc => ({ ...doc, round: roundName }));
+
+        console.log(jsonDataWithRoundName);
+        const response = await productsCollection.insertMany(jsonDataWithRoundName)
 
 
-        res.status(200).send({ data: jsonData });
+
+
+        res.status(200).send({ data: jsonDataWithRoundName });
 
     } catch (error) {
         console.error('Error processing file:', error);
         res.status(500).send({ error: 'Internal Server Error' });
     } finally {
-        
+
         fs.unlink(req.file.path, (err) => {
             if (err) {
                 console.error('Error deleting file:', err);
             }
-            
+
         });
-        
+
     }
 })
 
