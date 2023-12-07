@@ -9,6 +9,7 @@
   import ShowUsers from "./pages/ShowUsers/ShowUsers.svelte";
   import { user } from "./stores/userStore.js";
   import ShowOrder from "./pages/ShowOrderAdmin/ShowOrder.svelte";
+  import AddRound from "./pages/AddRound/AddRound.svelte";
   import { onMount } from "svelte";
   import { BASE_URL } from "./stores/generalStore.js";
 
@@ -24,10 +25,9 @@
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          currentUserId
+          currentUserId,
         }),
       });
-      
     } catch (error) {
       console.error("Could not fetch:", error);
     }
@@ -41,7 +41,7 @@
 
       $user = { uid, role };
 
-      navigate("/", { replace: true })
+      navigate("/", { replace: true });
     }
   });
 
@@ -53,18 +53,16 @@
     localStorage.removeItem("currentUserRole");
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/logout`)
+      const response = await fetch(`${BASE_URL}/auth/logout`);
 
       if (response.ok) {
         navigate("/");
 
-        console.log("Logout sucessful")
+        console.log("Logout sucessful");
       }
-    } catch(error) {
-      console.log("Could not logout:", error)
+    } catch (error) {
+      console.log("Could not logout:", error);
     }
-
-
   }
 </script>
 
@@ -74,6 +72,7 @@
       <nav>
         <Link to="/">Home</Link>
         <Link to="/ShowItemsAdmin">Show items (Admin)</Link>
+        <Link to="/addRound">Opret ny runde (Admin)</Link>
         <Link to="/adduser">Tilføj bruger (Admin)</Link>
         <Link to="/showusers">Vis brugere (Admin)</Link>
         <Link to="/showorderadmin">Vis ordre (Admin)</Link>
@@ -92,6 +91,7 @@
       <PrivateRoute path="/ShowItemsAdmin" let:location
         ><ShowItemsAdmin /></PrivateRoute
       >
+      <PrivateRoute path="/addRound" let:location><AddRound /></PrivateRoute>
       <PrivateRoute path="/adduser" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/showusers" let:location><ShowUsers /></PrivateRoute>
       <PrivateRoute path="/showorderadmin" let:location

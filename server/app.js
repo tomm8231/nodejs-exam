@@ -69,6 +69,12 @@ app.use(orderRouter)
 import authRouter from "./routers/authRouter.js"
 app.use(authRouter)
 
+import uploadsRouter from "./routers/uploadsRouter.js"
+app.use(uploadsRouter)
+
+import roundsRouter from "./routers/roundsRouters.js"
+app.use(roundsRouter)
+
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});
 });

@@ -11,9 +11,6 @@ const userCollection = db.collection("users");
 router.post("/auth/login", async (req, res) => {
     const { staffNumber, password } = req.body
     const foundUser = await userCollection.find({ staffNumber }).toArray()
-    console.log(foundUser);
-    const uid = foundUser[0].staffNumber
-    const role = foundUser[0].role
 
     const passwordMatch = await bcrypt.compare(password, foundUser[0].hashedPassword)
 
@@ -50,7 +47,7 @@ router.post("/auth/signup", adminCheck, async (req, res) => {
 router.post("/auth/validateSession", async (req, res) => {
     const { currentUserId } = req.body
     let sessionId = ""
-    if (req.session.user && req.session.user.uid) {
+    if (req.session && req.session.user) {
         sessionId = req.session?.user.uid
     }
 
