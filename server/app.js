@@ -53,7 +53,7 @@ const authRateLimiter = rateLimit({
 });
 
 import { checkAuth } from "./middelware/authMiddelware.js";
-// app.use(checkAuth)
+app.use(checkAuth)
 
 app.use("/auth", authRateLimiter);
 

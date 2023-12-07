@@ -19,6 +19,7 @@
     // Send formData to your server using fetch or any other method
     const response = await fetch(`${$BASE_URL}/api/upload`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     });
 
