@@ -1,11 +1,13 @@
 <script>
-  import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+  import { io } from "socket.io-client";
+  
+  const socket = io($BASE_URL);
 
   let showAllOrders = [];
   let headerKeys = [];
   let itemKey = "";
-  // let quantityValues = {};
   let currentRound = "";
   let uniqueRounds = [];
 
@@ -16,39 +18,78 @@
     const data = await response.json();
     uniqueRounds = data.data;
   });
+  let isOpen = true;
 
   async function fetchData() {
     const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
       credentials: "include",
     });
-
- 
-      const result = await response.json();
-
-      showAllOrders = result.data[0];
-
-      headerKeys =
-        showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
-      headerKeys.shift();
-      console.log(headerKeys);
-      itemKey =
-        showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
     
-  }
+    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: "include" });
+    const statusResult = await roundStatus.json();
+    if (statusResult.data !== undefined) {
+      isOpen = statusResult.data;
+    }
 
-  // function handleQuantityChange(sku, event) {
-  //   const value = parseInt(event.target.value) || 0;
-  //   quantityValues = {
-  //     ...quantityValues,
-  //     [sku]: value,
-  //   };
-  // }
+    const result = await response.json();
+    showAllOrders = result.data[0];
+
+    headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
+    headerKeys.shift()
+    itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
+  };
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
     showAllOrders = []
     fetchData();
   }
+
+  async function closeOrder() {
+    isOpen = false;
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: "include",
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isOpen }),
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      const message = result.data;
+      topcenterMessageFail("Der skete en fejl: " + message);
+    } else {
+      topcenterMessageSucces("Runden er lukket for flere bestillinger");
+
+      socket.emit("client-admin-order-status", {
+            message: `${currentRound} er lukket for flere bestillinger`
+      });
+     }
+  }
+
+  async function openOrder() {
+    isOpen = true;
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: "include",
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isOpen }),
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      const message = result.data;
+      topcenterMessageFail("Der skete en fejl: " + message);
+    } else {
+      topcenterMessageSucces("Runden er åbnet for flere bestillinger");
+      socket.emit("client-admin-order-status", {
+            message: `${currentRound} er genåbnet for bestillinger`
+        });
+    }
+  }
+
 </script>
 
 <main>
@@ -91,8 +132,16 @@
         {/each}
       </tbody>
     </table>
-  {/if}
-  <!-- <button on:click={printQuantities}>Print Quantities</button> -->
+    <div class="button-container">
+      {#if isOpen}
+        <h1>Denne bestilling er åben</h1>
+        <button class="closeOrder" on:click={closeOrder}>Luk for bestilling</button>
+      {:else}
+        <h1>Denne bestilling er lukket</h1>
+        <button class="openOrder" on:click={openOrder}>Genåben for bestilling</button>
+      {/if}
+  </div>
+{/if}
 </main>
 
 <style>

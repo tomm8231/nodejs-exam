@@ -3,7 +3,6 @@ import express from "express"
 
 const app = express()
 
-
 import session from "express-session";
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
@@ -17,6 +16,17 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 
 
+import http from "http";
+import { Server } from "socket.io";
+
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ["*"],
+    }
+});
+
 
 import helmet from "helmet";
 app.use(helmet())
@@ -28,9 +38,6 @@ app.use(cors({
 }))
 
 app.use(express.json())
-
-
-  
 
 import { rateLimit } from 'express-rate-limit';
 
@@ -54,6 +61,16 @@ const authRateLimiter = rateLimit({
 
 import { checkAuth } from "./middelware/authMiddelware.js";
 app.use(checkAuth)
+
+
+io.on("connection", (socket) => {
+    
+	
+	socket.on("client-admin-order-status", (data) => {
+		io.emit("server-sent-round-message", data);
+	});
+		    
+});
 
 app.use("/auth", authRateLimiter);
 
@@ -81,6 +98,8 @@ app.all("*", (req, res) => {
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, (res, req) => {
-    console.log("Server is running on port", PORT);
-});
+
+server.listen(PORT, console.log("Server is running on port", PORT));
+// app.listen(PORT, (res, req) => {
+//     console.log("Server is running on port", PORT);
+// });

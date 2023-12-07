@@ -3,6 +3,9 @@
   import { BASE_URL } from "../../stores/generalStore.js";
   import { user } from "../../stores/userStore.js"
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+  import { io } from "socket.io-client";
+  
+  const socket = io($BASE_URL);
 
   let orderedItems = [];
   let headerKeys = [];
@@ -17,12 +20,24 @@
     const data = await response.json();
     uniqueRounds = data.data
   });
+  let isOpen = true;
+
+  socket.on("server-sent-round-message", (data) => {
+             topcenterMessageSucces(data.message)
+         });
   
   async function fetchData() {
     let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`, { credentials: "include" });
 
     if (!response.ok) {
       response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, { credentials: "include" });
+    }
+
+
+    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: "include" });
+    const statusResult = await roundStatus.json();
+    if (statusResult.data !== undefined) {
+      isOpen = statusResult.data;
     }
 
     const result = await response.json();
@@ -61,7 +76,6 @@
         })
       });
 
-      console.log($user.uid);
       topcenterMessageSucces("Din bestilling er gemt");
     } catch (error) {
       console.error("Error: " + error);
@@ -107,6 +121,7 @@
             <td>
               <input
                 type="number"
+                min="0"
                 value={item.quantity || 0}
                 on:input={(event) => handleQuantityChange(item[itemKey], event)}
               />
@@ -115,8 +130,13 @@
         {/each}
       </tbody>
     </table>
-
-    <button on:click={submitChanges}>Gem ændringer</button>
+    <div class="button-container">
+    {#if isOpen}
+    <button class="open-button" on:click={submitChanges}>Gem ændringer</button>
+    {:else}
+    <button disabled class="close-button">Lukket for bestillinger</button>
+    {/if}
+    </div>
   {/if}
 </main>
 

@@ -31,3 +31,19 @@ main {
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .open-button {
+    background-color: #4caf50;
+    color: black;
+  }
+
+  .close-button {
+    background-color: #f44336;
+    color: black;
+  }
