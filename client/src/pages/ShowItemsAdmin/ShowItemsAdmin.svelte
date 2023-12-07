@@ -33,7 +33,12 @@
     }
 
     const result = await response.json();
-    showAllOrders = result.data[0];
+
+    if (result.data[0].hasOwnProperty("orderedItems")) {
+      showAllOrders = result.data[0]
+    } else {
+      showAllOrders = result.data
+    }
 
     headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
     headerKeys.shift()

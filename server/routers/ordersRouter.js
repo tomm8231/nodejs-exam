@@ -14,8 +14,9 @@ router.get("/api/orders/:round", async (req, res) => {
 
   try {
     const existingOrders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).toArray();
+    console.log(existingOrders);
 
-    if (existingOrders) {
+    if (existingOrders.length > 0) {
       const counts = await db.collection("orders").aggregate([
           {
             $unwind: "$orderedItems",
@@ -36,7 +37,7 @@ router.get("/api/orders/:round", async (req, res) => {
         return product;
       });
 
-      res.status(200).send({ data: [result] });
+      res.status(200).send({ data: result });
     } else {
       const existingProducts = await db.collection("products").find({ round }).toArray();
       res.status(200).send({ data: existingProducts, message: "No orders" });

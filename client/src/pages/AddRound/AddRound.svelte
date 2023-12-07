@@ -28,7 +28,7 @@
     if (response.ok) {
       message = "Filen blev uploadet" + JSON.stringify(result.data);
     } else {
-      message = "Filen blev ikke uploadet" + JSON.stringify(result.data);
+      message = "Filen blev ikke uploadet" + result.data;
     }
   }
 

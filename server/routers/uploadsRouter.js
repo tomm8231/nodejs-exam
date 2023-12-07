@@ -45,25 +45,33 @@ const upload = multer({ storage });
 
 router.post("/api/upload", upload.single('file'), async (req, res) => {
 
+    const roundName = req.body.roundName.trim().replace(/\s+/g, '_')    
 
 
     try {
+
+        const foundRound = await productsCollection.find({ round: roundName }).toArray()
+        console.log(foundRound);
+
+        if (foundRound.length > 0) {
+            return res.status(400).send({ data: " Navn på runde allerede i brug"})
+        }
+
+
         if (!req.file) {
             return res.status(400).json({ error: 'Invalid file or file is empty.' });
         }
+
+        
 
         const allData = xlsx.readFile(req.file.path);
         const spreadsheetName = allData.SheetNames[0];
         const sheet = allData.Sheets[spreadsheetName];
 
-        // const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // header: 1 returnerer mærkelig json-struktur
         const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-        const roundName = req.body.roundName.trim().replace(/\s+/g, '_')    
 
-        const jsonDataWithRoundName = jsonData.map(doc => ({ ...doc, round: roundName }));
-
-        console.log(jsonDataWithRoundName);
+        const jsonDataWithRoundName = jsonData.map(jsonDataItem => ({ ...jsonDataItem, round: roundName }));
         
         await productsCollection.insertMany(jsonDataWithRoundName)
 
