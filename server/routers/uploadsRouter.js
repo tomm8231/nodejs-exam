@@ -15,6 +15,7 @@ xlsx.set_cptable(cpexcel)
 
 import db from '../databases/connections.js'
 const productsCollection = db.collection("products")
+const ordersCollection = db.collection("orders")
 
 
 
@@ -63,8 +64,10 @@ router.post("/api/upload", upload.single('file'), async (req, res) => {
         const jsonDataWithRoundName = jsonData.map(doc => ({ ...doc, round: roundName }));
 
         console.log(jsonDataWithRoundName);
-        const response = await productsCollection.insertMany(jsonDataWithRoundName)
+        
+        await productsCollection.insertMany(jsonDataWithRoundName)
 
+        await ordersCollection.insertOne({ round: roundName, isOpen: true })
 
 
 
