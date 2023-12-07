@@ -111,9 +111,7 @@
     bind:value={currentRound}
     on:change={handleOfferRoundChange}
   >
-    <!-- <option value="fjallraven_feb_24">Fjallraven Feb 24</option>
-    <option value="s2s_oct_24">Sea to Summit okt 24</option>
-    <option value="arc'teryx_december_2023_2">arc</option> -->
+
     {#each uniqueRounds as round}
       <option value={round}>{round}</option>
     {/each}
@@ -151,5 +149,5 @@
 </main>
 
 <style>
-  @import "./showItemsAdmin.css";
+  @import "./finishOrderAdmin.css";
 </style>

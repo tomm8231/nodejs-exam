@@ -52,9 +52,10 @@ router.get("/api/orders/:round/users", async (req, res) => {
   const round = req.params?.round;
 
   try {
-    const existingOrders = await db.collection("orders").find({ round }).sort({ staffNumber: 1 }).toArray();
-    if (existingOrders) {
-      const users = existingOrders.map((order) => ({
+    const activeOrInactiveRounds = await db.collection("orders").find({ round, isOpen: { $exists: true } }).sort({ staffNumber: 1 }).toArray();
+    if (activeOrInactiveRounds.length > 0) {
+      const orders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).sort({ staffNumber: 1 }).toArray();
+      const users = orders.map((order) => ({
         staffNumber: order.staffNumber,
         name: order.name,
       }));

@@ -141,5 +141,5 @@
 </main>
 
 <style>
-  @import "./showItems.css";
+  @import "./showAvailableItemsUser.css";
 </style>
