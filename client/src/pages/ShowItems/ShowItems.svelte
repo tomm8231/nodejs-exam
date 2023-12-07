@@ -11,6 +11,15 @@
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
+  let uniqueRounds = []
+
+  onMount(async () => {
+    const response = await fetch(`${$BASE_URL}/api/rounds`, {
+        credentials: "include"
+      })
+    const data = await response.json();
+    uniqueRounds = data.data
+  });
   let isOpen = true;
 
   socket.on("server-sent-round-message", (data) => {
@@ -88,8 +97,9 @@
     bind:value={currentRound}
     on:change={handleOfferRoundChange}
   >
-    <option value="fjallraven_feb_24">Fjallraven Feb 24</option>
-    <option value="s2s_oct_24">Sea to Summit okt 24</option>
+  {#each uniqueRounds as round}
+  <option value={round}>{round}</option>
+{/each}
   </select>
 
   {#if currentRound}

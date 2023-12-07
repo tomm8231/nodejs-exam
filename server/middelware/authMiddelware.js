@@ -15,6 +15,7 @@ export const adminCheck = (req, res, next) => {
 };
 
 export const checkAuth = (req, res, next) => {
+  
   if (req.path === '/auth/login') {
     return next();
   }
@@ -25,4 +26,6 @@ export const checkAuth = (req, res, next) => {
   } else {
     return res.status(401).send({ data: "Unauthorised" });
   }
+  
+ 
 };

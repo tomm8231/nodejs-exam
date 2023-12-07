@@ -3,7 +3,7 @@
   import { BASE_URL } from "../../stores/generalStore.js";
 
   let currentRound = "";
-  let list = [];
+  let uniqueRounds = [];
   let users = [];
 
   let orderedItems = [];
@@ -13,16 +13,19 @@
   let currentStaffNumber = "";
 
   onMount(async () => {
-    const response = await fetch(`${$BASE_URL}/api/orders`, {
+    const response = await fetch(`${$BASE_URL}/api/rounds`, {
         credentials: "include"
       })
     const data = await response.json();
-    list = data.data;
+    uniqueRounds = data.data
   });
-
+ 
  async function handleOfferRoundChange(event) {
 
   currentRound = event.target[event.target.selectedIndex].text;
+
+  orderedItems = []
+
 
   showSidebar = true;
 
@@ -32,6 +35,7 @@
     
     const result = await response.json();
     users = result.data;
+  
   }
 
   let showSidebar = false;
@@ -79,9 +83,9 @@ function handleQuantityChange(itemId, event) {
   bind:value={currentRound}
   on:change={handleOfferRoundChange}
 >
-  {#each list as name, index (index)}
-    <option value={index}>{name}</option>
-  {/each}
+{#each uniqueRounds as round}
+<option value={round}>{round}</option>
+{/each}
 </select>
 
 {#if currentRound && users.length > 0}
@@ -100,6 +104,10 @@ function handleQuantityChange(itemId, event) {
       </button>
     {/each}
 </div>
+{/if}
+
+{#if currentRound}
+<h3>Runde: {currentRound}</h3>
 {/if}
 
 {#if orderedItems && orderedItems.length > 0}
@@ -132,6 +140,6 @@ function handleQuantityChange(itemId, event) {
     {/each}
   </tbody>
 </table>
-
+{:else}
 <!-- <button on:click={submitChanges}>Gem ændringer</button> -->
 {/if}
