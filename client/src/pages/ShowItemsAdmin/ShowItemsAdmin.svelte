@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
   import { io } from "socket.io-client";
