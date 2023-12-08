@@ -51,33 +51,23 @@ router.post("/api/upload", upload.single('file'), async (req, res) => {
     try {
 
         const foundRound = await productsCollection.find({ round: roundName }).toArray()
-        console.log(foundRound);
 
         if (foundRound.length > 0) {
             return res.status(400).send({ data: " Navn på runde allerede i brug"})
         }
 
-
         if (!req.file) {
             return res.status(400).json({ error: 'Invalid file or file is empty.' });
         }
-
         
-
         const allData = xlsx.readFile(req.file.path);
         const spreadsheetName = allData.SheetNames[0];
         const sheet = allData.Sheets[spreadsheetName];
-
         const jsonData = xlsx.utils.sheet_to_json(sheet);
-
-
         const jsonDataWithRoundName = jsonData.map(jsonDataItem => ({ ...jsonDataItem, round: roundName }));
         
         await productsCollection.insertMany(jsonDataWithRoundName)
-
         await ordersCollection.insertOne({ round: roundName, isOpen: true })
-
-
 
         res.status(200).send({ data: jsonDataWithRoundName });
 
