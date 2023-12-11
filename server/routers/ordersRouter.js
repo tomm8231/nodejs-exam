@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import db from "../databases/connections.js";
-import { adminCheck } from '../middelware/authMiddelware.js';
 const router = Router();
 
 router.get("/api/orders", async (req, res) => {
@@ -72,10 +71,10 @@ router.get("/api/orders/status/:round", async (req, res) => {
   const round = req.params?.round;
 
   try {
-    const existingOrder = await db.collection("orders").find({ round, isOpen: { $exists: true }}).toArray();
+    const statusOrder = await db.collection("orders").find({ round, isOpen: { $exists: true }}).toArray();
 
-    if (existingOrder[0]) {
-      res.status(200).send({ data: existingOrder[0].isOpen });
+    if (statusOrder[0]) {
+      res.status(200).send({ data: statusOrder[0].isOpen });
     } else {
       res.status(400).send({ data: "Something went wrong in the database" });
     }
@@ -125,6 +124,24 @@ router.post("/api/orders", async (req, res) => {
         res.status(500).send({ data: "Something went wrong in the database" });
     }
 });
+
+
+router.delete("/api/orders", async (req, res) => {
+  const staffNumber = req.body.staffNumber;
+
+  try {
+    const openOrders = await db.collection("orders").find({ isOpen: true }).toArray();
+    console.log(openOrders);
+
+    openOrders.forEach(async (order) => {
+      await db.collection("orders").deleteOne({ staffNumber, round: order.round });
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 
 router.put("/api/orders/:round", async (req, res) => {
   const round = req.params?.round;

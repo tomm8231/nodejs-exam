@@ -120,7 +120,7 @@ function handleQuantityChange(itemId, event) {
   <h3>{currentRound}</h3>
   <h3>klik for ordre</h3>
 
-  <input type="text" placeholder="Search users" bind:value={searchQuery} on:input={handleSearchChange} />
+  <input type="text" placeholder="Søg efter bruger" bind:value={searchQuery} on:input={handleSearchChange} />
 
   {#each filteredUsers as user}
     <button class="person-link" on:click={() => fetchOrderForUser(user)}>

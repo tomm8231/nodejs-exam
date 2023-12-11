@@ -1,7 +1,8 @@
 <script>
-    import { BASE_URL } from "../../stores/generalStore";
+  import { BASE_URL } from "../../stores/generalStore";
   import { useNavigate, useLocation } from "svelte-navigator";
-  import { user } from "../../stores/userStore.js"
+  import { user } from "../../stores/userStore.js";
+  import { topcenterMessageFail } from "../../components/toastr/toastrMessage";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,6 +30,8 @@
 
         const from = ($location.state && $location.state.from) || "/"
         navigate(from, { replace: true })
+      } else {
+        topcenterMessageFail("Login failed")
       }
     } catch (err) {
       console.log("err: " + err);

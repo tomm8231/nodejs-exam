@@ -20,7 +20,6 @@
 
   async function fetchUsers() {
     try {
-      // const response = await fetch($BASE_URL + "/api/users");
       const response = await fetch("http://localhost:8080/api/users", { credentials: "include" });
       const data = await response.json();
       users = data.data;
@@ -74,25 +73,42 @@
   }
 
   async function deleteUser(evt) {
-    let id = evt.target.id;
-    //removeing the first character from the id so it does not start with a $
-    id = id.substring(1);
+    let staffNumber = evt.target.id;
 
     try {
-      const response = await fetch($BASE_URL + "/api/users/" + id, {
+      const response = await fetch($BASE_URL + "/api/users/" + staffNumber, {
         credentials: "include",
         method: "DELETE",
       });
       const data = await response.json();
-
-      users = users.filter(user => user._id !== id);
-
 
       if (response.ok) {
         topcenterMessageSucces("Brugeren er slettet");
       } else if (data.error) {
         throw new Error(data.error);
       }
+
+      users = users.filter(user => {
+        return user.staffNumber !== staffNumber
+      });
+
+      const deleteOrders = await fetch($BASE_URL + "/api/orders/", {
+        credentials: "include",
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          staffNumber,
+        }),
+      }); 
+
+      const deletionData = await deleteOrders.json();
+
+      if (deletionData.error) {
+        throw new Error(data.error);
+      }
+     
     } catch (error) {
       topcenterMessageFail(error.message);
       console.error("Error: " + error);
@@ -125,7 +141,7 @@
           <td>{user.name}</td>
           <td>{user.email}</td>
           <td><button on:click={() => openModal(user)}>Rediger</button></td>
-          <td><button id="${user._id}" on:click={deleteUser}>Slet</button></td>
+          <td><button id="{user.staffNumber}" on:click={deleteUser}>Slet</button></td>
         </tr>
       {/each}
     </tbody>
