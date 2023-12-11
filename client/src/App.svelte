@@ -12,6 +12,7 @@
   import AddRound from "./pages/AddRound/AddRound.svelte";
   import { onMount } from "svelte";
   import { BASE_URL } from "./stores/generalStore.js";
+  import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
 
   let userSession = null;
   let currentUserId = localStorage.getItem("currentUserId");
@@ -75,6 +76,7 @@
         <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
         <Link to="/opret-bruger">Opret bruger</Link>
         <Link to="/brugere">Vis/rediger brugere</Link>
+        <Link to="/beskeder">Beskeder</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
     {:else if $user && $user.role === "USER"}
@@ -92,6 +94,7 @@
       <PrivateRoute path="/opret-bruger" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/brugere" let:location><ShowUsers /></PrivateRoute>
       <PrivateRoute path="/bestillingsrunde" let:location><ManageOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/beskeder" let:location><MessagesAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>
     </div>
   </div>
