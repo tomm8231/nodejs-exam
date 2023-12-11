@@ -12,3 +12,19 @@
     overflow: auto;
     position: relative;
 }
+
+#container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    min-width: 400px;
+  }
+  
+  #messageForm {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .messages {
+    flex: 1;
+  }

@@ -28,7 +28,8 @@
     }
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
+<section id="container">
+<form id="messageForm" on:submit|preventDefault={handleSubmit}>
     <div>
         <label for="offerRound">Vælg bestillingsrunde</label>
         <select
@@ -46,6 +47,12 @@
 
     <button type="submit">Submit</button>
 </form>
+
+<div class="messages">
+    <p>Test</p>
+</div>
+
+</section>
 
 <style>
     @import "./messagesAdmin.css";
