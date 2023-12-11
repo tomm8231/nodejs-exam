@@ -10,6 +10,9 @@
     let message = '';
     let uniqueRounds = [];
     let currentRound = "";
+    let messages = []
+
+    $:messages
 
 
     onMount(async () => {
@@ -18,13 +21,28 @@
     });
     const data = await response.json();
     uniqueRounds = data.data;
+
+
+    const messagesPromise = await fetch(`${$BASE_URL}/api/messages`, {
+      credentials: "include"
+    })
+    
+    const messagesResult = await messagesPromise.json()
+    messages = messagesResult.data
   });
   
 
     function handleSubmit() {
-        socket.emit("client-admin-message", { round: currentRound, message });
+      const messageData = {
+        round: currentRound,
+        message
+      }
+        socket.emit("client-admin-message", messageData );
+
+        messages.push(messageData)
         message = "";
         topcenterMessageSucces("Besked sendt");
+
     }
 </script>
 
@@ -49,7 +67,10 @@
 </form>
 
 <div class="messages">
-    <p>Test</p>
+  {#each messages as msg}
+  <p>{msg.round}</p>
+  <p>{msg.message}</p>
+{/each}
 </div>
 
 </section>

@@ -9,6 +9,7 @@ function handleSocket(socket) {
     socket.on("client-admin-message", async (data) => {
         data.timestamp = new Date();
         await db.collection("messages").insertOne(data);
+        console.log(data);
         socket.broadcast.emit("server-admin-message", data);
     });
 }
