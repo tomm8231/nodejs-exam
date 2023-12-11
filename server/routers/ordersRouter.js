@@ -1,14 +1,9 @@
 import { Router } from 'express';
 import db from "../databases/connections.js";
+import { adminCheck } from '../middelware/authMiddelware.js';
 const router = Router();
 
-router.get("/api/orders", async (req, res) => {
-  // find all the names of differend rounds
-  const rounds = await db.collection("orders").distinct("round");
-  res.status(200).send({ data: rounds });
-});
-
-router.get("/api/orders/:round", async (req, res) => {
+router.get("/api/orders/:round", adminCheck, async (req, res) => {
   const round = req.params?.round;
 
   try {
@@ -46,8 +41,7 @@ router.get("/api/orders/:round", async (req, res) => {
   }
 });
 
-
-router.get("/api/orders/:round/users", async (req, res) => {
+router.get("/api/orders/:round/users", adminCheck, async (req, res) => {
   const round = req.params?.round;
 
   try {
@@ -85,7 +79,11 @@ router.get("/api/orders/status/:round", async (req, res) => {
 
 router.get("/api/orders/:round/:staffNumber", async (req, res) => {
   const round = req.params?.round;
-  const staffNumber = req.params?.staffNumber;
+  let staffNumber = req.params?.staffNumber;
+
+  if (req.session.user.role !== "ADMIN" ) {
+    staffNumber = req.session.user.uid
+  }
 
   try {
     const existingOrder = await db.collection("orders").find({ round, staffNumber }).toArray();
@@ -99,7 +97,6 @@ router.get("/api/orders/:round/:staffNumber", async (req, res) => {
     console.log(error);
   }
 });
-
 
 router.post("/api/orders", async (req, res) => {
     const staffNumber = req.session.user?.uid;
@@ -118,15 +115,14 @@ router.post("/api/orders", async (req, res) => {
                 ,{ $set: newData }
             );
         }
-        res.status(200).send({ data: "All went well" });
+        res.status(200).send({ data: "Order made" });
     } catch (error) {
         console.log("Error: " + error);
         res.status(500).send({ data: "Something went wrong in the database" });
     }
 });
 
-
-router.delete("/api/orders", async (req, res) => {
+router.delete("/api/orders", adminCheck, async (req, res) => {
   const staffNumber = req.body.staffNumber;
 
   try {
@@ -142,8 +138,7 @@ router.delete("/api/orders", async (req, res) => {
   }
 });
 
-
-router.put("/api/orders/:round", async (req, res) => {
+router.put("/api/orders/:round", adminCheck, async (req, res) => {
   const round = req.params?.round;
   const isOpen = req.body.isOpen;
 
@@ -155,9 +150,5 @@ router.put("/api/orders/:round", async (req, res) => {
     res.status(500).send({ data: "failed to update status" });
   }
 });
-
-
-
-  
 
 export default router;
