@@ -12,6 +12,10 @@
   let currentName = "";
   let currentStaffNumber = "";
 
+  let filteredUsers;
+  let searchQuery = ""
+
+
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
         credentials: "include"
@@ -35,7 +39,8 @@
     
     const result = await response.json();
     users = result.data;
-  
+
+    filteredUsers = users
   }
 
   let showSidebar = false;
@@ -43,6 +48,23 @@
 function toggleSidebar() {
   showSidebar = !showSidebar;
 }
+
+
+function handleSearchChange(event) {
+    searchQuery = event.target.value.toLowerCase();
+    filterUsers();
+  }
+
+  function filterUsers() {
+  if (searchQuery.trim() === "") {
+    filteredUsers = users;
+  } else {
+    filteredUsers = users.filter(user =>
+      user.staffNumber.toLowerCase().includes(searchQuery) ||
+      user.name.toLowerCase().includes(searchQuery)
+    );
+  }
+  }
 
 
 
@@ -72,7 +94,7 @@ function handleQuantityChange(itemId, event) {
 </script>
 
 <style>
-  @import './showOrder.css';
+  @import './manageOrderAdmin.css';
 </style>
 
 <h1>Find bestillinger</h1>
@@ -97,12 +119,15 @@ function handleQuantityChange(itemId, event) {
 <div class="sidebar {showSidebar ? 'show' : ''}">
   <h3>{currentRound}</h3>
   <h3>klik for ordre</h3>
-    {#each users as user}
-      <button class="person-link" on:click={() => fetchOrderForUser(user)}>
-        <p>{user.staffNumber}</p>
-        <p>{user.name}</p>
-      </button>
-    {/each}
+
+  <input type="text" placeholder="Search users" bind:value={searchQuery} on:input={handleSearchChange} />
+
+  {#each filteredUsers as user}
+    <button class="person-link" on:click={() => fetchOrderForUser(user)}>
+      <p>{user.staffNumber}</p>
+      <p>{user.name}</p>
+    </button>
+  {/each}
 </div>
 {/if}
 

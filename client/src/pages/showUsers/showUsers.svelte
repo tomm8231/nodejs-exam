@@ -175,5 +175,5 @@
 </main>
 
 <style>
-  @import "../ShowItemsAdmin/showItemsAdmin.css";
+  @import "./showUsers.css";
 </style>

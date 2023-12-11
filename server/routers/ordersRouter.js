@@ -14,8 +14,9 @@ router.get("/api/orders/:round", async (req, res) => {
 
   try {
     const existingOrders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).toArray();
+    console.log(existingOrders);
 
-    if (existingOrders) {
+    if (existingOrders.length > 0) {
       const counts = await db.collection("orders").aggregate([
           {
             $unwind: "$orderedItems",
@@ -36,7 +37,7 @@ router.get("/api/orders/:round", async (req, res) => {
         return product;
       });
 
-      res.status(200).send({ data: [result] });
+      res.status(200).send({ data: result });
     } else {
       const existingProducts = await db.collection("products").find({ round }).toArray();
       res.status(200).send({ data: existingProducts, message: "No orders" });
@@ -51,9 +52,10 @@ router.get("/api/orders/:round/users", async (req, res) => {
   const round = req.params?.round;
 
   try {
-    const existingOrders = await db.collection("orders").find({ round }).sort({ staffNumber: 1 }).toArray();
-    if (existingOrders) {
-      const users = existingOrders.map((order) => ({
+    const activeOrInactiveRounds = await db.collection("orders").find({ round, isOpen: { $exists: true } }).sort({ staffNumber: 1 }).toArray();
+    if (activeOrInactiveRounds.length > 0) {
+      const orders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).sort({ staffNumber: 1 }).toArray();
+      const users = orders.map((order) => ({
         staffNumber: order.staffNumber,
         name: order.name,
       }));
