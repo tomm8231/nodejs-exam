@@ -1,7 +1,8 @@
 import { Router } from 'express'
+import { adminCheck } from '../middelware/authMiddelware.js'
 const router = Router()
-import multer from 'multer'
 
+import multer from 'multer'
 import * as xlsx from 'xlsx/xlsx.mjs'
 
 import * as fs from 'fs'
@@ -43,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
-router.post("/api/upload", upload.single('file'), async (req, res) => {
+router.post("/api/upload", upload.single('file'), adminCheck, async (req, res) => {
 
     const roundName = req.body.roundName.trim().replace(/\s+/g, '_')    
 
