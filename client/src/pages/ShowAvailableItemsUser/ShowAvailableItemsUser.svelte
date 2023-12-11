@@ -89,9 +89,9 @@
       filteredItems = orderedItems.filter((item) =>
         Object.values(item).some((value) => {
           if (typeof value === "string") {
-            return value.toLowerCase().includes(searchQuery.toLowerCase());
+            return value.toLowerCase().includes(searchQuery);
           } else if (typeof value === "number") {
-            return value.toString().includes(searchQuery.toLowerCase());
+            return value.toString().includes(searchQuery);
           }
           return false;
         })
@@ -141,7 +141,7 @@
   </div>
 
   {#if orderedItems.length > 0}
-    <div>
+    <div id="search-bar">
       <input
         type="text"
         placeholder="Søg på vare"

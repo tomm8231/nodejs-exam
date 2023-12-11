@@ -70,11 +70,11 @@
   <div id="app">
     {#if $user && $user.role === "ADMIN"}
       <nav>
-        <Link to="/afslut-ordre">Afslut ordrer</Link>
         <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
+        <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
+        <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
         <Link to="/opret-bruger">Opret bruger</Link>
         <Link to="/brugere">Vis/rediger brugere</Link>
-        <Link to="/ordrer">Vis/rediger ordrer</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
     {:else if $user && $user.role === "USER"}
@@ -87,11 +87,11 @@
     <div class="content">
       <PrivateRoute path="/" let:location><Home /></PrivateRoute>
       <PrivateRoute path="/bestil-varer" let:location><ShowAvailableItemsUser /></PrivateRoute>
-      <PrivateRoute path="/afslut-ordre" let:location><FinishOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/afslut-bestillingsrunde" let:location><FinishOrderAdmin /></PrivateRoute>
       <PrivateRoute path="/opret-bestillingsrunde" let:location><AddRound /></PrivateRoute>
       <PrivateRoute path="/opret-bruger" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/brugere" let:location><ShowUsers /></PrivateRoute>
-      <PrivateRoute path="/ordrer" let:location><ManageOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/bestillingsrunde" let:location><ManageOrderAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>
     </div>
   </div>
