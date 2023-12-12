@@ -156,7 +156,7 @@
   <h3>Runde: {currentRound}</h3>
 {/if}
 
-{#if displayedItems && displayedItems.length > 0}
+{#if displayedItems && displayedItems.length > 0 }
   <h3>Medlemsnummer: {currentStaffNumber}</h3>
   <h3>Navn: {currentName}</h3>
 
@@ -195,8 +195,9 @@
       {/each}
     </tbody>
   </table>
-{:else}
-  <!-- <button on:click={submitChanges}>Gem ændringer</button> -->
+{/if}
+{#if users.length < 1 && currentRound !== ""}
+<h3>Ingen bestillinger</h3>
 {/if}
 
 <style>

@@ -11,6 +11,15 @@
   let itemKey = "";
   let currentRound = "";
   let uniqueRounds = [];
+  let showOnlyOrderedItems;
+  let displayedItems = []
+
+
+  $: if (showOnlyOrderedItems) {
+    displayedItems = showAllOrders.filter((item) => item.quantity > 0);
+  } else {
+    displayedItems = showAllOrders;
+  }
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
@@ -36,18 +45,21 @@
 
     if (result.data[0].hasOwnProperty("orderedItems")) {
       showAllOrders = result.data[0]
+      displayedItems = showAllOrders
     } else {
       showAllOrders = result.data
+      displayedItems = showAllOrders
     }
 
-    headerKeys = showAllOrders.length > 0 ? Object.keys(showAllOrders[0]) : [];
+    headerKeys = displayedItems.length > 0 ? Object.keys(displayedItems[0]) : [];
     headerKeys.shift()
-    itemKey = showAllOrders.length > 0 ? Object.keys(showAllOrders[0])[0] : "";
+    itemKey = displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : "";
   };
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
-    showAllOrders = []
+    displayedItems = []
+    showOnlyOrderedItems = false
     fetchData();
   }
 
@@ -117,7 +129,26 @@
     {/each}
   </select>
 
-  {#if showAllOrders && showAllOrders.length > 0}
+  {#if displayedItems && displayedItems.length > 0 || showAllOrders.length > 0}
+  <div id="orderedItemsCheckbox">
+    <label for="showOnlyOrderedItems">Vis kun bestilte varer</label>
+    <input
+      type="checkbox"
+      id="showOnlyOrderedItems"
+      bind:checked={showOnlyOrderedItems}
+    />
+  </div>
+
+  <div class="button-container">
+    {#if isOpen}
+      <h3>Denne bestilling er åben</h3>
+      <button class="closeOrder" on:click={closeOrder}>Luk for bestilling</button>
+    {:else}
+      <h3>Denne bestilling er lukket</h3>
+      <button class="openOrder" on:click={openOrder}>Genåben for bestilling</button>
+    {/if}
+</div>
+{#if displayedItems.length > 0}
     <table>
       <thead>
         <tr>
@@ -127,7 +158,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each showAllOrders as item (item[itemKey])}
+        {#each displayedItems as item (item[itemKey])}
           <tr>
             {#each headerKeys as key (key)}
               <td>{item[key]}</td>
@@ -136,15 +167,7 @@
         {/each}
       </tbody>
     </table>
-    <div class="button-container">
-      {#if isOpen}
-        <h1>Denne bestilling er åben</h1>
-        <button class="closeOrder" on:click={closeOrder}>Luk for bestilling</button>
-      {:else}
-        <h1>Denne bestilling er lukket</h1>
-        <button class="openOrder" on:click={openOrder}>Genåben for bestilling</button>
-      {/if}
-  </div>
+    {/if}
 {/if}
 </main>
 
