@@ -5,6 +5,8 @@
 	let dialog; // HTMLDialogElement
 
 	$: if (dialog && showModal) dialog.showModal();
+
+	$: if (dialog && !showModal) dialog.close();
 </script>
 
 <style>

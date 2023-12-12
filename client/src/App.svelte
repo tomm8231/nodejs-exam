@@ -2,7 +2,7 @@
   import { Router, Link, Route, navigate } from "svelte-navigator";
   import PrivateRoute from "./privateRouting/PrivateRoute.svelte";
   import ShowAvailableItemsUser from "./pages/ShowAvailableItemsUser/ShowAvailableItemsUser.svelte";
-  import Home from "./pages/Home.svelte";
+  import Home from "./pages/Home/Home.svelte";
   import FinishOrderAdmin from "./pages/FinishOrderAdmin/FinishOrderAdmin.svelte";
   import AddUser from "./pages/AddUser/AddUser.svelte";
   import Login from "./pages/Login/Login.svelte";
@@ -12,8 +12,10 @@
   import AddRound from "./pages/AddRound/AddRound.svelte";
   import { onMount } from "svelte";
   import { BASE_URL } from "./stores/generalStore.js";
+  import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
+  import MessagesUser from "./pages/MessagesUser/MessagesUser.svelte";
+  import UserInfo from "./pages/UserInfo/userInfo.svelte";
 
-  let userSession = null;
   let currentUserId = localStorage.getItem("currentUserId");
 
   onMount(async () => {
@@ -75,12 +77,15 @@
         <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
         <Link to="/opret-bruger">Opret bruger</Link>
         <Link to="/brugere">Vis/rediger brugere</Link>
+        <Link to="/beskederAdmin">Beskeder</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
     {:else if $user && $user.role === "USER"}
       <nav>
         <Link to="/">Home</Link>
         <Link to="/bestil-varer">Bestil varer</Link>
+        <Link to="/beskederBruger">Beskeder</Link>
+        <Link to="/brugerInfo">Dine info</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
     {/if}
@@ -92,6 +97,9 @@
       <PrivateRoute path="/opret-bruger" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/brugere" let:location><ShowUsers /></PrivateRoute>
       <PrivateRoute path="/bestillingsrunde" let:location><ManageOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/beskederAdmin" let:location><MessagesAdmin /></PrivateRoute>
+      <PrivateRoute path="/beskederBruger" let:location><MessagesUser /></PrivateRoute>
+      <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
       <Route path="/login"><Login /></Route>
     </div>
   </div>

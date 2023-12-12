@@ -15,7 +15,6 @@ const sessionMiddleware = session({
 });
 app.use(sessionMiddleware);
 
-
 import http from "http";
 import { Server } from "socket.io";
 
@@ -26,7 +25,6 @@ const io = new Server(server, {
         methods: ["*"],
     }
 });
-
 
 import helmet from "helmet";
 app.use(helmet())
@@ -62,15 +60,8 @@ const authRateLimiter = rateLimit({
 import { checkAuth } from "./middelware/authMiddelware.js";
 app.use(checkAuth)
 
-
-io.on("connection", (socket) => {
-    
-	
-	socket.on("client-admin-order-status", (data) => {
-		io.emit("server-sent-round-message", data);
-	});
-		    
-});
+import handleSocket from "./sockets/handleSocket.js";
+io.on("connection", handleSocket);
 
 app.use("/auth", authRateLimiter);
 
@@ -92,14 +83,13 @@ app.use(uploadsRouter)
 import roundsRouter from "./routers/roundsRouters.js"
 app.use(roundsRouter)
 
+import messaagesRouter from "./routers/messagesRouter.js"
+app.use(messaagesRouter)
+
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});
 });
 
 const PORT = process.env.PORT || 8080;
 
-
 server.listen(PORT, console.log("Server is running on port", PORT));
-// app.listen(PORT, (res, req) => {
-//     console.log("Server is running on port", PORT);
-// });

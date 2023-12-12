@@ -6,3 +6,9 @@ export async function hashPassword(plainTextPassword) {
     
     return hashedPassword
 }
+
+export async function comparePassword(plainTextPassword, hashedPassword) {
+    const match = await bcrypt.compare(plainTextPassword, hashedPassword)
+    
+    return match
+}
