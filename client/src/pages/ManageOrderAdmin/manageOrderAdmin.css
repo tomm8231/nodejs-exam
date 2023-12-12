@@ -49,3 +49,7 @@
   .person-link p {
     margin: 0;
   }
+
+  input#showOnlyOrderedItems {
+    width: max-content;
+}
