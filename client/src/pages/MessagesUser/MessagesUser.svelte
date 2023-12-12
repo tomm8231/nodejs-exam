@@ -50,7 +50,14 @@
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    return `${date.getDate()}/${date.getMonth()+1} - ${date.getHours()}:${date.getMinutes()}`;
+    return date.toLocaleString('dk-DK', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false 
+    });
   }
 </script>
 
@@ -66,23 +73,28 @@ function formatDate(dateString) {
   {/each}
 </select>
 
+{#if filteredMessages.length > 0}
+
 <div class="messages">
-  <table>
-    <thead>
-      <tr>
-        <th>Bestillingsrunde</th>
-        <th>Besked</th>
-        <th>Dato</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each filteredMessages as msg}
+    <table>
+      <thead>
         <tr>
-          <td class="info">{msg.round}</td>
-          <td class="message-text">{msg.message}</td>
-          <td class="info">{formatDate(msg.date)}</td>
+          <th>Bestillingsrunde</th>
+          <th>Besked</th>
+          <th>Dato</th>
         </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        {#each filteredMessages as msg}
+          <tr>
+            <td class="info">{msg.round}</td>
+            <td class="message-text">{msg.message}</td>
+            <td class="info">{formatDate(msg.date)}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+{:else}
+<h3>Ingen beskeder</h3>
+{/if}
