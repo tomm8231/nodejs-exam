@@ -26,7 +26,6 @@
     const data = await response.json();
     uniqueRounds = data.data;
 
-
     const messagesPromise = await fetch(`${$BASE_URL}/api/messages`, {
       credentials: "include"
     })

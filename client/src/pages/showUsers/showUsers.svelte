@@ -58,6 +58,7 @@
       if (response.ok) {
         topcenterMessageSucces("Brugeren er opdateret");
         updateFrontendUser();
+        showModal = false;
       } else if (data.error) {
         throw new Error(data.error);
       }
@@ -70,6 +71,7 @@
   function updatePassword(event) {
     event.preventDefault();
     topcenterMessageSucces("Password er opdateret");
+    showModal = false;
   }
 
   async function deleteUser(evt) {
