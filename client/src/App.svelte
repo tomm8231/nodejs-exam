@@ -2,7 +2,7 @@
   import { Router, Link, Route, navigate } from "svelte-navigator";
   import PrivateRoute from "./privateRouting/PrivateRoute.svelte";
   import ShowAvailableItemsUser from "./pages/ShowAvailableItemsUser/ShowAvailableItemsUser.svelte";
-  import Home from "./pages/Home.svelte";
+  import Home from "./pages/Home/Home.svelte";
   import FinishOrderAdmin from "./pages/FinishOrderAdmin/FinishOrderAdmin.svelte";
   import AddUser from "./pages/AddUser/AddUser.svelte";
   import Login from "./pages/Login/Login.svelte";

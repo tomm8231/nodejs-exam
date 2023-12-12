@@ -26,11 +26,9 @@
 
     const messagesResult = await messagesPromise.json();
     messages = messagesResult.data;
-    console.log(messages);
   });
 
   socket.on("server-admin-message", (data) => {
-    console.log(data);
     messages = [...messages, data]
   });
 </script>
