@@ -44,17 +44,17 @@
       }
       const messageData = {
         round: currentRoundMessage,
-        message
+        message: `${message}`
       }
         socket.emit("client-admin-message", messageData );
         messageData.date = new Date();
-        messages = [...messages, messageData]
+        messages = [ messageData, ...messages]
         message = "";
         topcenterMessageSucces("Besked sendt");
 
         //skal kunne vises i filtered også
         if (currentRoundShow === currentRoundMessage || currentRoundShow === "") {
-          filteredMessages = [...filteredMessages, messageData]
+          filteredMessages = [messageData, ...filteredMessages]
         }
     }
 
@@ -131,7 +131,7 @@ function filterMessages() {
       {#each filteredMessages as msg}
         <tr>
           <td class="info">{msg.round}</td>
-          <td>{msg.message}</td>
+          <td class="message-text">{msg.message}</td>
           <td class="info">{formatDate(msg.date)}</td>        
         </tr>
       {/each}

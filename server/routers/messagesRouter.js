@@ -5,7 +5,7 @@ const router = Router()
 
 router.get("/api/messages", async (req, res) => {
 
-    const messages = await db.collection("messages").find().toArray()
+    const messages = await db.collection("messages").find().sort({ date: -1 }).toArray()
 
     res.send({ data: messages })
 }) 

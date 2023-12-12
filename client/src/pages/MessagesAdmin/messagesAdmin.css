@@ -61,3 +61,11 @@
   .info {
     white-space: nowrap;
   }
+
+  td {
+    white-space: pre;
+  }
+
+  .message-text{
+    text-align: left;
+  }
