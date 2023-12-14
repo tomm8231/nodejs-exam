@@ -77,14 +77,14 @@
         <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
         <Link to="/opret-bruger">Opret bruger</Link>
         <Link to="/brugere">Vis/rediger brugere</Link>
-        <Link to="/beskederAdmin">Beskeder</Link>
+        <Link to="/beskederAdmin">Opslagstavle</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
     {:else if $user && $user.role === "USER"}
       <nav>
         <Link to="/">Home</Link>
         <Link to="/bestil-varer">Bestil varer</Link>
-        <Link to="/beskederBruger">Beskeder</Link>
+        <Link to="/beskederBruger">Opslagstavle</Link>
         <Link to="/brugerInfo">Dine info</Link>
         <a href="/" on:click={logout}>Log ud</a>
       </nav>
