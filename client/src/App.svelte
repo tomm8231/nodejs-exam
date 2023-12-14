@@ -82,7 +82,6 @@
       </nav>
     {:else if $user && $user.role === "USER"}
       <nav>
-        <Link to="/">Home</Link>
         <Link to="/bestil-varer">Bestil varer</Link>
         <Link to="/beskederBruger">Opslagstavle</Link>
         <Link to="/brugerInfo">Dine info</Link>
