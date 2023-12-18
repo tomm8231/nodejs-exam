@@ -24,7 +24,7 @@ router.post("/auth/login", async (req, res) => {
           }
           res.status(200).send({ data: "logged in", userData: req.session.user })
     } else {
-        res.status(500).send({ data: "not logged in" })
+        res.status(400).send({ data: "not logged in" })
     }
 })
 
@@ -32,8 +32,9 @@ router.post("/auth/signup", adminCheck, async (req, res) => {
     const { name, email, staffNumber } = req.body
     const role = "USER"
     const existingUser = await userCollection.find({ staffNumber }).toArray()
+    const existingEmail = await userCollection.find({ email }).toArray()
 
-    if (!existingUser[0]) {
+    if (!existingUser[0] && !existingEmail[0]) {
         const password = await randomPassword()
         const hashedPassword = await hashPassword(password)
         const response = await userCollection.insertOne({ name, email, staffNumber, hashedPassword, role })
@@ -41,7 +42,7 @@ router.post("/auth/signup", adminCheck, async (req, res) => {
         sendMail(email, "Velkommen til luffelands staffbestilling", message )
         res.status(200).send({ data: ["User was created", response] })
     } else {
-        res.status(500).send({ data: "User was not created: user already exists" })
+        res.status(400).send({ data: "User was not created: user already exists" })
     }
 
 })

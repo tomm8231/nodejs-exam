@@ -57,9 +57,6 @@
   });
 
   async function logout() {
-    // Perform logout logic here
-    // For example, clear user data from localStorage and navigate to the login page
-
     localStorage.removeItem("currentUserId");
     localStorage.removeItem("currentUserRole");
 
@@ -81,33 +78,70 @@
   <div id="app">
     {#if $user && $user.role === "ADMIN"}
       <nav>
-        <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
-        <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
-        <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
-        <Link to="/opret-bruger">Opret bruger</Link>
-        <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
-        <Link to="/brugere">Vis/rediger brugere</Link>
-        <Link to="/beskederAdmin">Opslagstavle</Link>
-        <a href="/" on:click={logout}>Log ud</a>
+        <div id="main-menu-box">
+          <div class="dropdown">
+            <button class="dropbtn"
+              >Bestillingsrunder
+              <i class="fa fa-caret-down" />
+            </button>
+            <div class="dropdown-content">
+              <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
+              <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
+              <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
+              <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <button class="dropbtn"
+              >Brugere
+              <i class="fa fa-caret-down" />
+            </button>
+            <div class="dropdown-content">
+              <Link to="/opret-bruger">Opret bruger</Link>
+              <Link to="/brugere">Vis/rediger brugere</Link>
+            </div>
+          </div>
+          <Link to="/beskederAdmin">Opslagstavle</Link>
+        </div>
+        <div id="logout-box">
+          <a href="/" on:click={logout}>Log ud</a>
+        </div>
       </nav>
     {:else if $user && $user.role === "USER"}
       <nav>
-        <Link to="/bestil-varer">Bestil varer</Link>
-        <Link to="/beskederBruger">Opslagstavle</Link>
-        <Link to="/brugerInfo">Dine info</Link>
-        <a href="/" on:click={logout}>Log ud</a>
+        <div id="main-menu-box">
+          <Link to="/bestil-varer">Bestil varer</Link>
+          <Link to="/beskederBruger">Opslagstavle</Link>
+          <Link to="/brugerInfo">Dine info</Link>
+        </div>
+        <div id="logout-box">
+          <a href="/" on:click={logout}>Log ud</a>
+        </div>
       </nav>
     {/if}
     <div class="content">
       <PrivateRoute path="/" let:location><Home /></PrivateRoute>
-      <PrivateRoute path="/bestil-varer" let:location><ShowAvailableItemsUser /></PrivateRoute>
-      <PrivateRoute path="/afslut-bestillingsrunde" let:location><FinishOrderAdmin /></PrivateRoute>
-      <PrivateRoute path="/opret-bestillingsrunde" let:location><AddRound /></PrivateRoute>
+      <PrivateRoute path="/bestil-varer" let:location
+        ><ShowAvailableItemsUser /></PrivateRoute
+      >
+      <PrivateRoute path="/afslut-bestillingsrunde" let:location
+        ><FinishOrderAdmin /></PrivateRoute
+      >
+      <PrivateRoute path="/opret-bestillingsrunde" let:location
+        ><AddRound /></PrivateRoute
+      >
       <PrivateRoute path="/opret-bruger" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/brugere" let:location><ShowUsers /></PrivateRoute>
-      <PrivateRoute path="/bestillingsrunde" let:location><ManageOrderAdmin /></PrivateRoute>
-      <PrivateRoute path="/beskederAdmin" let:location><MessagesAdmin /></PrivateRoute>
-      <PrivateRoute path="/beskederBruger" let:location><MessagesUser /></PrivateRoute>
+      <PrivateRoute path="/bestillingsrunde" let:location
+        ><ManageOrderAdmin /></PrivateRoute
+      >
+      <PrivateRoute path="/beskederAdmin" let:location
+        ><MessagesAdmin /></PrivateRoute
+      >
+      <PrivateRoute path="/beskederBruger" let:location
+        ><MessagesUser /></PrivateRoute
+      >
       <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
       <PrivateRoute path="/slet-bestillingsrunde" let:location><DeleteRoundAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>

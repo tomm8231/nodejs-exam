@@ -21,14 +21,13 @@
 
       const data = await response.json();
 
-      if (data.error) {
-        throw new Error(data.error);
-      } else if (response.ok) {
+      if (!response.ok) {
+        topcenterMessageFail("Fejl: En bruger findes allerede med medarbejdernummer eller email");
+      } else {
         topcenterMessageSucces("Brugeren er tilføjet");
         name = "";
         email = "";
         staffNumber = "";
-
       }
 
     } catch (error) {
