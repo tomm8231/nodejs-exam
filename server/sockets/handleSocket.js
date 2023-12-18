@@ -11,8 +11,7 @@ function handleSocket(socket) {
     });
 
     socket.on("client-admin-message", async (data) => {
-        // data.date = new Date();
-        console.log(data);
+
         const roundOrders = await db.collection("orders").find({ round: data.round, staffNumber: { $exists: true } }).toArray()
         const staffNumbersFromRound = roundOrders.map(order => order.staffNumber);
         const roundUsers = await db.collection("users").find({

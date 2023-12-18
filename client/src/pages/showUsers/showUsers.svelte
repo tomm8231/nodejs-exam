@@ -68,10 +68,25 @@
     }
   }
 
-  function updatePassword(event) {
+  async function newPassword(event) {
     event.preventDefault();
-    topcenterMessageSucces("Password er opdateret");
-    showModal = false;
+    const response = await fetch(`${$BASE_URL}/api/users/resetpassword`, {
+      credentials: "include",
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        staffNumber: selectedUser.staffNumber,
+      }),
+    });
+    
+    if (response.ok){
+      topcenterMessageSucces("Password er opdateret");
+      showModal = false;
+    } else {
+      topcenterMessageFail("Password kunne ikke opdateres");
+    }
   }
 
   async function deleteUser(evt) {
@@ -183,12 +198,9 @@
       <button on:click={updateUser}>Opdater bruger</button>
     </form>
     <hr />
-    <form>
-      <label for="password">Password</label>
-      <input type="text" id="password" name="password" />
-
-      <button on:click={updatePassword}>Opdater password</button>
-    </form>
+    <div class="button-container">
+      <button on:click={newPassword}>Send bruger nyt password</button>
+    </div>
   </Modal>
 </main>
 

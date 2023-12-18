@@ -1,7 +1,8 @@
 import {Router} from 'express'
 import db from '../databases/connections.js'
 import { adminCheck } from '../middelware/authMiddelware.js';
-import { hashPassword, comparePassword } from '../encrypt/encryption.js';
+import { hashPassword, comparePassword, randomPassword } from '../encrypt/encryption.js';
+import { sendMail } from '../nodemailer/sendEmail.js'
 
 const router = Router()
 
@@ -29,7 +30,6 @@ router.delete("/api/users/:staffNumber", adminCheck, async (req, res) => {
 });
 
 router.put("/api/users/password", async (req, res) => {
-
     const { oldPassWord, newPassWord } = req.body;
     const staffNumber = req.session.user.uid
 
@@ -45,6 +45,26 @@ router.put("/api/users/password", async (req, res) => {
         res.status(401).send({ data: "Passwords does not match" })
     }
 
+
+})
+
+router.put('/api/users/resetpassword', adminCheck, async (req, res) => {
+try {
+    const { staffNumber } = req.body
+    const newRandomPassword = await randomPassword()
+    const hashedPassword = await hashPassword(newRandomPassword)
+
+    await userCollection.updateOne({ staffNumber }, { $set: { hashedPassword } })
+
+    const user = await userCollection.findOne({ staffNumber })
+    const text = 'Dit nye password er: ' + newRandomPassword + '\nDu bør skifte dette hurtigst muligt. \nMvh admin'
+    await sendMail(user.email,"password reset", text)
+
+    res.status(200).send({ data: "Password reset" })
+
+} catch (error) {
+    res.status(500).send({ data: error.message })
+}
 
 })
 
