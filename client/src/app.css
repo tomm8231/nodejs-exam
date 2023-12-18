@@ -62,3 +62,50 @@ nav a:hover {
 body #toast-container > div {
   opacity: 1;
 }
+
+#main-menu-box {
+  padding-left: 30px;
+}
+
+#main-menu-box div {
+  margin-right: 75px;
+}
+
+#logout-box {
+  padding-right: 30px;
+}
+
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: inherit;  
+  padding-top: 0;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 20px;
+  display: block;
+  margin: 0;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
