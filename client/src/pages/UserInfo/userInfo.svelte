@@ -20,8 +20,8 @@
 
     async function updatePassword(event) {
         event.preventDefault();
-        if (event.target.oldPassword.value !== event.target.repeatOldPassword.value) {
-            topcenterMessageFail("Password matcher ikke");
+        if (event.target.newPassword.value !== event.target.repeatNewPassword.value) {
+            topcenterMessageFail("Nye password matcher ikke");
         } else {
 
             const response = await fetch(`${$BASE_URL}/api/users/password`, {
@@ -73,12 +73,13 @@
     <form on:submit={updatePassword}>
         <label for="oldPassword">Nuværende password</label>
         <input type="password" id="oldPassword"  name="password" />
-
-        <label for="repeatOldPassword">Gentag nuværende password</label>
-        <input type="password" id="repeatOldPassword" name="password" />
-
+        
         <label for="newPassword">nyt password</label>
         <input type="password" id="newPassword" name="password" />
+
+        <label for="repeatNewPassword">Gentag nyt password</label>
+        <input type="password" id="repeatOldPassword" name="password" />
+
 
         <button >Opdater password</button>
     </form>

@@ -15,6 +15,7 @@
   import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
   import MessagesUser from "./pages/MessagesUser/MessagesUser.svelte";
   import UserInfo from "./pages/UserInfo/userInfo.svelte";
+  import DeleteRoundAdmin from "./pages/DeleteRound/DeleteRoundAdmin.svelte";
 
   let currentUserId = localStorage.getItem("currentUserId");
 
@@ -84,6 +85,7 @@
         <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
         <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
         <Link to="/opret-bruger">Opret bruger</Link>
+        <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
         <Link to="/brugere">Vis/rediger brugere</Link>
         <Link to="/beskederAdmin">Opslagstavle</Link>
         <a href="/" on:click={logout}>Log ud</a>
@@ -107,6 +109,7 @@
       <PrivateRoute path="/beskederAdmin" let:location><MessagesAdmin /></PrivateRoute>
       <PrivateRoute path="/beskederBruger" let:location><MessagesUser /></PrivateRoute>
       <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
+      <PrivateRoute path="/slet-bestillingsrunde" let:location><DeleteRoundAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>
     </div>
   </div>

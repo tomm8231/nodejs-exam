@@ -5,7 +5,6 @@
   let name = "";
   let staffNumber = "";
   let email = "";
-  let password = "";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,7 +16,7 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, staffNumber, email, password }),
+        body: JSON.stringify({ name, staffNumber, email }),
       });
 
       const data = await response.json();
@@ -28,7 +27,6 @@
         topcenterMessageSucces("Brugeren er tilføjet");
         name = "";
         email = "";
-        password = "";
         staffNumber = "";
 
       }
@@ -57,9 +55,6 @@
 
     <label for="email">Email</label>
     <input type="email" id="email" bind:value={email} />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" bind:value={password} />
 
     <button type="submit">Tilføj bruger</button>
   </form>
