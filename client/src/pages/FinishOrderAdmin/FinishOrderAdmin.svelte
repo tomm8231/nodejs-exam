@@ -78,10 +78,11 @@
       const message = result.data;
       topcenterMessageFail("Der skete en fejl: " + message);
     } else {
-      topcenterMessageSucces("Runden er lukket for flere bestillinger");
-
+      topcenterMessageSucces("Runden er lukket for bestillinger");
       socket.emit("client-admin-order-status", {
-            message: `${currentRound} er lukket for flere bestillinger`
+            message: `${currentRound} er lukket for bestillinger`,
+            round: currentRound,
+            date: new Date()
       });
      }
   }
@@ -103,7 +104,9 @@
     } else {
       topcenterMessageSucces("Runden er åbnet for flere bestillinger");
       socket.emit("client-admin-order-status", {
-            message: `${currentRound} er genåbnet for bestillinger`
+            round: currentRound,
+            message: `${currentRound} er genåbnet for bestillinger`,
+            date: new Date()
         });
     }
   }
