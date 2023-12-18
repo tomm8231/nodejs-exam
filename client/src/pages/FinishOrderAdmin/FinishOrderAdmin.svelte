@@ -82,7 +82,8 @@
       socket.emit("client-admin-order-status", {
             message: `${currentRound} er lukket for bestillinger`,
             round: currentRound,
-            date: new Date()
+            date: new Date(),
+            isOpen
       });
      }
   }
@@ -106,7 +107,8 @@
       socket.emit("client-admin-order-status", {
             round: currentRound,
             message: `${currentRound} er genåbnet for bestillinger`,
-            date: new Date()
+            date: new Date(),
+            isOpen
         });
     }
   }

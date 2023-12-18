@@ -30,6 +30,13 @@
           currentUserId,
         }),
       });
+
+      if (!response.ok) {
+        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("currentUserRole");
+        navigate("/login", { replace: true });
+      }
+
     } catch (error) {
       console.error("Could not fetch:", error);
     }
@@ -45,6 +52,7 @@
 
       navigate("/", { replace: true });
     }
+
   });
 
   async function logout() {

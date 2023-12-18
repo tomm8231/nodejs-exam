@@ -4,9 +4,11 @@ const router = Router();
 
 
 router.get("/api/rounds", async (req, res) => {
-    const allRounds = await db.collection("products").distinct("round")
 
-    res.send({ data: allRounds });
+    const allRounds = await db.collection("orders").find({ softDeadline: { $exists: true } }).sort({ softDeadline: -1 }).toArray();
+    const roundList = allRounds.map((round) => round.round);
+
+    res.send({ data: roundList });
 });
 
 
