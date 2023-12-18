@@ -38,31 +38,31 @@ onMount(async () => {
         showModal = true;
     }
   }
-
 </script>
 
 <style>
-    @import "./deleteRoundAdmin.css";
+        @import "./deleteRoundAdmin.css";
 </style>
 
-<h1>Bestillingsrunder</h1>
+<h1 id="title">Slet bestillingsrunde</h1>
 
-<div>
-  <label for="offerRound">Vælg bestillingsrunde</label>
-  <select
-    id="offerRound"
-    bind:value={currentRound} >
-    {#each uniqueRounds as round}
-      <option value={round}>{round}</option>
-    {/each}
-  </select>
+<div id="select-container">
+    <label for="offerRound" id="offerRoundLabel">Vælg bestillingsrunde</label>
+    <select
+        id="offerRound"
+        bind:value={currentRound} >
+        {#each uniqueRounds as round}
+            <option value={round} id={`option-${round}`}>{round}</option>
+        {/each}
+    </select>
+    <button id="deleteRoundButton" on:click={showTheModal}>Slet runde</button>
 </div>
-<button on:click={showTheModal}>Slet runde</button>
 <Modal bind:showModal bind:selectedUser={currentRound}>
-    <div class="options">
-        <div>Slet bestillingsrunde {currentRound} og alt tilhørende</div>
-        <button on:click={deleteRound}>Ja</button>
-        <button on:click={() => showModal = false}>Nej</button>
-    </div>
-  </Modal>
+    <div id="modalText">Slet bestillingsrunde {currentRound} og alt tilhørende</div>
+        <div class="options" id="modalOptions">
+                <button id="confirmDeleteButton" on:click={deleteRound}>Ja</button>
+                <button id="cancelDeleteButton" on:click={() => showModal = false}>Nej</button>
+        </div>
+</Modal>
+
 
