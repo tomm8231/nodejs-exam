@@ -15,6 +15,7 @@
   import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
   import MessagesUser from "./pages/MessagesUser/MessagesUser.svelte";
   import UserInfo from "./pages/UserInfo/userInfo.svelte";
+  import DeleteRoundAdmin from "./pages/DeleteRound/DeleteRoundAdmin.svelte";
 
   let currentUserId = localStorage.getItem("currentUserId");
 
@@ -30,6 +31,13 @@
           currentUserId,
         }),
       });
+
+      if (!response.ok) {
+        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("currentUserRole");
+        navigate("/login", { replace: true });
+      }
+
     } catch (error) {
       console.error("Could not fetch:", error);
     }
@@ -45,6 +53,7 @@
 
       navigate("/", { replace: true });
     }
+
   });
 
   async function logout() {
@@ -76,10 +85,10 @@
               <i class="fa fa-caret-down" />
             </button>
             <div class="dropdown-content">
-              <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link
-              >
+              <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
               <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
               <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
+              <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
             </div>
           </div>
 
@@ -134,6 +143,7 @@
         ><MessagesUser /></PrivateRoute
       >
       <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
+      <PrivateRoute path="/slet-bestillingsrunde" let:location><DeleteRoundAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>
     </div>
   </div>

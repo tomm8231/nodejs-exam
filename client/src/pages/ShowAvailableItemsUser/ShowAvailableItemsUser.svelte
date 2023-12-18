@@ -18,6 +18,8 @@
 
   let filteredItems = [];
   let searchQuery = "";
+  let isOpen = true;
+
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
@@ -26,9 +28,12 @@
     const data = await response.json();
     uniqueRounds = data.data;
   });
-  let isOpen = true;
 
   socket.on("server-sent-round-message", (data) => {
+
+    if (data.round === currentRound) {
+      isOpen = data.isOpen;
+    }
     topcenterMessageSucces(data.message);
   });
 
@@ -144,6 +149,7 @@
   {#if orderedItems.length > 0}
     <div id="search-bar">
       <input
+        id="search-input"
         type="text"
         placeholder="Søg på vare"
         bind:value={searchQuery}
