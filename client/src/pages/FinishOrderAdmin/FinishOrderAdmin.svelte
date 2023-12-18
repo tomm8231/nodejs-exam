@@ -106,7 +106,7 @@
       socket.emit("client-admin-order-status", {
             round: currentRound,
             message: `${currentRound} er genåbnet for bestillinger`,
-            date: new Date().toISOString()
+            date: new Date()
         });
     }
   }

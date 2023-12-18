@@ -43,10 +43,10 @@
       }
       const messageData = {
         round: currentRoundMessage,
-        message: `${message}`
+        message: `${message}`,
+        date: new Date()
       }
         socket.emit("client-admin-message", messageData );
-        messageData.date = new Date();
         messages = [ messageData, ...messages]
         message = "";
         topcenterMessageSucces("Besked sendt");
