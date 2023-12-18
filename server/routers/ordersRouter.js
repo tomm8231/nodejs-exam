@@ -8,7 +8,6 @@ router.get("/api/orders/:round", adminCheck, async (req, res) => {
 
   try {
     const existingOrders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).toArray();
-    console.log(existingOrders);
 
     if (existingOrders.length > 0) {
       const counts = await db.collection("orders").aggregate([
@@ -127,7 +126,6 @@ router.delete("/api/orders", adminCheck, async (req, res) => {
 
   try {
     const openOrders = await db.collection("orders").find({ isOpen: true }).toArray();
-    console.log(openOrders);
 
     openOrders.forEach(async (order) => {
       await db.collection("orders").deleteOne({ staffNumber, round: order.round });
