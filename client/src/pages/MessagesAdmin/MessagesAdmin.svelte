@@ -14,6 +14,8 @@
     let messages = []
     let filteredMessages = [];
     let showSidebar = false;
+    let sendToAll = false;
+
 
 
     $:messages
@@ -44,7 +46,8 @@
       const messageData = {
         round: currentRoundMessage,
         message: `${message}`,
-        date: new Date()
+        date: new Date(),
+        sendToAll
       }
         socket.emit("client-admin-message", messageData );
         messages = [ messageData, ...messages]
@@ -103,11 +106,15 @@ function filterMessages() {
     </select>
     <form id="messageForm" on:submit|preventDefault={handleSubmit}>
     
-      <label for="message">Message:</label>
+      <label id="label-sendToAll" for="sendToAll">Send til alle brugere</label>
+      <input type="checkbox" id="sendToAll" bind:checked={sendToAll}/>
+
+      <label for="message">Din besked:</label>
       <textarea id="message" bind:value={message} />
-      
-  
+
       <button type="submit">Submit</button>
+    
+      <checkbox></checkbox>
   </form>
   </div>
 </div>
