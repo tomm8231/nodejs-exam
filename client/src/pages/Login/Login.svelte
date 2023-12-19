@@ -43,7 +43,7 @@
 
 <form on:submit={(event) => handleLogin(event)}>
 
-    <label for="staffNumber">Medlemsnummer</label>
+    <label for="staffNumber">Medarbejdernummer</label>
     <input type="text" id="staffNumber" bind:value={staffNumber} />
 
     <label for="password">Password</label>

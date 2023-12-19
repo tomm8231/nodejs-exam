@@ -121,8 +121,8 @@
         topcenterMessageSucces("Brugeren er opdateret");
         updateFrontendUser();
         showModal = false;
-      } else if (data.error) {
-        throw new Error(data.error);
+      } else {
+        topcenterMessageFail("Kunne ikke opdateres")
       }
     } catch (error) {
       topcenterMessageFail(error.message);
@@ -220,14 +220,29 @@
     <div class="button-container">
       <button on:click={newPassword}>Send bruger nyt password</button>
     </div>
+    <hr />
+    <!-- svelte-ignore a11y-autofocus -->
+    <button autofocus on:click={() => showModal = false}>Luk</button>
   </Modal>
 
 
   <Modal bind:showModal={showDeleteConfirmationModal} bind:selectedUser>
     <h2>Slet bruger</h2>
-    <p>{selectedUser.name}, {selectedUser.staffNumber}?</p>
-    <button on:click={confirmDeleteUser}>Slet</button>
+    <div id="staff-info">
+    <p>Navn: {selectedUser.name}</p>
+    <p>Medarbejdernummer: {selectedUser.staffNumber}</p>
+    <p>Email: {selectedUser.email}</p>
+  </div>
+    <hr />
+		<!-- svelte-ignore a11y-autofocus -->
+    <div id="delete-user-btn-container">
+    <div>
+      <button on:click={confirmDeleteUser}>Slet</button>
+      </div>
+      <div>
     <button on:click={() => showDeleteConfirmationModal = false}>Annuler</button>
+    </div>
+  </div>
   </Modal>
 </main>
 

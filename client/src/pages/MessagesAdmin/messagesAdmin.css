@@ -3,7 +3,7 @@
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 0 10px #ccc;
@@ -43,7 +43,7 @@
 
   .sidebar-message.show {
     transform: translateX(0);
-    box-shadow: blue 1px 1px 1px;
+    box-shadow: #00461c 1px 1px 1px;
   }
 
   .write-message{
@@ -55,7 +55,7 @@
     cursor: pointer;
     color: black;
     position: absolute;
-    box-shadow: blue 2px 2px 2px;; 
+    box-shadow: #00461c  2px 2px 2px;; 
   }
 
   .info {

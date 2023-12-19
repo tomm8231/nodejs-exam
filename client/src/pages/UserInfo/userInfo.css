@@ -21,10 +21,10 @@
 .change-password {
     padding: 15px; /* Increase the padding to make the input bigger */
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-bottom: 10px;
-    width: 200px;
-    background-color: #4CAF50;
+    width: 120px;
+    background-color: #4caf50;
     color: white;
     cursor: pointer;
 }
