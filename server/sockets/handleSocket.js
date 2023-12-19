@@ -14,11 +14,17 @@ function handleSocket(socket) {
 
         const roundOrders = await db.collection("orders").find({ round: data.round, staffNumber: { $exists: true } }).toArray()
         const staffNumbersFromRound = roundOrders.map(order => order.staffNumber);
-        const roundUsers = await db.collection("users").find({
-            staffNumber: { $in: staffNumbersFromRound }
-        }).toArray();
+        
+        let roundUsers = [];
+        if (data.sendToAll){
+            roundUsers = await db.collection("users").find().toArray();
+        } else {
+            roundUsers = await db.collection("users").find({staffNumber: { $in: staffNumbersFromRound }}).toArray();
+        }
+                
         const emails = roundUsers.map(user => user.email);
-
+        //reomove sedToAll from data object before inserting to db
+        delete data.sendToAll;
         await db.collection("messages").insertOne(data);
         const message = `Der er kommet en ny besked vedr. bestillingsrunde ${data.round}: ${data.message}`
 

@@ -41,7 +41,7 @@
     @import "./addUser.css";
 </style>
 
-<section>
+<div id="section-user">
   <h1>Tilføj en medarbejder</h1>
 
   <form on:submit={handleSubmit}>
@@ -57,5 +57,5 @@
 
     <button type="submit">Tilføj bruger</button>
   </form>
-</section>
+</div>
 

@@ -36,9 +36,18 @@ await db.collection("products").insertMany([
     { Model_number: 27096, Model_name: 'Kajka 85', Farvekode: 550, Farve: 'Black', Størrelse: '1 Size', Indkøbspris: 2100, Bar_code: 7392158958412, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
 ]);
 
-await db.createCollection("users");
 
-await db.collection("users").insertOne({ name: "admin", email: "admin@admin.dk", staffNumber: "00", hashedPassword: '$2b$14$BVW5Ya2gyIi5c22yMfygxeJKWJCaV1JsJiCs7JEusGS8OjTbPmLvW', role: "ADMIN" })
-
+await db.collection("orders").insertOne({
+    "round": "s2s_oct_24",
+    "isOpen": true,
+    "softDeadline": "24-01-01"
+  })
+  await db.collection("orders").insertOne({
+    "round": "fjallraven_feb_24",
+    "isOpen": true,
+    "softDeadline": "31-01-01"
+  })
 
 //Create users with roles
+// await db.createCollection("users");
+// await db.collection("users").insertOne({ name: "admin", email: "admin@admin.dk", staffNumber: "00", hashedPassword: '$2b$14$BVW5Ya2gyIi5c22yMfygxeJKWJCaV1JsJiCs7JEusGS8OjTbPmLvW', role: "ADMIN" })

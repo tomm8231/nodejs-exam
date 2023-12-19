@@ -69,3 +69,8 @@
   .message-text{
     text-align: left;
   }
+
+  #label-sendToAll {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
