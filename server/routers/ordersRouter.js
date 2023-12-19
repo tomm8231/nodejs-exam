@@ -101,7 +101,6 @@ router.post("/api/orders", async (req, res) => {
     const staffNumber = req.session.user?.uid;
     const round = req.body.round;
     const existingOrder = await db.collection("orders").findOne({ staffNumber, round });
-
     try {
         if (!existingOrder) {
             const user = await db.collection("users").findOne({ staffNumber });
@@ -110,7 +109,7 @@ router.post("/api/orders", async (req, res) => {
         } else {
             const newData = req.body;
             await db.collection("orders").updateOne(
-                { "staffNumber": staffNumber }
+                { "staffNumber": staffNumber, "round": round }
                 ,{ $set: newData }
             );
         }
