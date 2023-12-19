@@ -7,14 +7,10 @@ main {
     border-collapse: collapse;
     margin-top: 20px;
   }
-  
-  thead {
-    background-color: #f2f2f2;
-  }
+
   
   th, td {
     padding: 10px;
-    border: 1px solid #dddddd;
   }
   
   input[type="number"] {
@@ -52,5 +48,19 @@ main {
     align-items: center; 
     margin-top: 20px;
   }
+
+  #delete-user-btn-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #delete-user-btn-container div {
+    margin: 5px;
+  }
+
+  #staff-info {
+    text-align: left;
+  }
+
 
 

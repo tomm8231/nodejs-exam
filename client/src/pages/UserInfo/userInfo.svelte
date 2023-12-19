@@ -67,6 +67,7 @@
     <input class="input" type="text" id="staffNumber" value="{selectedUser.staffNumber}" readonly>
 
     <button class="change-password" on:click={() => showModal = true}>Ændre kodeord</button>
+    
 </div>
 
 <Modal bind:showModal bind:selectedUser>
@@ -82,6 +83,9 @@
 
 
         <button >Opdater password</button>
+        <hr />
+		<!-- svelte-ignore a11y-autofocus -->
+		<button autofocus on:click={() => showModal = false}>Luk</button>
     </form>
 </Modal>
     

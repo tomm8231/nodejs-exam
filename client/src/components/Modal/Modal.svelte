@@ -24,9 +24,6 @@
 		<slot name="header" />
 		<hr />
 		<slot />
-		<hr />
-		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>Luk</button>
 	</div>
 </dialog>
 
