@@ -113,7 +113,31 @@
     }
   }
 
+
+  async function downloadExcel() {
+    try {
+      const response = await fetch(`${$BASE_URL}/download-excel/${currentRound}`, {credentials: "include"});
+      if (!response.ok) {
+        const message = await response.json();
+        topcenterMessageFail("Der skete en fejl: " + message.data);
+      } else {
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${currentRound}-stafforders.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+
+
 </script>
+
 
 <main>
   {#if currentRound}
@@ -152,6 +176,9 @@
       <h3>Denne bestilling er lukket</h3>
       <button class="openOrder" on:click={openOrder}>Genåben for bestilling</button>
     {/if}
+    {#if !isOpen}
+    <button id="button-download" on:click={downloadExcel}>Download Excel</button>
+    {/if}
 </div>
 {#if displayedItems.length > 0}
     <table>
@@ -179,3 +206,7 @@
 <style>
   @import "./finishOrderAdmin.css";
 </style>
+
+
+
+

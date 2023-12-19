@@ -86,6 +86,9 @@ app.use(roundsRouter)
 import messaagesRouter from "./routers/messagesRouter.js"
 app.use(messaagesRouter)
 
+import downloadRouter from "./routers/downloadRouter.js"
+app.use(downloadRouter)
+
 app.all("*", (req, res) => {
     res.status(404).send({ data: `Unsupported path ${req.path}`});
 });
