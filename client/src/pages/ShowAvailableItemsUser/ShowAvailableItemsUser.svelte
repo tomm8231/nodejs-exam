@@ -157,6 +157,15 @@
       />
     </div>
     {#if filteredItems.length > 0}
+    <div class="button-container">
+      {#if isOpen}
+        <button class="open-button" on:click={submitChanges}
+          >Gem ændringer</button
+        >
+      {:else}
+        <button disabled class="close-button">Lukket for bestillinger</button>
+      {/if}
+    </div>
       <table>
         <thead>
           <tr>
@@ -185,15 +194,7 @@
           {/each}
         </tbody>
       </table>
-      <div class="button-container">
-        {#if isOpen}
-          <button class="open-button" on:click={submitChanges}
-            >Gem ændringer</button
-          >
-        {:else}
-          <button disabled class="close-button">Lukket for bestillinger</button>
-        {/if}
-      </div>
+
     {:else}
       <p>Din søgning gav intet resultat</p>
     {/if}

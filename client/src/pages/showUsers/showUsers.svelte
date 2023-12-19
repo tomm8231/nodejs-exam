@@ -12,6 +12,7 @@
   let headerKeys = [];
   let itemKey = "";
   let showModal = false;
+  let showDeleteConfirmationModal = false;
   let selectedUser = { staffnumber: "", name: "", email: "" };
 
   onMount(async () => {
@@ -26,6 +27,67 @@
     } catch (error) {
       console.error("Error: " + error);
     }
+  }
+
+  function openDeleteConfirmationModal(user) {
+    selectedUser = user;
+    showDeleteConfirmationModal = true;
+  }
+
+  async function deleteUser(evt) {
+    let staffNumber = evt.target.id;
+
+    const user = users.find(u => u.staffNumber === staffNumber);
+    if (user) {
+      openDeleteConfirmationModal(user);
+    }
+
+  }
+
+  async function confirmDeleteUser() {
+    const staffNumber = selectedUser.staffNumber
+    
+    try {
+      const response = await fetch($BASE_URL + "/api/users/" + staffNumber, {
+        credentials: "include",
+        method: "DELETE",
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        topcenterMessageSucces("Brugeren er slettet");
+        showDeleteConfirmationModal = false
+      } else if (data.error) {
+        throw new Error(data.error);
+      }
+
+      users = users.filter(user => {
+        return user.staffNumber !== staffNumber
+      });
+
+      const deleteOrders = await fetch($BASE_URL + "/api/orders/", {
+        credentials: "include",
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          staffNumber,
+        }),
+      }); 
+
+      const deletionData = await deleteOrders.json();
+
+      if (deletionData.error) {
+        throw new Error(data.error);
+      }
+     
+    } catch (error) {
+      topcenterMessageFail(error.message);
+      console.error("Error: " + error);
+    }
+
+    showDeleteConfirmationModal = false;
   }
 
   async function updateFrontendUser(){
@@ -89,56 +151,13 @@
     }
   }
 
-  async function deleteUser(evt) {
-    let staffNumber = evt.target.id;
-
-    try {
-      const response = await fetch($BASE_URL + "/api/users/" + staffNumber, {
-        credentials: "include",
-        method: "DELETE",
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        topcenterMessageSucces("Brugeren er slettet");
-      } else if (data.error) {
-        throw new Error(data.error);
-      }
-
-      users = users.filter(user => {
-        return user.staffNumber !== staffNumber
-      });
-
-      const deleteOrders = await fetch($BASE_URL + "/api/orders/", {
-        credentials: "include",
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          staffNumber,
-        }),
-      }); 
-
-      const deletionData = await deleteOrders.json();
-
-      if (deletionData.error) {
-        throw new Error(data.error);
-      }
-     
-    } catch (error) {
-      topcenterMessageFail(error.message);
-      console.error("Error: " + error);
-    }
-  }
-
   function openModal(user) {
     selectedUser = user;
     showModal = true;
   }
 </script>
 
-<h1>Bruger i systemet</h1>
+<h1>Brugere i systemet</h1>
 
 <main>
   <table>
@@ -201,6 +220,14 @@
     <div class="button-container">
       <button on:click={newPassword}>Send bruger nyt password</button>
     </div>
+  </Modal>
+
+
+  <Modal bind:showModal={showDeleteConfirmationModal} bind:selectedUser>
+    <h2>Slet bruger</h2>
+    <p>{selectedUser.name}, {selectedUser.staffNumber}?</p>
+    <button on:click={confirmDeleteUser}>Slet</button>
+    <button on:click={() => showDeleteConfirmationModal = false}>Annuler</button>
   </Modal>
 </main>
 
