@@ -63,7 +63,7 @@
     <label class="label" for="email"><strong>Email:</strong></label>
     <input class="input" type="email" id="email" value="{selectedUser.email}" readonly>
 
-    <label class="label" for="staffNumber"><strong>Staff Number:</strong></label>
+    <label class="label" for="staffNumber"><strong>Medarbejdernummer:</strong></label>
     <input class="input" type="text" id="staffNumber" value="{selectedUser.staffNumber}" readonly>
 
     <button class="change-password" on:click={() => showModal = true}>Ændre kodeord</button>

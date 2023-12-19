@@ -14,7 +14,7 @@
   import { BASE_URL } from "./stores/generalStore.js";
   import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
   import MessagesUser from "./pages/MessagesUser/MessagesUser.svelte";
-  import UserInfo from "./pages/UserInfo/userInfo.svelte";
+  import UserInfo from "./pages/UserInfo/UserInfo.svelte";
   import DeleteRoundAdmin from "./pages/DeleteRound/DeleteRoundAdmin.svelte";
 
   let currentUserId = localStorage.getItem("currentUserId");
