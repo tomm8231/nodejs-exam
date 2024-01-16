@@ -2,10 +2,7 @@
   import { onMount } from "svelte";
   import { BASE_URL } from "../../stores/generalStore.js";
   import { user } from "../../stores/userStore.js";
-  import {
-    topcenterMessageSucces,
-    topcenterMessageFail,
-  } from "../../components/toastr/toastrMessage.js";
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
   import { io } from "socket.io-client";
 
   const socket = io($BASE_URL);
