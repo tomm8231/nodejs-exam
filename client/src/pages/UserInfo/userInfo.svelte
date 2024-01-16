@@ -5,7 +5,7 @@
     import Modal from "../../components/Modal/Modal.svelte";
     import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
 
-    let selectedUser = {}
+    let selectedUser = {};
     $: showModal = false;
 
     onMount(async () => {
@@ -14,7 +14,6 @@
         });
 
         const data = await response.json();
-
         selectedUser = data.data;
     });
 
@@ -23,7 +22,6 @@
         if (event.target.newPassword.value !== event.target.repeatNewPassword.value) {
             topcenterMessageFail("Nye password matcher ikke");
         } else {
-
             const response = await fetch(`${$BASE_URL}/api/users/password`, {
                 method: "PUT",
                 credentials: "include",
@@ -40,12 +38,10 @@
                 const data = await response.json();
                 topcenterMessageFail("Fejl: " + data.message + "");
             } else {
-                
                 topcenterMessageSucces("Password er opdateret");
                 event.target.reset();
                 showModal = false;
             }
-
         }
     }
 </script>
@@ -67,7 +63,6 @@
     <input class="input" type="text" id="staffNumber" value="{selectedUser.staffNumber}" readonly>
 
     <button class="change-password" on:click={() => showModal = true}>Ændre kodeord</button>
-    
 </div>
 
 <Modal bind:showModal bind:selectedUser>

@@ -19,8 +19,6 @@
         body: JSON.stringify({ name, staffNumber, email }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
         topcenterMessageFail("Fejl: En bruger findes allerede med medarbejdernummer eller email");
       } else {
@@ -45,7 +43,6 @@
   <h1>Tilføj en medarbejder</h1>
 
   <form on:submit={handleSubmit}>
-
     <label for="staffNumber">Medlemsnummer</label>
     <input type="text" id="staffNumber" bind:value={staffNumber} />
 

@@ -65,8 +65,6 @@
 
       if (response.ok) {
         navigate("/");
-
-        console.log("Logout sucessful");
       }
     } catch (error) {
       console.log("Could not logout:", error);
@@ -122,26 +120,14 @@
     {/if}
     <div class="content">
       <PrivateRoute path="/" let:location><Home /></PrivateRoute>
-      <PrivateRoute path="/bestil-varer" let:location
-        ><ShowAvailableItemsUser /></PrivateRoute
-      >
-      <PrivateRoute path="/afslut-bestillingsrunde" let:location
-        ><FinishOrderAdmin /></PrivateRoute
-      >
-      <PrivateRoute path="/opret-bestillingsrunde" let:location
-        ><AddRound /></PrivateRoute
-      >
+      <PrivateRoute path="/bestil-varer" let:location><ShowAvailableItemsUser /></PrivateRoute>
+      <PrivateRoute path="/afslut-bestillingsrunde" let:location><FinishOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/opret-bestillingsrunde" let:location><AddRound /></PrivateRoute>
       <PrivateRoute path="/opret-bruger" let:location><AddUser /></PrivateRoute>
       <PrivateRoute path="/brugere" let:location><ShowUsers /></PrivateRoute>
-      <PrivateRoute path="/bestillingsrunde" let:location
-        ><ManageOrderAdmin /></PrivateRoute
-      >
-      <PrivateRoute path="/beskederAdmin" let:location
-        ><MessagesAdmin /></PrivateRoute
-      >
-      <PrivateRoute path="/beskederBruger" let:location
-        ><MessagesUser /></PrivateRoute
-      >
+      <PrivateRoute path="/bestillingsrunde" let:location><ManageOrderAdmin /></PrivateRoute>
+      <PrivateRoute path="/beskederAdmin" let:location><MessagesAdmin /></PrivateRoute>
+      <PrivateRoute path="/beskederBruger" let:location><MessagesUser /></PrivateRoute>
       <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
       <PrivateRoute path="/slet-bestillingsrunde" let:location><DeleteRoundAdmin /></PrivateRoute>
       <Route path="/login"><Login /></Route>
