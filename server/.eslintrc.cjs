@@ -22,5 +22,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'import/no-unresolved': 'off',
+    'import/extensions': 'off',
   },
 };

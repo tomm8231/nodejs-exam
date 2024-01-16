@@ -1,28 +1,27 @@
-import { Router } from 'express'
-import excel from 'exceljs'
-import db from '../databases/connections.js'
-import { adminCheck } from '../middelware/authMiddelware.js'
+import { Router } from 'express';
+import excel from 'exceljs';
+import db from '../database/connections.js';
+import { adminCheck } from '../middelware/authMiddelware.js';
 
-const router = Router()
+const router = Router();
 
 // Replace the connection URL with your actual MongoDB connection string
 
 router.get('/download-excel/:round', adminCheck, async (req, res) => {
   const round = req.params?.round;
   try {
-
-    const existingOrders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).toArray();
+    const existingOrders = await db.collection('orders').find({ round, orderedItems: { $exists: true } }).toArray();
 
     if (existingOrders.length > 0) {
-      const counts = await db.collection("orders").aggregate([
+      const counts = await db.collection('orders').aggregate([
         {
-          $unwind: "$orderedItems",
+          $unwind: '$orderedItems',
         },
         {
           $group: {
-            _id: "$orderedItems._id",
+            _id: '$orderedItems._id',
             count: {
-              $sum: "$orderedItems.quantity",
+              $sum: '$orderedItems.quantity',
             },
           },
         },
@@ -34,8 +33,8 @@ router.get('/download-excel/:round', adminCheck, async (req, res) => {
         return product;
       });
 
-      //deconstuerer vores item, og returnere en ny array uden id
-      const resultWithoutId = result.map(({ _id, round, ...orderItem }) => orderItem)
+      // deconstuerer vores item, og returnere en ny array uden id
+      const resultWithoutId = result.map(({ _id, round, ...orderItem }) => orderItem);
 
       const workbook = new excel.Workbook();
       const worksheet = workbook.addWorksheet('Sheet 1');
@@ -46,13 +45,11 @@ router.get('/download-excel/:round', adminCheck, async (req, res) => {
         worksheet.addRow(headers);
 
         // Add data to the worksheet
-        resultWithoutId.forEach(item => {
+        resultWithoutId.forEach((item) => {
           const row = Object.values(item);
           worksheet.addRow(row);
         });
       }
-
-
 
       // Set response headers for Excel file download
       try {
@@ -66,15 +63,13 @@ router.get('/download-excel/:round', adminCheck, async (req, res) => {
         console.error(error);
         res.status(400).send({ data: 'Server Error' });
       }
-
     } else if (existingOrders.length === 0) {
       res.status(400).send({ data: 'Ingen ordre fundet på den angivne runde' });
     }
-
   } catch (error) {
     console.error(error);
     res.status(400).send({ data: 'Server Error' });
   }
 });
 
-export default router
+export default router;
