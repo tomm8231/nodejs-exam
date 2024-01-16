@@ -3,7 +3,7 @@
     import { user } from "../stores/userStore.js"
   
     const navigate = useNavigate()
-    const location = useLocation()
+    const location = useLocation() 
   
     $: if (!$user) {
       navigate("/login", {
