@@ -5,13 +5,13 @@ const app = express()
 
 import session from "express-session";
 const sessionMiddleware = session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { 
+	secret: process.env.SESSION_SECRET,
+	resave: false,
+	saveUninitialized: true,
+	cookie: {
 		secure: false,
-		maxAge: 1000 * 60 * 60 //1 time		
-		}
+		maxAge: 1000 * 60 * 60 //1 time
+	}
 });
 app.use(sessionMiddleware);
 
@@ -20,10 +20,10 @@ import { Server } from "socket.io";
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: '*',
-        methods: ["*"],
-    }
+	cors: {
+		origin: '*',
+		methods: ["*"],
+	}
 });
 
 import helmet from "helmet";
@@ -31,7 +31,7 @@ app.use(helmet())
 
 import cors from 'cors'
 app.use(cors({
-    origin: true,
+	origin: true,
 	credentials: true
 }))
 
@@ -80,19 +80,21 @@ app.use(authRouter)
 import uploadsRouter from "./routers/uploadsRouter.js"
 app.use(uploadsRouter)
 
-import roundsRouter from "./routers/roundsRouters.js"
+import roundsRouter from "./routers/roundsRouter.js"
 app.use(roundsRouter)
 
 import messaagesRouter from "./routers/messagesRouter.js"
 app.use(messaagesRouter)
 
-import downloadRouter from "./routers/downloadRouter.js"
-app.use(downloadRouter)
+import downloadsRouter from "./routers/downloadsRouter.js"
+app.use(downloadsRouter)
 
 app.all("*", (req, res) => {
-    res.status(404).send({ data: `Unsupported path ${req.path}`});
+	res.status(404).send({ data: `Unsupported path ${req.path}` });
 });
 
 const PORT = process.env.PORT || 8080;
 
-server.listen(PORT, console.log("Server is running on port", PORT));
+server.listen(PORT, () => {
+	console.log("Server is running on port", PORT)
+});

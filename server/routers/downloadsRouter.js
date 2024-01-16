@@ -1,4 +1,4 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import excel from 'exceljs'
 import db from '../databases/connections.js'
 import { adminCheck } from '../middelware/authMiddelware.js'
@@ -7,26 +7,26 @@ const router = Router()
 
 // Replace the connection URL with your actual MongoDB connection string
 
-router.get('/download-excel/:round', adminCheck,  async (req, res) => {
-    const round = req.params?.round;
+router.get('/download-excel/:round', adminCheck, async (req, res) => {
+  const round = req.params?.round;
   try {
-  
+
     const existingOrders = await db.collection("orders").find({ round, orderedItems: { $exists: true } }).toArray();
 
     if (existingOrders.length > 0) {
       const counts = await db.collection("orders").aggregate([
-          {
-            $unwind: "$orderedItems",
-          },
-          {
-            $group: {
-              _id: "$orderedItems._id",
-              count: {
-                $sum: "$orderedItems.quantity",
-              },
+        {
+          $unwind: "$orderedItems",
+        },
+        {
+          $group: {
+            _id: "$orderedItems._id",
+            count: {
+              $sum: "$orderedItems.quantity",
             },
           },
-        ]).toArray();
+        },
+      ]).toArray();
 
       const result = existingOrders[0].orderedItems.map((product) => {
         const foundItem = counts.find((item) => item._id === product._id);
@@ -35,43 +35,43 @@ router.get('/download-excel/:round', adminCheck,  async (req, res) => {
       });
 
       //deconstuerer vores item, og returnere en ny array uden id
-      const resultWithoutId = result.map(({_id, ...orderItem}) => orderItem)
+      const resultWithoutId = result.map(({ _id, round, ...orderItem }) => orderItem)
 
-    const workbook = new excel.Workbook();
-    const worksheet = workbook.addWorksheet('Sheet 1');
+      const workbook = new excel.Workbook();
+      const worksheet = workbook.addWorksheet('Sheet 1');
 
-    // Add headers to the worksheet
-    if (resultWithoutId.length > 0) {
-      const headers = Object.keys(resultWithoutId[0]);
-      worksheet.addRow(headers);
+      // Add headers to the worksheet
+      if (resultWithoutId.length > 0) {
+        const headers = Object.keys(resultWithoutId[0]);
+        worksheet.addRow(headers);
 
-      // Add data to the worksheet
-      resultWithoutId.forEach(item => {
-        const row = Object.values(item);
-        worksheet.addRow(row);
-      });
-    } 
-        
-    
+        // Add data to the worksheet
+        resultWithoutId.forEach(item => {
+          const row = Object.values(item);
+          worksheet.addRow(row);
+        });
+      }
 
-    // Set response headers for Excel file download
-    try {
+
+
+      // Set response headers for Excel file download
+      try {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', `attachment; filename=${round}-stafforders.xlsx`);
 
         // Send the Excel file to the client
         await workbook.xlsx.write(res);
         res.end();
-    } catch (error) {
+      } catch (error) {
         console.error(error);
         res.status(400).send({ data: 'Server Error' });
-    }
+      }
 
     } else if (existingOrders.length === 0) {
-        res.status(400).send({ data: 'Ingen ordre fundet på den angivne runde' });
+      res.status(400).send({ data: 'Ingen ordre fundet på den angivne runde' });
     }
 
-} catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(400).send({ data: 'Server Error' });
   }
