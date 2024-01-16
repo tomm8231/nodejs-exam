@@ -11,7 +11,7 @@
   let messages = [];
   let filteredMessages = [];
 
-  $:messages
+  $:messages;
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
@@ -35,7 +35,7 @@
     if (currentRoundShow === data.round || currentRoundShow === "") {
         topcenterMessageSucces("Ny besked vedr. " + data.round);
           filteredMessages = [data, ...filteredMessages]
-        }
+        };
   });
 
 
@@ -45,8 +45,8 @@
     filteredMessages = messages;
   } else {
     filteredMessages = messages.filter(msg => msg.round === currentRoundShow);
-  }
-}
+  };
+};
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -58,7 +58,8 @@ function formatDate(dateString) {
         minute: '2-digit', 
         hour12: false 
     });
-  }
+  };
+
 </script>
 
 <label for="offerRound">Vælg bestillingsrunde</label>
@@ -67,6 +68,7 @@ function formatDate(dateString) {
   bind:value={currentRoundShow}
   on:change={filterMessages}
 >
+  
   <option value="">Vis alle</option>
   {#each uniqueRounds as round}
     <option value={round}>{round}</option>

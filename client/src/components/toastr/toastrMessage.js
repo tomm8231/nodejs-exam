@@ -1,6 +1,5 @@
 import toastr from "toastr";
-import 'toastr/build/toastr.css'
-
+import 'toastr/build/toastr.css';
 
 toastr.options = {
     "closeButton": false,
@@ -18,18 +17,14 @@ toastr.options = {
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut",
-    
-    
-  }
+};
 
-
-  
-export function topcenterMessageSucces(message){
-    toastr.remove()   
+export function topcenterMessageSucces(message) {
+    toastr.remove();
     toastr.success(message);
 }
 
-export function topcenterMessageFail(message){
-    toastr.remove()
+export function topcenterMessageFail(message) {
+    toastr.remove();
     toastr.error(message);
 }
