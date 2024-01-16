@@ -159,6 +159,7 @@
     <input
       type="checkbox"
       id="showOnlyOrderedItems"
+      name="showOnlyOrderedItems"
       bind:checked={showOnlyOrderedItems}
     />
   </div>

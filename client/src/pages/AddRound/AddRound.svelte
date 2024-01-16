@@ -21,9 +21,8 @@
   function getMinDate() {
     const now = new Date();
 
-    const month =
-      now.getMonth() + 1 < 10 ? "0" + now.getMonth() + 1 : now.getMonth() + 1;
-    const day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    const month = (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1);
+    const day = (now.getDate() < 10 ? "0" : "") + (now.getDate());
     const year = now.getFullYear();
     return year + "-" + month + "-" + day;
   }

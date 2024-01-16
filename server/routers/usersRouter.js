@@ -9,7 +9,7 @@ const router = Router();
 const userCollection = db.collection('users');
 
 router.get('/api/users', adminCheck, async (req, res) => {
-  const response = await userCollection.find({ role: 'USER' }).toArray();
+  const response = await userCollection.find({ role: 'USER' }).sort({staffNumber: 1}).toArray();
 
   res.status(200).send({ data: response });
 });
