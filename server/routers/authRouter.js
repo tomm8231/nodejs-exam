@@ -1,20 +1,19 @@
 import { Router } from "express"
 import bcrypt from "bcrypt"
-import { hashPassword, randomPassword } from '../encrypt/encryption.js';
-import db from "../databases/connections.js";
-import { adminCheck } from "../middelware/authMiddelware.js";
-import { sendMail } from "../nodemailer/sendEmail.js";
+import { hashPassword, randomPassword } from '../encrypt/encryption.js'
+import db from "../database/connections.js"
+import { adminCheck } from "../middelware/authMiddelware.js"
+import { sendMail } from "../nodemailer/sendEmail.js"
 
 const router = Router()
 
-const userCollection = db.collection("users");
+const userCollection = db.collection("users")
 
 router.post("/auth/login", async (req, res) => {
     const { staffNumber, password } = req.body
     const foundUser = await userCollection.find({ staffNumber }).toArray()
 
     const passwordMatch = await bcrypt.compare(password, foundUser[0].hashedPassword)
-
 
     if (passwordMatch) {
 
@@ -44,7 +43,6 @@ router.post("/auth/signup", adminCheck, async (req, res) => {
     } else {
         res.status(400).send({ data: "User was not created: user already exists" })
     }
-
 })
 
 router.post("/auth/validateSession", async (req, res) => {
@@ -58,9 +56,7 @@ router.post("/auth/validateSession", async (req, res) => {
         res.status(200).send({ data: "Session validated" })
     } else {
         res.status(400).send({ data: "Session not validated" })
-
     }
-
 })
 
 router.get("/auth/logout", (req, res) => {
@@ -69,7 +65,6 @@ router.get("/auth/logout", (req, res) => {
     req.session.destroy(() => {
             res.status(200).send({ data: "Logged out" })
     })
-
 })
 
 export default router

@@ -2,8 +2,9 @@ import "dotenv/config"
 import express from "express"
 
 const app = express()
+app.use(express.json())
 
-import session from "express-session";
+import session from "express-session" 
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -12,21 +13,21 @@ const sessionMiddleware = session({
 		secure: false,
 		maxAge: 1000 * 60 * 60 //1 time		
 		}
-});
-app.use(sessionMiddleware);
+}) 
+app.use(sessionMiddleware) 
 
-import http from "http";
-import { Server } from "socket.io";
+import http from "http" 
+import { Server } from "socket.io" 
 
-const server = http.createServer(app);
+const server = http.createServer(app) 
 const io = new Server(server, {
     cors: {
         origin: '*',
         methods: ["*"],
     }
-});
+}) 
 
-import helmet from "helmet";
+import helmet from "helmet" 
 app.use(helmet())
 
 import cors from 'cors'
@@ -35,9 +36,7 @@ app.use(cors({
 	credentials: true
 }))
 
-app.use(express.json())
-
-import { rateLimit } from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit' 
 
 const allRoutesRateLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
@@ -45,9 +44,9 @@ const allRoutesRateLimiter = rateLimit({
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	// store: ... , // Use an external store for consistency across multiple server instances.
-});
+}) 
 
-app.use(allRoutesRateLimiter);
+app.use(allRoutesRateLimiter) 
 
 const authRateLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
@@ -55,21 +54,25 @@ const authRateLimiter = rateLimit({
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	// store: ... , // Use an external store for consistency across multiple server instances.
-});
+}) 
 
-import { checkAuth } from "./middelware/authMiddelware.js";
+import { checkAuth } from "./middelware/authMiddelware.js" 
 app.use(checkAuth)
 
-import handleSocket from "./sockets/handleSocket.js";
-io.on("connection", handleSocket);
+import handleSocket from "./sockets/handleSocket.js" 
 
-app.use("/auth", authRateLimiter);
+io.on("connection", (socket) => {
+	handleSocket(socket)
 
-import userRouters from "./routers/usersRouter.js";
-app.use(userRouters);
+}) 
 
-import productsRouters from "./routers/productsRouter.js";
-app.use(productsRouters);
+app.use("/auth", authRateLimiter) 
+
+import userRouters from "./routers/usersRouter.js" 
+app.use(userRouters) 
+
+import productsRouters from "./routers/productsRouter.js" 
+app.use(productsRouters) 
 
 import orderRouter from './routers/ordersRouter.js'
 app.use(orderRouter)
@@ -90,9 +93,9 @@ import downloadRouter from "./routers/downloadRouter.js"
 app.use(downloadRouter)
 
 app.all("*", (req, res) => {
-    res.status(404).send({ data: `Unsupported path ${req.path}`});
-});
+    res.status(404).send({ data: `Unsupported path ${req.path}`}) 
+}) 
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080 
 
-server.listen(PORT, console.log("Server is running on port", PORT));
+server.listen(PORT, console.log("Server is running on port", PORT)) 

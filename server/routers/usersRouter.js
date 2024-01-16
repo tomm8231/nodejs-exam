@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import db from '../databases/connections.js'
-import { adminCheck } from '../middelware/authMiddelware.js';
-import { hashPassword, comparePassword, randomPassword } from '../encrypt/encryption.js';
+import db from '../database/connections.js'
+import { adminCheck } from '../middelware/authMiddelware.js' 
+import { hashPassword, comparePassword, randomPassword } from '../encrypt/encryption.js' 
 import { sendMail } from '../nodemailer/sendEmail.js'
 
 const router = Router()
 
-const userCollection = db.collection("users");
+const userCollection = db.collection("users") 
 
 router.get("/api/users", adminCheck, async (req, res) => {
     const response = await userCollection.find({ role: "USER" }).toArray()
@@ -17,20 +17,19 @@ router.get("/api/users", adminCheck, async (req, res) => {
 router.get("/api/users/:staffNumber", async (req, res) => {
     const staffNumber = req.session.user.uid
 
-    const response = await userCollection.findOne({ staffNumber });
-    res.status(200).send({ data: response });
-});
-
+    const response = await userCollection.findOne({ staffNumber }) 
+    res.status(200).send({ data: response }) 
+}) 
 
 router.delete("/api/users/:staffNumber", adminCheck, async (req, res) => {
-    const staffNumber = req.params.staffNumber;
+    const staffNumber = req.params.staffNumber 
 
-    const response = await userCollection.deleteOne({ staffNumber });
-    res.status(200).send({ data: response });
-});
+    const response = await userCollection.deleteOne({ staffNumber }) 
+    res.status(200).send({ data: response }) 
+}) 
 
 router.put("/api/users/password", async (req, res) => {
-    const { oldPassWord, newPassWord } = req.body;
+    const { oldPassWord, newPassWord } = req.body 
     const staffNumber = req.session.user.uid
 
     const user = await userCollection.findOne({ staffNumber })
@@ -44,8 +43,6 @@ router.put("/api/users/password", async (req, res) => {
     } else {
         res.status(401).send({ data: "Passwords does not match" })
     }
-
-
 })
 
 router.put('/api/users/resetpassword', adminCheck, async (req, res) => {
@@ -65,12 +62,11 @@ router.put('/api/users/resetpassword', adminCheck, async (req, res) => {
     } catch (error) {
         res.status(500).send({ data: error.message })
     }
-
 })
 
 router.put("/api/users/:staffnumber", adminCheck, async (req, res) => {
-    const staffNumber = req.params.staffnumber;
-    const { name, email } = req.body;
+    const staffNumber = req.params.staffnumber 
+    const { name, email } = req.body 
     
     const foundUserOnStaffNumber = await userCollection.find({ staffNumber }).toArray()
 
@@ -87,7 +83,7 @@ router.put("/api/users/:staffnumber", adminCheck, async (req, res) => {
 
     if (foundUserOnStaffNumber[0].email !== email) {
         const foundUser = await userCollection.find({ email }).toArray()
-        console.log(foundUser);
+        console.log(foundUser) 
         if (foundUser.length < 1) {
             await userCollection.updateOne(
                 { staffNumber },
@@ -96,14 +92,14 @@ router.put("/api/users/:staffnumber", adminCheck, async (req, res) => {
                         email,
                     },
                 }
-            );
-            res.status(200).send({ data: "User updated" });
+            ) 
+            res.status(200).send({ data: "User updated" }) 
         } else {
             res.status(400).send({ data: "Email address already assigned to another user"})
         }
     } else{
-        res.status(200).send({ data: "User updated" });
+        res.status(200).send({ data: "User updated" }) 
     }
-});
+}) 
 
 export default router

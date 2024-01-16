@@ -14,11 +14,9 @@ xlsx.stream.set_readable(Readable)
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs'
 xlsx.set_cptable(cpexcel)
 
-import db from '../databases/connections.js'
+import db from '../database/connections.js'
 const productsCollection = db.collection("products")
 const ordersCollection = db.collection("orders")
-
-
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -31,12 +29,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-
 router.post("/api/upload", upload.single('file'), adminCheck, async (req, res) => {
 
     const roundName = req.body.roundName.trim().replace(/\s+/g, '_')
     const softDeadline = req.body.softDeadline
-
 
     try {
 
@@ -70,9 +66,7 @@ router.post("/api/upload", upload.single('file'), adminCheck, async (req, res) =
             if (err) {
                 console.error('Error deleting file:', err)
             }
-
         })
-
     }
 })
 

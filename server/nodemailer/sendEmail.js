@@ -1,5 +1,5 @@
-import "dotenv/config";
-import nodemailer from "nodemailer";
+import "dotenv/config"
+import nodemailer from "nodemailer"
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,
   },
-});
+})
 
 export async function sendMail(recipient, subject, message) {
   const mailOptions = {
@@ -19,16 +19,16 @@ export async function sendMail(recipient, subject, message) {
     bcc: recipient,
     subject: subject,
     text: message,
-  };
+  }
 
   try {
     await transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Error sending email: ", error);
+        console.error("Error sending email: ", error)
       } 
     });
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
 }
 
