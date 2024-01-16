@@ -5,17 +5,14 @@
   let currentRound = "";
   let uniqueRounds = [];
   let users = [];
-
   let orderedItems = [];
   let displayedItems = [];
   let headerKeys = [];
   let itemKey = "";
   let currentName = "";
   let currentStaffNumber = "";
-
   let filteredUsers;
   let searchQuery = "";
-
   let showOnlyOrderedItems;
 
   $: if (showOnlyOrderedItems) {
@@ -34,9 +31,7 @@
 
   async function handleOfferRoundChange(event) {
     currentRound = event.target[event.target.selectedIndex].text;
-
     displayedItems = [];
-
     showSidebar = true;
 
     const response = await fetch(
@@ -48,7 +43,6 @@
 
     const result = await response.json();
     users = result.data;
-
     filteredUsers = users;
   }
 
@@ -56,12 +50,12 @@
 
   function toggleSidebar() {
     showSidebar = !showSidebar;
-  }
+  };
 
   function handleSearchChange(event) {
     searchQuery = event.target.value.toLowerCase();
     filterUsers();
-  }
+  };
 
   function filterUsers() {
     if (searchQuery.trim() === "") {
@@ -73,7 +67,7 @@
           user.name.toLowerCase().includes(searchQuery)
       );
     }
-  }
+  };
 
   async function fetchOrderForUser(user) {
     showSidebar = false;
@@ -96,13 +90,13 @@
     headerKeys.pop(); // removes/hides the quantity from the user
     itemKey =
       displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : "";
-  }
+  };
 
   function handleQuantityChange(itemId, event) {
     const value = parseInt(event.target.value);
     const foundItem = orderedItems.find((item) => item._id === itemId);
     foundItem.quantity = value;
-  }
+  };
 </script>
 
 <h1>Find bestillinger</h1>
