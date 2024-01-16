@@ -1,43 +1,42 @@
-<script>
-import { onMount } from "svelte";
-import { BASE_URL } from "../../stores/generalStore.js";
-import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
-import Modal from "../../components/Modal/Modal.svelte";
+<script>t } from 'svelte';
+import { BASE_URL } from '../../stores/generalStore.js';
+import { topcenterMessageSucces, topcenterMessageFail } from '../../components/toastr/toastrMessage.js';
+import Modal from '../../components/Modal/Modal.svelte';
+
+let $BASE_URL;
 
 let uniqueRounds = [];
-let currentRound = "";
+let currentRound = '';
 let showModal = false;
 
 onMount(async () => {
-    const response = await fetch(`${$BASE_URL}/api/rounds`, {
-      credentials: "include",
-    });
-    const data = await response.json();
-    uniqueRounds = data.data;
+  const response = await fetch(`${$BASE_URL}/api/rounds`, {
+    credentials: 'include',
+  });
+  const data = await response.json();
+  uniqueRounds = data.data;
+});
+
+async function deleteRound() {
+  const response = await fetch(`${$BASE_URL}/api/rounds/${currentRound}`, {
+    method: 'DELETE',
+    credentials: 'include',
   });
 
-  async function deleteRound() {
-    const response = await fetch(`${$BASE_URL}/api/rounds/${currentRound}`, {
-      method: "DELETE",
-      credentials: "include",
-    })
-
-    if (response.ok){
-        showModal = false;
-        uniqueRounds = uniqueRounds.filter(round => round !== currentRound);
-        topcenterMessageSucces(`${currentRound} er nu slettet`);
-
-    } else {
-        topcenterMessageFail("Noget gik galt, prøv igen senere");
-    }
-
-    }
-
-  function showTheModal() {
-    if(currentRound !== ""){
-        showModal = true;
-    }
+  if (response.ok) {
+    showModal = false;
+    uniqueRounds = uniqueRounds.filter((round) => round !== currentRound);
+    topcenterMessageSucces(`${currentRound} er nu slettet`);
+  } else {
+    topcenterMessageFail('Noget gik galt, prøv igen senere');
   }
+}
+
+function showTheModal() {
+  if (currentRound !== '') {
+    showModal = true;
+  }
+}
 </script>
 
 <style>

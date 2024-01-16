@@ -1,59 +1,57 @@
-<script>
-  import { onMount } from "svelte";
+<script>svelte';
+  import { io } from "socket.io-client";
   import { BASE_URL } from "../../stores/generalStore.js";
   import { user } from "../../stores/userStore.js";
   import {
     topcenterMessageSucces,
     topcenterMessageFail,
   } from "../../components/toastr/toastrMessage.js";
-  import { io } from "socket.io-client";
+  
+  let $user;let $BASE_URL;
 
   const socket = io($BASE_URL);
 
   let orderedItems = [];
   let headerKeys = [];
-  let itemKey = "";
-  let currentRound = "";
+  let itemKey = '';
+  let currentRound = '';
   let uniqueRounds = [];
 
   let filteredItems = [];
-  let searchQuery = "";
+  let searchQuery = '';
   let isOpen = true;
-
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
     uniqueRounds = data.data;
   });
 
-  socket.on("server-sent-round-message", (data) => {
-
-    if (data.round === currentRound) {
+  socket.on('server-sent-round-message', (data) => {
+  if (data.round === currentRound) {
       isOpen = data.isOpen;
     }
     topcenterMessageSucces(data.message);
   });
 
-
   async function fetchData() {
     try {
       let response = await fetch(
         `${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`,
-        { credentials: "include" }
+        { credentials: 'include' },
       );
 
       if (!response.ok) {
         response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, {
-          credentials: "include",
+          credentials: 'include',
         });
       }
 
       const roundStatus = await fetch(
         `${$BASE_URL}/api/orders/status/${currentRound}`,
-        { credentials: "include" }
+        { credentials: 'include' },
       );
       const statusResult = await roundStatus.json();
       if (statusResult.data !== undefined) {
@@ -67,9 +65,9 @@
       headerKeys = orderedItems.length > 0 ? Object.keys(orderedItems[0]) : [];
       headerKeys.shift(); // removes/hides the _id from the user
       headerKeys.pop(); // removes/hides the quantity from the user
-      itemKey = orderedItems.length > 0 ? Object.keys(orderedItems[0])[0] : "";
+      itemKey = orderedItems.length > 0 ? Object.keys(orderedItems[0])[0] : '';
     } catch (error) {
-      console.log("Fejl: " + error);
+      console.log(`Fejl: ${  error}`);
     }
   }
 
@@ -81,8 +79,8 @@
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
-    filteredItems = []
-    searchQuery = ""
+    filteredItems = [];
+    searchQuery = '';
     fetchData();
   }
 
@@ -92,25 +90,24 @@
   }
 
   function filterItems() {
-      filteredItems = orderedItems.filter((item) =>
-        Object.values(item).some((value) => {
-          if (typeof value === "string") {
-            return value.toLowerCase().includes(searchQuery);
-          } else if (typeof value === "number") {
-            return value.toString().includes(searchQuery);
-          }
-          return false;
-        })
-      );
+    filteredItems = orderedItems.filter((item) => Object.values(item).some((value) => {
+        if (typeof value === 'string') {
+          return value.toLowerCase().includes(searchQuery);
+        } if (typeof value === 'number') {
+          return value.toString().includes(searchQuery);
+        }
+        return false;
+      }),
+    );
   }
 
   async function submitChanges() {
     try {
       await fetch(`${$BASE_URL}/api/orders`, {
-        credentials: "include",
-        method: "POST",
+        credentials: 'include',
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           orderedItems,
@@ -119,10 +116,10 @@
         }),
       });
 
-      topcenterMessageSucces("Din bestilling er gemt");
+      topcenterMessageSucces('Din bestilling er gemt');
     } catch (error) {
-      console.error("Error: " + error);
-      topcenterMessageFail("Der skete en fejl. Prøv igen senere");
+      console.error(`Error: ${  error}`);
+      topcenterMessageFail('Der skete en fejl. Prøv igen senere');
     }
   }
 </script>
@@ -186,8 +183,7 @@
                   type="number"
                   min="0"
                   value={item.quantity || 0}
-                  on:input={(event) =>
-                    handleQuantityChange(item[itemKey], event)}
+                  on:input={(event) => handleQuantityChange(item[itemKey], event)}
                 />
               </td>
             </tr>

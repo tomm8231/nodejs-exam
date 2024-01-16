@@ -1,16 +1,17 @@
-<script>
-  import { BASE_URL } from "../../stores/generalStore.js";
+<script>RL } from '../../stores/generalStore.js';
   import {
     topcenterMessageSucces,
     topcenterMessageFail,
-  } from "../../components/toastr/toastrMessage.js";
+  } from '../../components/toastr/toastrMessage.js';
+  
+  let $BASE_URL;
 
-  let roundName = "";
-  let softDeadline = ""
+  let roundName = '';
+  let softDeadline = '';
   let file;
   const formData = new FormData();
-  let message = "";
-  let minDate = getMinDate();
+  const message = '';
+  const minDate = getMinDate();
 
   $: file;
 
@@ -21,38 +22,37 @@
   function getMinDate() {
     const now = new Date();
 
-    const month =
-      now.getMonth() + 1 < 10 ? "0" + now.getMonth() + 1 : now.getMonth() + 1;
-    const day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    const month =    now.getMonth() + 1 < 10 ? `0${  now.getMonth()  }${1}` : now.getMonth() + 1;
+    const day = now.getDate() < 10 ? `0${  now.getDate()}` : now.getDate();
     const year = now.getFullYear();
-    return year + "-" + month + "-" + day;
+    return `${year}-${month}-${day}`;
   }
 
   async function handleSubmit() {
-    formData.append("file", file);
-    formData.append("roundName", roundName);
-    formData.append("softDeadline", softDeadline);
+    formData.append('file', file);
+    formData.append('roundName', roundName);
+    formData.append('softDeadline', softDeadline);
 
     try {
       const response = await fetch(`${$BASE_URL}/api/upload`, {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
         body: formData,
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        topcenterMessageSucces("Bestillingsrunden blev oprettet");
+        topcenterMessageSucces('Bestillingsrunden blev oprettet');
 
-        deleteFile()
-        roundName = ""
-        softDeadline = ""
+        deleteFile();
+        roundName = '';
+        softDeadline = '';
       } else {
         throw new Error(result.error);
       }
     } catch (err) {
-      topcenterMessageFail("Bestillingsrunden blev ikke oprettet: " + err.message);
+      topcenterMessageFail(`Bestillingsrunden blev ikke oprettet: ${  err.message}`);
     }
   }
 

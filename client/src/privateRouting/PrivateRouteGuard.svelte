@@ -6,12 +6,12 @@
     const location = useLocation()
   
     $: if (!$user) {
-      navigate("/login", {
+      navigate('/login', {
         state: { from: $location.pathname },
         replace: true,
-      })
+      });
     }
-  </script>
+</script>
   
   {#if $user}
     <slot />

@@ -1,52 +1,50 @@
-<script>
-    import { onMount } from "svelte";
-    import { BASE_URL } from "../../stores/generalStore.js";
-    import { user } from "../../stores/userStore.js";
-    import Modal from "../../components/Modal/Modal.svelte";
-    import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+<script>import { BASE_URL } from '../../stores/generalStore.js';
+    import { user } from '../../stores/userStore.js';
+    import Modal from '../../components/Modal/Modal.svelte';
+    import { topcenterMessageSucces, topcenterMessageFail } from '../../components/toastr/toastrMessage.js';
+    
+    let showModal;let $BASE_URL;let $user;
 
-    let selectedUser = {}
+    let selectedUser = {};
     $: showModal = false;
 
     onMount(async () => {
-        const response = await fetch(`${$BASE_URL}/api/users/${$user.uid}`, {
-            credentials: "include",
-        });
+      const response = await fetch(`${$BASE_URL}/api/users/${$user.uid}`, {
+        credentials: 'include',
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        selectedUser = data.data;
+      selectedUser = data.data;
     });
 
     async function updatePassword(event) {
-        event.preventDefault();
-        if (event.target.newPassword.value !== event.target.repeatNewPassword.value) {
-            topcenterMessageFail("Nye password matcher ikke");
+      event.preventDefault();
+      if (event.target.newPassword.value !== event.target.repeatNewPassword.value) {
+        topcenterMessageFail('Nye password matcher ikke');
+      } else {
+    const response = await fetch(`${$BASE_URL}/api/users/password`, {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            oldPassWord: event.target.oldPassword.value,
+            newPassWord: event.target.newPassword.value,
+          }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          topcenterMessageFail(`Fejl: ${  data.message  }`);
         } else {
-
-            const response = await fetch(`${$BASE_URL}/api/users/password`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    oldPassWord: event.target.oldPassword.value,
-                    newPassWord: event.target.newPassword.value,
-                }),
-            });
-
-            if (!response.ok) {
-                const data = await response.json();
-                topcenterMessageFail("Fejl: " + data.message + "");
-            } else {
-                
-                topcenterMessageSucces("Password er opdateret");
-                event.target.reset();
-                showModal = false;
-            }
-
+    
+          topcenterMessageSucces('Password er opdateret');
+          event.target.reset();
+          showModal = false;
         }
+  }
     }
 </script>
 
