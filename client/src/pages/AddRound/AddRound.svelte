@@ -6,7 +6,7 @@
   } from "../../components/toastr/toastrMessage.js";
 
   let roundName = "";
-  let softDeadline = ""
+  let softDeadline = "";
   let file;
   const formData = new FormData();
   let message = "";
@@ -23,6 +23,7 @@
 
     const month = (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1);
     const day = (now.getDate() < 10 ? "0" : "") + (now.getDate());
+
     const year = now.getFullYear();
     return year + "-" + month + "-" + day;
   }
@@ -43,21 +44,24 @@
 
       if (response.ok) {
         topcenterMessageSucces("Bestillingsrunden blev oprettet");
-
-        deleteFile()
-        roundName = ""
-        softDeadline = ""
+        deleteFile();
+        roundName = "";
+        softDeadline = "";
       } else {
         throw new Error(result.error);
       }
+
     } catch (err) {
-      topcenterMessageFail("Bestillingsrunden blev ikke oprettet: " + err.message);
-    }
-  }
+      topcenterMessageFail(
+        "Bestillingsrunden blev ikke oprettet: " + err.message
+      );
+    };
+  };
 
   function deleteFile() {
     file = null;
-  }
+  };
+  
 </script>
 
 <div id="section-round">

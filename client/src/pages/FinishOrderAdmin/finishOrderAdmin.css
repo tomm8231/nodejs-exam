@@ -8,8 +8,6 @@ main {
     margin-top: 20px;
   }
   
-
-  
   th, td {
     padding: 10px;
   }
@@ -39,7 +37,6 @@ main {
     border-radius: 5px;
     cursor: pointer;
     max-width: 200px;
-
   }
 
   .button-container {

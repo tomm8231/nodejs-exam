@@ -39,14 +39,14 @@
     if (data.round === currentRound) {
       isOpen = data.isOpen;
     }
+
     topcenterMessageSucces(data.message);
   });
 
 
   async function fetchData() {
     try {
-      let response = await fetch(
-        `${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`,
+      let response = await fetch(`${$BASE_URL}/api/orders/${currentRound}/${$user.uid}`,
         { credentials: "include" }
       );
 
@@ -54,16 +54,17 @@
         response = await fetch(`${$BASE_URL}/api/products/${currentRound}`, {
           credentials: "include",
         });
-      }
+      };
 
-      const roundStatus = await fetch(
-        `${$BASE_URL}/api/orders/status/${currentRound}`,
+      const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`,
         { credentials: "include" }
       );
+
       const statusResult = await roundStatus.json();
+
       if (statusResult.data !== undefined) {
         isOpen = statusResult.data;
-      }
+      };
 
       const result = await response.json();
       orderedItems = result.data;
@@ -76,27 +77,28 @@
       itemKey = orderedItems.length > 0 ? Object.keys(orderedItems[0])[0] : "";
     } catch (error) {
       console.log("Fejl: " + error);
-    }
-  }
+    };
+  };
 
   function handleQuantityChange(itemId, event) {
     const value = parseInt(event.target.value);
     const foundItem = orderedItems.find((item) => item._id === itemId);
     foundItem.quantity = value;
-  }
+  };
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
     displayedItems = [];
     filteredItems = []
     searchQuery = ""
+
     fetchData();
   }
 
   function handleSearchChange(event) {
     searchQuery = event.target.value.toLowerCase();
     filterItems();
-  }
+  };
 
   function filterItems() {
       filteredItems = orderedItems.filter((item) =>
@@ -109,7 +111,7 @@
           return false;
         })
       );
-  }
+  };
 
   async function submitChanges() {
     try {
@@ -127,11 +129,13 @@
       });
 
       topcenterMessageSucces("Din bestilling er gemt");
+
     } catch (error) {
       console.error("Error: " + error);
       topcenterMessageFail("Der skete en fejl. Prøv igen senere");
-    }
-  }
+    };
+  };
+
 </script>
 
 <main>
