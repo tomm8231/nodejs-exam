@@ -1,6 +1,6 @@
-import db from "./connections.js";
+import db from "./connections.js"
 
-await db.createCollection("products");
+await db.createCollection("products")
 
 await db.collection("products").insertMany([
     { item_number: '64-00001', item: 'UltraLight ASC Mat XSmall Yellow', normal_price: 850, staff_price: 340, round: "s2s_oct_24" },
@@ -34,20 +34,16 @@ await db.collection("products").insertMany([
     { Model_number: 27097, Model_name: 'Kajka 100', Farvekode: 550, Farve: 'Black', Størrelse: '1 Size', Indkøbspris: 2160, Bar_code: 7392158958504, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
     { Model_number: 27097, Model_name: 'Kajka 100', Farvekode: 660, Farve: 'Forest Green', Størrelse: '1 Size', Indkøbspris: 2160, Bar_code: 7392158958511, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
     { Model_number: 27096, Model_name: 'Kajka 85', Farvekode: 550, Farve: 'Black', Størrelse: '1 Size', Indkøbspris: 2100, Bar_code: 7392158958412, Product_Group: 'Backpacks and Bags', Køn: 'Unisex', round: "fjallraven_feb_24" },
-]);
-
+])
 
 await db.collection("orders").insertOne({
     "round": "s2s_oct_24",
     "isOpen": true,
     "softDeadline": "24-01-01"
   })
+  
   await db.collection("orders").insertOne({
     "round": "fjallraven_feb_24",
     "isOpen": true,
     "softDeadline": "31-01-01"
   })
-
-//Create users with roles
-// await db.createCollection("users");
-// await db.collection("users").insertOne({ name: "admin", email: "admin@admin.dk", staffNumber: "00", hashedPassword: '$2b$14$BVW5Ya2gyIi5c22yMfygxeJKWJCaV1JsJiCs7JEusGS8OjTbPmLvW', role: "ADMIN" })

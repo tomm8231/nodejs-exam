@@ -18,8 +18,6 @@ import db from '../databases/connections.js'
 const productsCollection = db.collection("products")
 const ordersCollection = db.collection("orders")
 
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads')
@@ -31,12 +29,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-
 router.post("/api/upload", upload.single('file'), adminCheck, async (req, res) => {
 
     const roundName = req.body.roundName.trim().replace(/\s+/g, '_')
     const softDeadline = req.body.softDeadline
-
 
     try {
 
@@ -70,9 +66,7 @@ router.post("/api/upload", upload.single('file'), adminCheck, async (req, res) =
             if (err) {
                 console.error('Error deleting file:', err)
             }
-
         })
-
     }
 })
 

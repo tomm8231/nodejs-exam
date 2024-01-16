@@ -86,7 +86,7 @@
             </button>
             <div class="dropdown-content">
               <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
-              <Link to="/bestillingsrunde">Vis/rediger bestillingsrunde</Link>
+              <Link to="/bestillingsrunde">Vis bestillingsrunde</Link>
               <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
               <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
             </div>
