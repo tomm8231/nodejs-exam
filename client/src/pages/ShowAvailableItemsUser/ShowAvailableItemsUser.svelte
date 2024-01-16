@@ -8,6 +8,10 @@
   const socket = io($BASE_URL);
 
   let orderedItems = [];
+  let displayedItems = [];
+  let showOnlyOrderedItems = false
+
+
   let headerKeys = [];
   let itemKey = "";
   let currentRound = "";
@@ -16,6 +20,10 @@
   let filteredItems = [];
   let searchQuery = "";
   let isOpen = true;
+
+  $: displayedItems = showOnlyOrderedItems
+    ? filteredItems.filter(item => item.quantity > 0)
+    : filteredItems;
 
 
   onMount(async () => {
@@ -60,7 +68,8 @@
 
       const result = await response.json();
       orderedItems = result.data;
-      filteredItems = orderedItems;
+      displayedItems = orderedItems
+      filteredItems = displayedItems;
 
       headerKeys = orderedItems.length > 0 ? Object.keys(orderedItems[0]) : [];
       headerKeys.shift(); // removes/hides the _id from the user
@@ -79,8 +88,10 @@
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
-    filteredItems = [];
-    searchQuery = "";
+    displayedItems = [];
+    filteredItems = []
+    searchQuery = ""
+
     fetchData();
   }
 
@@ -156,6 +167,14 @@
         on:input={handleSearchChange}
       />
     </div>
+    <div id="orderedItemsCheckbox">
+      <label for="showOnlyOrderedItems">Vis kun bestilte varer</label>
+      <input
+        type="checkbox"
+        id="showOnlyOrderedItems"
+        bind:checked={showOnlyOrderedItems}
+      />
+    </div>
     {#if filteredItems.length > 0}
     <div class="button-container">
       {#if isOpen}
@@ -165,6 +184,7 @@
       {:else}
         <button disabled class="close-button">Lukket for bestillinger</button>
       {/if}
+
     </div>
       <table>
         <thead>
@@ -176,7 +196,7 @@
           </tr>
         </thead>
         <tbody>
-          {#each filteredItems as item (item[itemKey])}
+          {#each displayedItems as item (item[itemKey])}
             <tr>
               {#each headerKeys as key (key)}
                 <td>{item[key]}</td>

@@ -68,16 +68,16 @@
 <Modal bind:showModal bind:selectedUser>
     <form on:submit={updatePassword}>
         <label for="oldPassword">Nuværende password</label>
-        <input type="password" id="oldPassword"  name="password" />
+        <input type="password" id="oldPassword"  name="oldPassword" />
         
         <label for="newPassword">nyt password</label>
-        <input type="password" id="newPassword" name="password" />
+        <input type="password" id="newPassword" name="newPassword" />
 
         <label for="repeatNewPassword">Gentag nyt password</label>
-        <input type="password" id="repeatOldPassword" name="password" />
+        <input type="password" id="repeatOldPassword" name="repeatNewPassword" />
 
 
-        <button >Opdater password</button>
+        <button>Opdater password</button>
         <hr />
 		<!-- svelte-ignore a11y-autofocus -->
 		<button autofocus on:click={() => showModal = false}>Luk</button>
