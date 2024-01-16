@@ -1,5 +1,6 @@
 <script>
   import { Router, Link, Route, navigate } from "svelte-navigator";
+  import { onMount } from "svelte";
   import PrivateRoute from "./privateRouting/PrivateRoute.svelte";
   import ShowAvailableItemsUser from "./pages/ShowAvailableItemsUser/ShowAvailableItemsUser.svelte";
   import Home from "./pages/Home/Home.svelte";
@@ -10,14 +11,13 @@
   import { user } from "./stores/userStore.js";
   import ManageOrderAdmin from "./pages/ManageOrderAdmin/ManageOrderAdmin.svelte";
   import AddRound from "./pages/AddRound/AddRound.svelte";
-  import { onMount } from "svelte";
   import { BASE_URL } from "./stores/generalStore.js";
   import MessagesAdmin from "./pages/MessagesAdmin/MessagesAdmin.svelte";
   import MessagesUser from "./pages/MessagesUser/MessagesUser.svelte";
   import UserInfo from "./pages/UserInfo/UserInfo.svelte";
   import DeleteRoundAdmin from "./pages/DeleteRound/DeleteRoundAdmin.svelte";
 
-  let currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("currentUserId");
 
   onMount(async () => {
     try {
@@ -37,7 +37,6 @@
         localStorage.removeItem("currentUserRole");
         navigate("/login", { replace: true });
       }
-
     } catch (error) {
       console.error("Could not fetch:", error);
     }
@@ -53,7 +52,6 @@
 
       navigate("/", { replace: true });
     }
-
   });
 
   async function logout() {
@@ -85,7 +83,8 @@
               <i class="fa fa-caret-down" />
             </button>
             <div class="dropdown-content">
-              <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link>
+              <Link to="/opret-bestillingsrunde">Opret ny bestillingsrunde</Link
+              >
               <Link to="/bestillingsrunde">Vis bestillingsrunde</Link>
               <Link to="/afslut-bestillingsrunde">Afslut bestillingsrunde</Link>
               <Link to="/slet-bestillingsrunde">Slet bestillingsrunde</Link>
@@ -143,7 +142,9 @@
         ><MessagesUser /></PrivateRoute
       >
       <PrivateRoute path="/brugerInfo" let:location><UserInfo /></PrivateRoute>
-      <PrivateRoute path="/slet-bestillingsrunde" let:location><DeleteRoundAdmin /></PrivateRoute>
+      <PrivateRoute path="/slet-bestillingsrunde" let:location
+        ><DeleteRoundAdmin /></PrivateRoute
+      >
       <Route path="/login"><Login /></Route>
     </div>
   </div>

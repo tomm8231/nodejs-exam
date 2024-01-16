@@ -1,20 +1,21 @@
-<script>
-  import { onMount } from "svelte";
-  import { BASE_URL } from "../../stores/generalStore.js";
+<script>t } from 'svelte';
+  import { BASE_URL } from '../../stores/generalStore.js';
+  
+  let $BASE_URL;
 
-  let currentRound = "";
+  let currentRound = '';
   let uniqueRounds = [];
   let users = [];
 
   let orderedItems = [];
   let displayedItems = [];
   let headerKeys = [];
-  let itemKey = "";
-  let currentName = "";
-  let currentStaffNumber = "";
+  let itemKey = '';
+  let currentName = '';
+  let currentStaffNumber = '';
 
   let filteredUsers;
-  let searchQuery = "";
+  let searchQuery = '';
 
   let showOnlyOrderedItems;
 
@@ -26,7 +27,7 @@
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
     uniqueRounds = data.data;
@@ -42,8 +43,8 @@
     const response = await fetch(
       `${$BASE_URL}/api/orders/${currentRound}/users`,
       {
-        credentials: "include",
-      }
+        credentials: 'include',
+      },
     );
 
     const result = await response.json();
@@ -64,13 +65,12 @@
   }
 
   function filterUsers() {
-    if (searchQuery.trim() === "") {
+    if (searchQuery.trim() === '') {
       filteredUsers = users;
     } else {
       filteredUsers = users.filter(
-        (user) =>
-          user.staffNumber.toLowerCase().includes(searchQuery) ||
-          user.name.toLowerCase().includes(searchQuery)
+        (user) => user.staffNumber.toLowerCase().includes(searchQuery)
+          || user.name.toLowerCase().includes(searchQuery),
       );
     }
   }
@@ -80,9 +80,9 @@
     currentName = user.name;
     currentStaffNumber = user.staffNumber;
 
-    let response = await fetch(
+    const response = await fetch(
       `${$BASE_URL}/api/orders/${currentRound}/${user.staffNumber}`,
-      { credentials: "include" }
+      { credentials: 'include' },
     );
 
     const result = await response.json();
@@ -90,12 +90,10 @@
 
     displayedItems = orderedItems;
 
-    headerKeys =
-      displayedItems.length > 0 ? Object.keys(displayedItems[0]) : [];
+    headerKeys =    displayedItems.length > 0 ? Object.keys(displayedItems[0]) : [];
     headerKeys.shift(); // removes/hides the _id from the user
     headerKeys.pop(); // removes/hides the quantity from the user
-    itemKey =
-      displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : "";
+    itemKey =    displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : '';
   }
 
   function handleQuantityChange(itemId, event) {
@@ -196,7 +194,7 @@
     </tbody>
   </table>
 {/if}
-{#if users.length < 1 && currentRound !== ""}
+{#if users.length < 1 && currentRound !== ''}
 <h3>Ingen bestillinger</h3>
 {/if}
 

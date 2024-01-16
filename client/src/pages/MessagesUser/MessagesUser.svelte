@@ -1,27 +1,28 @@
-<script>
-  import { onMount } from "svelte";
-  import { BASE_URL } from "../../stores/generalStore.js";
+<script>t } from 'svelte';
   import { io } from "socket.io-client";
-  import { topcenterMessageSucces } from "../../components/toastr/toastrMessage.js";
+  import { BASE_URL } from "../../stores/generalStore.js";
+  import { topcenterMessageSucces } from '../../components/toastr/toastrMessage.js';
+  
+  let $BASE_URL;
 
   const socket = io($BASE_URL);
 
   let uniqueRounds = [];
-  let currentRoundShow = "";
+  let currentRoundShow = '';
   let messages = [];
   let filteredMessages = [];
 
-  $:messages
+  $:messages;
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
     uniqueRounds = data.data;
 
     const messagesPromise = await fetch(`${$BASE_URL}/api/messages`, {
-      credentials: "include",
+      credentials: 'include',
     });
 
     const messagesResult = await messagesPromise.json();
@@ -29,34 +30,32 @@
     filteredMessages = messages;
   });
 
-  socket.on("server-admin-message", (data) => {
+  socket.on('server-admin-message', (data) => {
     messages = [data, ...messages];
 
-    if (currentRoundShow === data.round || currentRoundShow === "") {
-        topcenterMessageSucces("Ny besked vedr. " + data.round);
-          filteredMessages = [data, ...filteredMessages]
-        }
+    if (currentRoundShow === data.round || currentRoundShow === '') {
+      topcenterMessageSucces(`Ny besked vedr. ${  data.round}`);
+      filteredMessages = [data, ...filteredMessages];
+    }
   });
 
-
-
   function filterMessages() {
-  if (currentRoundShow === "") {
-    filteredMessages = messages;
-  } else {
-    filteredMessages = messages.filter(msg => msg.round === currentRoundShow);
-  }
+    if (currentRoundShow === '') {
+      filteredMessages = messages;
+    } else {
+      filteredMessages = messages.filter((msg) => msg.round === currentRoundShow);
+    }
 }
 
 function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleString('dk-DK', { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: false 
+    return date.toLocaleString('dk-DK', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
     });
   }
 </script>

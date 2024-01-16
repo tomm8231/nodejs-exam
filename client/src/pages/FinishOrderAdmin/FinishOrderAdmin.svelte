@@ -1,18 +1,153 @@
-<script>
-  import { onMount } from "svelte";
+<script>t } from 'svelte';
+  import { io } from "socket.io-client";
   import { BASE_URL } from "../../stores/generalStore.js";
   import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
-  import { io } from "socket.io-client";
+  
+  let $BASE_URL;
   
   const socket = io($BASE_URL);
 
   let showAllOrders = [];
   let headerKeys = [];
-  let itemKey = "";
-  let currentRound = "";
+  let itemKey = '';
+  let currentRound = '';
   let uniqueRounds = [];
   let showOnlyOrderedItems;
-  let displayedItems = []
+  let displayedItems = [];
+
+  $: if (showOnlyOrderedItems) {
+    displayedItems = showAllOrders.filter((item) => item.quantity > 0);
+  } else {
+    displayedItems = showAllOrders;
+  }
+
+  onMount(async () => {
+    const response = await fetch(`${$BASE_URL}/api/rounds`, {
+      credentials: 'include',
+    });
+    const data = await response.json();
+    uniqueRounds = data.data;
+  });
+  let isOpen = true;
+
+  async function fetchData() {
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: 'include',
+    });
+  
+    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: 'include' });
+    const statusResult = await roundStatus.json();
+    if (statusResult.data !== undefined) {
+      isOpen = statusResult.data;
+    }
+
+    const result = await response.json();
+
+    if (result.data[0].hasOwnProperty('orderedItems')) {
+      showAllOrders = result.data[0];
+      displayedItems = showAllOrders;
+    } else {
+      showAllOrders = result.data;
+      displayedItems = showAllOrders;
+    }
+
+    headerKeys = displayedItems.length > 0 ? Object.keys(displayedItems[0]) : [];
+    headerKeys.shift();
+    itemKey = displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : '';
+  }
+
+  function handleOfferRoundChange(event) {
+    currentRound = event.target.value;
+    displayedItems = [];
+    showOnlyOrderedItems = false;
+    fetchData();
+  }
+
+  async function closeOrder() {
+    isOpen = false;
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isOpen }),
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      const message = result.data;
+      topcenterMessageFail(`Der skete en fejl: ${  message}`);
+    } else {
+      topcenterMessageSucces('Runden er lukket for bestillinger');
+      socket.emit('client-admin-order-status', {
+        message: `${currentRound} er lukket for bestillinger`,
+        round: currentRound,
+        date: new Date(),
+        isOpen,
+      });
+    }
+  }
+
+  async function openOrder() {
+    isOpen = true;
+    const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
+      credentials: 'include',
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isOpen }),
+    });
+    if (!response.ok) {
+      const result = await response.json();
+      const message = result.data;
+      topcenterMessageFail(`Der skete en fejl: ${  message}`);
+    } else {
+      topcenterMessageSucces('Runden er åbnet for flere bestillinger');
+      socket.emit('client-admin-order-status', {
+        round: currentRound,
+        message: `${currentRound} er genåbnet for bestillinger`,
+        date: new Date(),
+        isOpen,
+      });
+    }
+  }
+
+  async function downloadExcel() {
+    try {
+      const response = await fetch(`${$BASE_URL}/download-excel/${currentRound}`, { credentials: 'include' });
+      if (!response.ok) {
+        const message = await response.json();
+        topcenterMessageFail(`Der skete en fejl: ${  message.data}`);
+      } else {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${currentRound}-stafforders.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
+  }
+<script>
+  import { onMount } from 'svelte';
+  import { io } from "socket.io-client";
+  import { BASE_URL } from "../../stores/generalStore.js";
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
+  
+  const socket = io($BASE_URL);
+
+  let showAllOrders = [];
+  let headerKeys = [];
+  let itemKey = '';
+  let currentRound = '';
+  let uniqueRounds = [];
+  let showOnlyOrderedItems;
+  let displayedItems = [];
 
 
   $: if (showOnlyOrderedItems) {
@@ -23,7 +158,7 @@
 
   onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
     uniqueRounds = data.data;
@@ -32,10 +167,10 @@
 
   async function fetchData() {
     const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
-      credentials: "include",
+      credentials: 'include',
     });
-    
-    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: "include" });
+  
+    const roundStatus = await fetch(`${$BASE_URL}/api/orders/status/${currentRound}`, { credentials: 'include' });
     const statusResult = await roundStatus.json();
     if (statusResult.data !== undefined) {
       isOpen = statusResult.data;
@@ -43,93 +178,93 @@
 
     const result = await response.json();
 
-    if (result.data[0].hasOwnProperty("orderedItems")) {
-      showAllOrders = result.data[0]
-      displayedItems = showAllOrders
+    if (result.data[0].hasOwnProperty('orderedItems')) {
+      showAllOrders = result.data[0];
+      displayedItems = showAllOrders;
     } else {
-      showAllOrders = result.data
-      displayedItems = showAllOrders
+      showAllOrders = result.data;
+      displayedItems = showAllOrders;
     }
 
     headerKeys = displayedItems.length > 0 ? Object.keys(displayedItems[0]) : [];
-    headerKeys.shift()
-    itemKey = displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : "";
-  };
+    headerKeys.shift();
+    itemKey = displayedItems.length > 0 ? Object.keys(displayedItems[0])[0] : '';
+  }
 
   function handleOfferRoundChange(event) {
     currentRound = event.target.value;
-    displayedItems = []
-    showOnlyOrderedItems = false
+    displayedItems = [];
+    showOnlyOrderedItems = false;
     fetchData();
   }
 
   async function closeOrder() {
     isOpen = false;
     const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
-      credentials: "include",
-      method: "PUT",
+      credentials: 'include',
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ isOpen }),
     });
     if (!response.ok) {
       const result = await response.json();
       const message = result.data;
-      topcenterMessageFail("Der skete en fejl: " + message);
+      topcenterMessageFail('Der skete en fejl: ' + message);
     } else {
-      topcenterMessageSucces("Runden er lukket for bestillinger");
-      socket.emit("client-admin-order-status", {
-            message: `${currentRound} er lukket for bestillinger`,
-            round: currentRound,
-            date: new Date(),
-            isOpen
+      topcenterMessageSucces('Runden er lukket for bestillinger');
+      socket.emit('client-admin-order-status', {
+        message: `${currentRound} er lukket for bestillinger`,
+        round: currentRound,
+        date: new Date(),
+        isOpen,
       });
-     }
+    }
   }
 
   async function openOrder() {
     isOpen = true;
     const response = await fetch(`${$BASE_URL}/api/orders/${currentRound}`, {
-      credentials: "include",
-      method: "PUT",
+      credentials: 'include',
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ isOpen }),
     });
     if (!response.ok) {
       const result = await response.json();
       const message = result.data;
-      topcenterMessageFail("Der skete en fejl: " + message);
+      topcenterMessageFail('Der skete en fejl: ' + message);
     } else {
-      topcenterMessageSucces("Runden er åbnet for flere bestillinger");
-      socket.emit("client-admin-order-status", {
-            round: currentRound,
-            message: `${currentRound} er genåbnet for bestillinger`,
-            date: new Date(),
-            isOpen
-        });
+      topcenterMessageSucces('Runden er åbnet for flere bestillinger');
+      socket.emit('client-admin-order-status', {
+        round: currentRound,
+        message: `${currentRound} er genåbnet for bestillinger`,
+        date: new Date(),
+        isOpen,
+      });
     }
   }
 
 
   async function downloadExcel() {
     try {
-      const response = await fetch(`${$BASE_URL}/download-excel/${currentRound}`, {credentials: "include"});
+      const response = await fetch(`${$BASE_URL}/download-excel/${currentRound}`, { credentials: 'include'});
       if (!response.ok) {
         const message = await response.json();
-        topcenterMessageFail("Der skete en fejl: " + message.data);
+        topcenterMessageFail('Der skete en fejl: ' + message.data);
       } else {
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${currentRound}-stafforders.xlsx`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${currentRound}-stafforders.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
     }
