@@ -1,13 +1,12 @@
-import { Router } from "express"
-import db from "../database/connections.js"
+import { Router } from 'express';
+import db from '../database/connections.js';
 
-const router = Router()
+const router = Router();
 
-router.get("/api/messages", async (req, res) => {
+router.get('/api/messages', async (req, res) => {
+  const messages = await db.collection('messages').find().sort({ date: -1 }).toArray();
 
-    const messages = await db.collection("messages").find().sort({ date: -1 }).toArray()
+  res.send({ data: messages });
+});
 
-    res.send({ data: messages })
-}) 
-
-export default router
+export default router;

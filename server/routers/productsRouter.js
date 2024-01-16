@@ -1,12 +1,13 @@
-import { Router } from "express" 
-import db from "../database/connections.js" 
-const router = Router() 
+import { Router } from 'express';
+import db from '../database/connections.js';
 
-router.get("/api/products/:round", async (req, res) => {
-    const round = req.params?.round 
-    const allProducts = await db.collection("products").find({ round }).toArray() 
+const router = Router();
 
-    res.send({ data: allProducts }) 
-}) 
+router.get('/api/products/:round', async (req, res) => {
+  const round = req.params?.round;
+  const allProducts = await db.collection('products').find({ round }).toArray();
 
-export default router 
+  res.send({ data: allProducts });
+});
+
+export default router;
