@@ -1,90 +1,87 @@
 <script>
-    import { onMount } from "svelte";
-    import { BASE_URL } from "../../stores/generalStore.js";
-    import { io } from "socket.io-client";
-    import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
-  
-    const socket = io($BASE_URL);
+  import { onMount } from "svelte";
+  import { BASE_URL } from "../../stores/generalStore.js";
+  import { io } from "socket.io-client";
+  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
 
-    let round = '';
-    let message = '';
-    let uniqueRounds = [];
-    let currentRoundMessage = "";
-    let currentRoundShow = "";
-    let messages = []
-    let filteredMessages = [];
-    let showSidebar = false;
-    let sendToAll = false;
+  const socket = io($BASE_URL);
 
+  let round = '';
+  let message = '';
+  let uniqueRounds = [];
+  let currentRoundMessage = "";
+  let currentRoundShow = "";
+  let messages = []
+  let filteredMessages = [];
+  let showSidebar = false;
+  let sendToAll = false;
+  $: messages;
 
-
-    $:messages
-
-
-    onMount(async () => {
+  onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds`, {
       credentials: "include",
     });
+
     const data = await response.json();
     uniqueRounds = data.data;
 
     const messagesPromise = await fetch(`${$BASE_URL}/api/messages`, {
-      credentials: "include"
-    })
+      credentials: "include",
+    });
     
-    const messagesResult = await messagesPromise.json()
-    messages = messagesResult.data
+    const messagesResult = await messagesPromise.json();
+    messages = messagesResult.data;
     filteredMessages = messages;
   });
-  
 
-    function handleSubmit() {
-      if (currentRoundMessage === "" || message === "") {
-        topcenterMessageFail("Vælg en bestillingsrunde og skriv en besked først");
-        return;
-      }
-      const messageData = {
-        round: currentRoundMessage,
-        message: `${message}`,
-        date: new Date(),
-        sendToAll
-      }
-        socket.emit("client-admin-message", messageData );
-        messages = [ messageData, ...messages]
-        message = "";
-        topcenterMessageSucces("Besked sendt");
-
-        //skal kunne vises i filtered også
-        if (currentRoundShow === currentRoundMessage || currentRoundShow === "") {
-          filteredMessages = [messageData, ...filteredMessages]
-        }
+  function handleSubmit() {
+    if (currentRoundMessage === "" || message === "") {
+      topcenterMessageFail("Vælg en bestillingsrunde og skriv en besked først");
+      return;
     }
 
-    function toggleSidebar() {
-  showSidebar = !showSidebar;
-}
+    const messageData = {
+      round: currentRoundMessage,
+      message: `${message}`,
+      date: new Date(),
+      sendToAll
+    };
 
-function formatDate(dateString) {
+    socket.emit("client-admin-message", messageData );
+    messages = [ messageData, ...messages];
+    message = "";
+    topcenterMessageSucces("Besked sendt");
+
+    //skal kunne vises i filtered også
+    if (currentRoundShow === currentRoundMessage || currentRoundShow === "") {
+      filteredMessages = [messageData, ...filteredMessages];
+    }
+  };
+
+  function toggleSidebar() {
+    showSidebar = !showSidebar;
+  };
+
+  function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleString('dk-DK', { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: false 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
     });
-  }
+  };
 
-//make me funktion that filter out the messages that are not in the current round
-function filterMessages() {
-  if (currentRoundShow === "") {
-    filteredMessages = messages;
-  } else {
-    filteredMessages = messages.filter(msg => msg.round === currentRoundShow);
-  }
-}
-
+  //make me funktion that filter out the messages that are not in the current round
+  function filterMessages() {
+    if (currentRoundShow === "") {
+      filteredMessages = messages;
+    } else {
+      filteredMessages = messages.filter(msg => msg.round === currentRoundShow);
+    }
+  };
 
 </script>
 
@@ -115,7 +112,7 @@ function filterMessages() {
       <button type="submit">Submit</button>
     
       <checkbox></checkbox>
-  </form>
+    </form>
   </div>
 </div>
 
@@ -124,8 +121,7 @@ function filterMessages() {
 <select
   id="offerRound"
   bind:value={currentRoundShow}
-  on:change={filterMessages}
->
+  on:change={filterMessages}>
   <option value="">Vis alle</option>
   {#each uniqueRounds as round}
     <option value={round}>{round}</option>

@@ -20,7 +20,7 @@ onMount(async () => {
     const response = await fetch(`${$BASE_URL}/api/rounds/${currentRound}`, {
       method: "DELETE",
       credentials: "include",
-    })
+    });
 
     if (response.ok){
         showModal = false;
@@ -31,13 +31,13 @@ onMount(async () => {
         topcenterMessageFail("Noget gik galt, prøv igen senere");
     }
 
-    }
+    };
 
   function showTheModal() {
     if(currentRound !== ""){
         showModal = true;
-    }
-  }
+    };
+  };
 </script>
 
 <style>
@@ -60,9 +60,9 @@ onMount(async () => {
 <Modal bind:showModal bind:selectedUser={currentRound}>
     <div id="modalText">Slet bestillingsrunde {currentRound} og alt tilhørende</div>
         <div class="options" id="modalOptions">
-                <button id="confirmDeleteButton" on:click={deleteRound}>Ja</button>
-                <button id="cancelDeleteButton" on:click={() => showModal = false}>Nej</button>
-        </div>
+        <button id="confirmDeleteButton" on:click={deleteRound}>Ja</button>
+        <button id="cancelDeleteButton" on:click={() => showModal = false}>Nej</button>
+      </div>
 </Modal>
 
 
