@@ -2,7 +2,7 @@
     import { useNavigate, useLocation } from "svelte-navigator"
     import { user } from "../stores/userStore.js"
   
-    const navigate = useNavigate()
+    const navigate = useNavigate() 
     const location = useLocation()
   
     $: if (!$user) {
