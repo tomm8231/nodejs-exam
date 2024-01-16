@@ -1,55 +1,56 @@
 main {
-    text-align: center;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  
-  th, td {
-    padding: 10px;
-  }
-  
-  input[type="number"] {
-    width: 50px;
-    padding: 5px;
-  }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+  text-align: center;
+}
 
-  .button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-  .open-button {
-    background-color: #4caf50;
-    color: white;
-  }
 
-  .close-button {
-    background-color: #b32825;
-    color: white;
-  }
+th,
+td {
+  padding: 10px;
+}
 
-  #search-bar {
-    margin-top: 15px;
-  }
+input[type="number"] {
+  width: 50px;
+  padding: 5px;
+}
 
-  #search-bar input {
-    width: 450px;
-    padding: 10px;
-    border-radius: 5px;
-  }
+button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.open-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.close-button {
+  background-color: #b32825;
+  color: white;
+}
+
+#search-bar {
+  margin-top: 15px;
+}
+
+#search-bar input {
+  width: 450px;
+  padding: 10px;
+  border-radius: 5px;
+}
