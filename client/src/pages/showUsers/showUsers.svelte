@@ -1,19 +1,20 @@
-<script>
-  import { onMount } from "svelte";
-  import { BASE_URL } from "../../stores/generalStore.js";
+<script>t } from 'svelte';
+  import { BASE_URL } from '../../stores/generalStore.js';
   import {
     topcenterMessageSucces,
     topcenterMessageFail,
-  } from "../../components/toastr/toastrMessage.js";
-  import Modal from "../../components/Modal/Modal.svelte";
+  } from '../../components/toastr/toastrMessage.js';
+  import Modal from '../../components/Modal/Modal.svelte';
+  
+  let $BASE_URL;
 
   let users = [];
-  let userOrders = [];
-  let headerKeys = [];
-  let itemKey = "";
+  const userOrders = [];
+  const headerKeys = [];
+  const itemKey = '';
   let showModal = false;
   let showDeleteConfirmationModal = false;
-  let selectedUser = { staffnumber: "", name: "", email: "" };
+  let selectedUser = { staffnumber: '', name: '', email: '' };
 
   onMount(async () => {
     fetchUsers();
@@ -21,11 +22,11 @@
 
   async function fetchUsers() {
     try {
-      const response = await fetch("http://localhost:8080/api/users", { credentials: "include" });
+      const response = await fetch('http://localhost:8080/api/users', { credentials: 'include' });
       const data = await response.json();
       users = data.data;
     } catch (error) {
-      console.error("Error: " + error);
+      console.error(`Error: ${  error}`);
     }
   }
 
@@ -35,79 +36,76 @@
   }
 
   async function deleteUser(evt) {
-    let staffNumber = evt.target.id;
+    const staffNumber = evt.target.id;
 
-    const user = users.find(u => u.staffNumber === staffNumber);
+    const user = users.find((u) => u.staffNumber === staffNumber);
     if (user) {
       openDeleteConfirmationModal(user);
     }
-
-  }
+}
 
   async function confirmDeleteUser() {
-    const staffNumber = selectedUser.staffNumber
-    
+    const { staffNumber } = selectedUser;
+  
     try {
-      const response = await fetch($BASE_URL + "/api/users/" + staffNumber, {
-        credentials: "include",
-        method: "DELETE",
+      const response = await fetch(`${$BASE_URL}/api/users/${staffNumber}`, {
+        credentials: 'include',
+        method: 'DELETE',
       });
       const data = await response.json();
 
       if (response.ok) {
-        topcenterMessageSucces("Brugeren er slettet");
-        showDeleteConfirmationModal = false
+        topcenterMessageSucces('Brugeren er slettet');
+        showDeleteConfirmationModal = false;
       } else if (data.error) {
         throw new Error(data.error);
       }
 
-      users = users.filter(user => {
-        return user.staffNumber !== staffNumber
-      });
+      users = users.filter((user) => user.staffNumber !== staffNumber);
 
-      const deleteOrders = await fetch($BASE_URL + "/api/orders/", {
-        credentials: "include",
-        method: "DELETE",
+      const deleteOrders = await fetch(`${$BASE_URL}/api/orders/`, {
+        credentials: 'include',
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           staffNumber,
         }),
-      }); 
+      });
 
       const deletionData = await deleteOrders.json();
 
       if (deletionData.error) {
         throw new Error(data.error);
       }
-     
+  
     } catch (error) {
       topcenterMessageFail(error.message);
-      console.error("Error: " + error);
+      console.error(`Error: ${  error}`);
     }
 
     showDeleteConfirmationModal = false;
   }
 
-  async function updateFrontendUser(){
-    users = users.map(user => {
-      if(user.staffNumber === selectedUser.staffNumber){
+  async function updateFrontendUser() {
+    users = users.map((user) => {
+      if (user.staffNumber === selectedUser.staffNumber) {
         user.name = selectedUser.name;
         user.email = selectedUser.email;
       }
       return user;
-    })
+    });
   }
 
   async function updateUser(event) {
     event.preventDefault();
     try {
       const response = await fetch(`${$BASE_URL}/api/users/${selectedUser.staffNumber}`, {
-        credentials: "include",
-        method: "PUT",
+        credentials: 'include',
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: selectedUser.name,
@@ -118,36 +116,36 @@
       const data = await response.json();
 
       if (response.ok) {
-        topcenterMessageSucces("Brugeren er opdateret");
+        topcenterMessageSucces('Brugeren er opdateret');
         updateFrontendUser();
         showModal = false;
       } else {
-        topcenterMessageFail("Kunne ikke opdateres")
+        topcenterMessageFail('Kunne ikke opdateres');
       }
     } catch (error) {
       topcenterMessageFail(error.message);
-      console.error("Error: " + error);
+      console.error(`Error: ${  error}`);
     }
   }
 
   async function newPassword(event) {
     event.preventDefault();
     const response = await fetch(`${$BASE_URL}/api/users/resetpassword`, {
-      credentials: "include",
-      method: "PUT",
+      credentials: 'include',
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         staffNumber: selectedUser.staffNumber,
       }),
     });
-    
-    if (response.ok){
-      topcenterMessageSucces("Password er opdateret");
+  
+    if (response.ok) {
+      topcenterMessageSucces('Password er opdateret');
       showModal = false;
     } else {
-      topcenterMessageFail("Password kunne ikke opdateres");
+      topcenterMessageFail('Password kunne ikke opdateres');
     }
   }
 

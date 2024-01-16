@@ -1,40 +1,42 @@
-<script>
+<script>m "svelte-navigator";
   import { BASE_URL } from "../../stores/generalStore";
-  import { useNavigate, useLocation } from "svelte-navigator";
-  import { user } from "../../stores/userStore.js";
-  import { topcenterMessageFail } from "../../components/toastr/toastrMessage";
+  import { user } from '../../stores/userStore.js';
+  import { topcenterMessageFail } from '../../components/toastr/toastrMessage';
+  
+  let $location;let $user;let $BASE_URL;
+  
   const navigate = useNavigate();
   const location = useLocation();
 
-  let staffNumber = ""
-  let password = ""
+  let staffNumber = '';
+  let password = '';
 
   async function handleLogin(event) {
-    event.preventDefault()
+    event.preventDefault();
     try {
-        const response = await fetch(`${$BASE_URL}/auth/login`, {
-        credentials: "include",
-        method: "POST",
+      const response = await fetch(`${$BASE_URL}/auth/login`, {
+        credentials: 'include',
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ staffNumber, password }),
       });
 
       if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem("currentUserId", data.userData.uid)
-        localStorage.setItem("currentUserRole", data.userData.role)
+        const data = await response.json();
+        localStorage.setItem('currentUserId', data.userData.uid);
+        localStorage.setItem('currentUserRole', data.userData.role);
 
-        $user = data.userData
+        $user = data.userData;
 
-        const from = ($location.state && $location.state.from) || "/"
-        navigate(from, { replace: true })
+        const from = ($location.state && $location.state.from) || '/';
+        navigate(from, { replace: true });
       } else {
-        topcenterMessageFail("Login failed")
+        topcenterMessageFail('Login failed');
       }
     } catch (err) {
-      console.log("err: " + err);
+      console.log(`err: ${  err}`);
     }
   }
 </script>

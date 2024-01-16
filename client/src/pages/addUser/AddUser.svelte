@@ -1,20 +1,21 @@
-<script>
-  import { topcenterMessageSucces, topcenterMessageFail } from "../../components/toastr/toastrMessage.js";
-  import { BASE_URL } from "../../stores/generalStore.js";
+<script>terMessageSucces, topcenterMessageFail } from '../../components/toastr/toastrMessage.js';
+  import { BASE_URL } from '../../stores/generalStore.js';
+  
+  let $BASE_URL;
 
-  let name = "";
-  let staffNumber = "";
-  let email = "";
+  let name = '';
+  let staffNumber = '';
+  let email = '';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch($BASE_URL+"/auth/signup", {
-        credentials: "include",
-        method: "POST",
+      const response = await fetch(`${$BASE_URL}/auth/signup`, {
+        credentials: 'include',
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, staffNumber, email }),
       });
@@ -22,17 +23,16 @@
       const data = await response.json();
 
       if (!response.ok) {
-        topcenterMessageFail("Fejl: En bruger findes allerede med medarbejdernummer eller email");
+        topcenterMessageFail('Fejl: En bruger findes allerede med medarbejdernummer eller email');
       } else {
-        topcenterMessageSucces("Brugeren er tilføjet");
-        name = "";
-        email = "";
-        staffNumber = "";
+        topcenterMessageSucces('Brugeren er tilføjet');
+        name = '';
+        email = '';
+        staffNumber = '';
       }
-
-    } catch (error) {
+  } catch (error) {
       topcenterMessageFail(error.message);
-      console.error("Error: " + error);
+      console.error(`Error: ${  error}`);
     }
   };
 </script>
