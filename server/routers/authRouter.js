@@ -1,7 +1,7 @@
 import { Router } from "express"
 import bcrypt from "bcrypt"
 import { hashPassword, randomPassword } from '../encrypt/encryption.js'
-import db from "../databases/connections.js"
+import db from "../database/connections.js"
 import { adminCheck } from "../middelware/authMiddelware.js"
 import { sendMail } from "../nodemailer/sendEmail.js"
 

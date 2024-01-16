@@ -1,4 +1,4 @@
-import db from "../databases/connections.js" 
+import db from "../database/connections.js" 
 import { sendMail } from "../nodemailer/sendEmail.js" 
 
 function handleSocket(socket) {

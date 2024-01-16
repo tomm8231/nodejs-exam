@@ -14,7 +14,7 @@ xlsx.stream.set_readable(Readable)
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs'
 xlsx.set_cptable(cpexcel)
 
-import db from '../databases/connections.js'
+import db from '../database/connections.js'
 const productsCollection = db.collection("products")
 const ordersCollection = db.collection("orders")
 

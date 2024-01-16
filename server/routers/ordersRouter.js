@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import db from "../databases/connections.js"
+import db from "../database/connections.js"
 import { adminCheck } from '../middelware/authMiddelware.js'
 const router = Router()
 
